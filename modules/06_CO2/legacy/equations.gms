@@ -1,15 +1,19 @@
-*' @title Equations of OPEN-PROMs CO2 SEQUESTRATION COST CURVES
+*' @title Equations of OPEN-PROM CO2 Sequestration and CDR
 *' @code
 
 *' GENERAL INFORMATION
-
-*' Equation format: "typical useful energy demand equation"
-*' The main explanatory variables (drivers) are activity indicators (economic activity) and corresponding energy costs.
-*' The type of "demand" is computed based on its past value, the ratio of the current and past activity indicators (with the corresponding elasticity), 
-*' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
+*' These equations represent CO2 capture from power generation, hydrogen production,
+*' and industry, together with cumulative capture, sequestration costs, and CDR
+*' deployment.
+*' CDR costs include technology-specific learning, energy requirements, subsidies,
+*' and applicable CO2 storage charges.
 
 *' * CO2 SEQUESTRATION COST CURVES
 
+*' Calculates CO2 captured from fuel use in power generation, hydrogen production,
+*' and industrial technologies with carbon capture, by sector, fuel, and year.
+*' Fuel inputs are multiplied by the corresponding capture rates and CO2 emission
+*' factors. A biomass-specific adjustment of 4.17 is included for BMSWAS.
 Q06CO2CaptureCCS(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EFS))..
     V06CO2CaptureCCS(allCy,SBS,EFS,YTIME)
       =E=
@@ -21,53 +25,52 @@ Q06CO2CaptureCCS(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EF
         V04CO2CaptRate(allCy,PGALL,YTIME)
       )$sameas("PG", SBS) +
       sum(H2TECH$(H2TECHtoFEEDSTOCK(H2TECH,EFS) or H2TECHtoENERGY(H2TECH,EFS)),
-        VmProdH2(allCy,H2TECH,YTIME) * 
+        VmProdH2(allCy,H2TECH,YTIME) *
         (i05InputOverOutH2ProdFeed(allCy,H2TECH,EFS,YTIME) + i05InputOverOutH2ProdEnergy(allCy,H2TECH,EFS,YTIME)) *
         V05CaptRateH2(allCy,H2TECH,YTIME)
       )$sameas("H2P", SBS) +
       sum(DSBS$sameas(DSBS,SBS),
         sum(CCSTECH$SECTTECH(DSBS,CCSTECH),
             i02ShareBlend(allCy,DSBS,CCSTECH,EFS,YTIME) *
-            V02EquipCapTechSubsec(allcy,DSBS,CCSTECH,YTIME) * 
-            i02util(allCy,DSBS,CCSTECH,YTIME) * 
+            V02EquipCapTechSubsec(allcy,DSBS,CCSTECH,YTIME) *
+            i02util(allCy,DSBS,CCSTECH,YTIME) *
             imCO2CaptRateIndustry(allCy,CCSTECH,YTIME)
         )
       )$INDSE1(SBS)
     ) *
     (imCo2EmiFac(allCy,SBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS));
 
-*' The equation calculates the cumulative CO2 captured in million tons of CO2 for a given scenario and year.
-*' The cumulative CO2 captured at the current time period is determined by adding the CO2 captured by electricity and hydrogen production
-*' plants to the cumulative CO2 captured in the previous time period. This equation captures the ongoing total CO2 capture
-*' over time in the specified scenario.
+*' Accumulates captured CO2 over time for each country.
+*' Adds current-year capture from the eligible sector-fuel combinations and
+*' CDR capacity converted by a factor of 1e-6 to the previous cumulative total.
 Q06CaptCummCO2(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V06CaptCummCO2(allCy,YTIME) 
-      =E= 
+    V06CaptCummCO2(allCy,YTIME)
+      =E=
     V06CaptCummCO2(allCy,YTIME-1) +
     sum((SBS,EFS)$SECtoEF(SBS,EFS),V06CO2CaptureCCS(allCy,SBS,EFS,YTIME)) +
-    sum(DACTECH,V06CapCDR(allCy,DACTECH,YTIME) * 1e-6);   
+    sum(DACTECH,V06CapCDR(allCy,DACTECH,YTIME) * 1e-6);
 
-*' The equation calculates the effective CO2 sequestration cost in US$2015 per tCO2.
-*' All regions use the same completed prior-year global cumulative storage.
-*' The physical curve retains its existing sequestration-cost parameters.
-*' The cost curve transitions smoothly from a minimum to a maximum cost using a hyperbolic tangent function, 
-*' representing a realistic relationship between cumulative CO2 captured and sequestration costs. The transition 
-*' behavior is controlled by shape parameters that define the steepness and midpoint of the cost curve.
-*' The shared storage tax is then added once. A zero ccsStorageReferenceGtCO2 disables
-*' the tax, not the physical storage-cost curve.
+*' Calculates the effective CO2 sequestration cost in US$2015 per tonne of CO2.
+*' The physical cost follows a hyperbolic tangent curve between minimum and
+*' maximum cost levels, driven by prior-year global cumulative CO2 capture.
+*' The curve shape is controlled by sig_a and sig_b; the shared CCS availability
+*' cost adder is applied separately and only once.
 Q06CstCO2SeqCsts(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    VmCstCO2SeqCsts(allCy,YTIME) 
+    VmCstCO2SeqCsts(allCy,YTIME)
         =E=
-   i06CO2SeqData("seq_min") + 
+   i06CO2SeqData("seq_min") +
    (i06CO2SeqData("seq_max") - i06CO2SeqData("seq_min")) / 2 *
    (1+tanh(i06CO2SeqData("sig_a") / (i06CO2SeqData("sig_b") * i06CO2SeqData("seq_max")) * (V06CaptCummCO2Glob.L(YTIME-1) * 1e-3 - i06CO2SeqData("sig_b") * i06CO2SeqData("seq_max")))) +
    i06CCSAvailabilityCostAdder(YTIME);
 
-*' The equation calculates the CAPEX of each CDR technology, as it's affected by a learning curve ($/tCO2).
+*' Calculates the gross capital cost of each CDR technology using a learning curve.
+*' Costs decline with previous-year aggregate CDR capacity, subject to a
+*' technology-specific minimum capital cost. The learning exponent corresponds
+*' to a 2% cost reduction for each doubling of the capacity measure.
 Q06GrossCapCDR(CDRTECH,YTIME)$(TIME(YTIME))..
     V06GrossCapCDR(CDRTECH,YTIME)
-            =E=         
-    0.5 * 
+            =E=
+    0.5 *
     (
       (i06GrossCapCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.98)/log(2))) +
       i06GrossCapCDRMin(CDRTECH) +
@@ -79,11 +82,13 @@ Q06GrossCapCDR(CDRTECH,YTIME)$(TIME(YTIME))..
       )
     );
 
-*' The equation calculates the fixed and O&M costs of each CDR technology, as they are affected by a learning curve.
+*' Calculates fixed operation and maintenance costs for each CDR technology.
+*' The learning curve depends on previous-year aggregate technology capacity,
+*' with a 2% reduction per doubling and a technology-specific minimum cost.
 Q06FixOandMCDR(CDRTECH,YTIME)$(TIME(YTIME))..
     V06FixOandMCDR(CDRTECH,YTIME)
-            =E=         
-    0.5 * 
+            =E=
+    0.5 *
     (
       (i06FixOandMCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.98)/log(2))) +
       i06FixOandMCDRMin(CDRTECH) +
@@ -96,11 +101,13 @@ Q06FixOandMCDR(CDRTECH,YTIME)$(TIME(YTIME))..
     )
 ;
 
-*' The equation calculates the variable costs of each CDR technology including the CO2 storage costs, as they are affected by a learning curve.
+*' Calculates variable operation costs for each CDR technology.
+*' Previous-year aggregate installed capacity determines learning effects,
+*' while a technology-specific minimum prevents costs falling below the floor.
 Q06VarCostCDR(CDRTECH,YTIME)$(TIME(YTIME))..
     V06VarCostCDR(CDRTECH,YTIME)
-            =E=         
-    0.5 * 
+            =E=
+    0.5 *
     (
       (i06VarCostCDR(CDRTECH) * (sum(allCy$runCyL(allCy),V06CapCDR(allCy,CDRTECH,YTIME-1))) ** (log(0.98)/log(2))) +
       i06VarCostCDRMin(CDRTECH) +
@@ -113,31 +120,35 @@ Q06VarCostCDR(CDRTECH,YTIME)$(TIME(YTIME))..
     )
 ;
 
-*' The equation calculates the Levelized Costs of CDR capacity, also taking into account its discount rate and life expectancy, 
-*' for each region (country) and year.
-*' This subsidy-eligible cost excludes the shared storage tax, but includes physical storage.
+*' Calculates the pre-subsidy levelized cost of CDR by country and technology.
+*' Combines learned capital, fixed and variable costs, a fixed adjustment of 20,
+*' electricity and natural gas requirements, and physical CO2 storage costs for DAC.
+*' The shared CCS availability cost adder is excluded at this stage.
 Q06LvlCostCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06LvlCostCDR(allCy,CDRTECH,YTIME)
-            =E=         
+            =E=
     V06GrossCapCDR(CDRTECH,YTIME) +
-    V06FixOandMCDR(CDRTECH,YTIME) + 
+    V06FixOandMCDR(CDRTECH,YTIME) +
     V06VarCostCDR(CDRTECH,YTIME) - 20 +
     i06SpecElecCDR(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME) +
     i06SpecHeatCDR(allCy,CDRTECH,YTIME) * VmPriceFuelSubsecCarVal(allCy,"OI","NGS",YTIME) / 0.85 +
     (VmCstCO2SeqCsts(allCy,YTIME) - i06CCSAvailabilityCostAdder(YTIME))$DACTECH(CDRTECH)
 ;
 
-*' Deduct the technology subsidy, then add the shared storage tax in full for DAC.
+*' Calculates the full cost of CDR after technology-specific subsidies.
+*' Subtracts DAC or enhanced-weathering subsidies as applicable, then adds the
+*' shared CCS availability cost adder for DAC technologies in full.
 Q06CostFullCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06CostFullCDR(allCy,CDRTECH,YTIME)
-        =E=         
+        =E=
     V06LvlCostCDR(allCy,CDRTECH,YTIME)
     - VmSubsiDemTech(allCy,"DAC",CDRTECH,YTIME)$DACTECH(CDRTECH) - VmSubsiDemTech(allCy,"EW",CDRTECH,YTIME)$sameas("TEW",CDRTECH)
     + i06CCSAvailabilityCostAdder(YTIME)$DACTECH(CDRTECH)
 ;
 
-*' The equation estimates the profitability of CDR capacity, calculating the rate between levelized costs (CAPEX, fixed and fuel needs)
-*' and revenues/avoided costs (carbon values, carbon subsidies) regionally.
+*' Calculates a CDR profitability ratio by country, technology, and year.
+*' Divides the current carbon value applicable to DAC by the previous-year
+*' full CDR cost. Higher values indicate more favorable relative economics.
 Q06ProfRateCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06ProfRateCDR(allCy,CDRTECH,YTIME)
         =E=
@@ -145,11 +156,9 @@ Q06ProfRateCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06CostFullCDR(allCy,CDRTECH,YTIME - 1)
 ;
 
-*' The equation estimates the CDR deployment gap for each region, technology and year based on previous-year net emissions
-*' and the profitability rate of CDR technologies. The emissions term is scaled by a policy parameter and transformed
-*' through a smooth hyperbolic tangent function,
-*' so profitability above a threshold increases deployment pressure while lower profitability keeps the gap close to zero.
-*' This gap is subsequently used to determine the annual increase in CDR capacity.
+*' Estimates the CDR deployment gap from previous-year net emissions.
+*' A policy scaling factor and a smooth profitability response determine the gap.
+*' The tanh response increases around a profitability ratio of 1.5.
 Q06GapCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   V06GapCDR(allCy,CDRTECH,YTIME)
       =E=
@@ -157,14 +166,10 @@ Q06GapCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   * (tanh(3 * (V06ProfRateCDR(allCy,CDRTECH,YTIME) - 1.5)) + 1) / 2
   ;
 
-
-* The equation determines the annual growth rate of new DAC capacity by region and technology. 
-* The growth rate is modeled as a smooth S-shaped (tanh) function of the profitability rate, 
-* scaled by the maximum allowable expansion factor and adjusted by a technology-specific 
-* maturity factor. This formulation captures the idea that as DAC technologies become more profitable,
-* their growth rate will accelerate, but will eventually level off as they reach market saturation or face other constraints.
-*'It also chooses the higher between the gap and a minimum growth rate based on last year's capacity.
-*'The maturity factor allows for differentiation between technologies based on their readiness and potential for rapid deployment.
+*' Determines the annual addition to CDR capacity for each technology and country.
+*' Uses the deployment gap and a minimum addition proportional to last-year
+*' capacity, with a technology-specific maturity factor applied to the result.
+*' The square-root term implements an absolute-value adjustment in the formula.
 Q06CapFacNewCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   V06CapFacNewCDR(allCy,CDRTECH,YTIME)
       =E=
@@ -176,19 +181,23 @@ Q06CapFacNewCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   ))) / 2
   * i06MatFacCDR(CDRTECH);
 
-*' The equation calculates the CDR installed capacity annually and regionally.
+*' Updates installed CDR capacity by adding the current-year capacity increment
+*' to the installed capacity of the previous year.
 Q06CapCDR(allCy,CDRTECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V06CapCDR(allCy,CDRTECH,YTIME)
       =E=
     (V06CapCDR(allCy,CDRTECH,YTIME-1) + V06CapFacNewCDR(allCy,CDRTECH,YTIME))
     ;
 
-*' The equation calculates the different fuels consumed by the DAC installed capacity annually and regionally.
+*' Calculates final fuel consumption associated with installed CDR capacity.
+*' Natural gas and hydrogen heat inputs use the specific heat requirement
+*' divided by 0.85, while electricity uses the specific electricity requirement.
+*' The resulting fuel consumption is divided by 1e6.
 Q06ConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)$(TIME(YTIME) $TECHtoEF(CDRTECH,EF) $(runCy(allCy)))..
     VmConsFuelTechCDRProd(allCy,CDRTECH,EF,YTIME)
       =E=
     (
       (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecHeatCDR(allCy,CDRTECH,YTIME) / 0.85)$(sameas(EF, 'ngs')) +
       (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecHeatCDR(allCy,CDRTECH,YTIME) / 0.85)$(sameas(EF, 'H2F')) +
-      (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecElecCDR(allCy,CDRTECH,YTIME))$(sameas(EF, 'elc')) 
+      (V06CapCDR(allCy,CDRTECH,YTIME) * i06SpecElecCDR(allCy,CDRTECH,YTIME))$(sameas(EF, 'elc'))
     ) / 1e6;

@@ -1,34 +1,32 @@
-*' @title Equations of OPEN-PROMs Learning Curves module
+*' @title Equations of OPEN-PROM's Learning Curves module
 *' @code
 
 *' GENERAL INFORMATION
-
-*' * Learning Curves module 
-
-*' This equation implements the learning curve for wind and solar technologies with stopping mechanism.
-*' The learning curve follows the equation: multiplier = (Cap_current / Cap_initial)^ε
-*' where ε is calculated from learning rate: ε = log(1-LR)/log(2)
-*' 
-*' STOPPING MECHANISM: Only a fraction of costs are subject to learning curves.
-*' - LearnableFraction: Technology-specific manufacturing costs that improve with experience
-*' - FixedFraction: Basic materials, labor, installation costs that remain constant
-*' - MinCostFraction: Absolute floor preventing unrealistic cost reductions
 *'
-*' The cost multiplier applies only to the learnable portion of total costs.
-*' Final cost = [LearnableFraction × CostMultiplier + (1-LearnableFraction)] × InitialCost
+*' * Learning Curves module
+*'
+*' This module models experience-driven cost changes for technologies in LCTECH.
+*' The learning exponent i10AlphaLC is typically derived from a learning rate as
+*' log(1 - learning rate) / log(2). A negative exponent implies decreasing costs
+*' when cumulative installed capacity grows.
+*' The equations below calculate a period-to-period learning multiplier and
+*' accumulate new electricity capacity globally. They do not themselves implement
+*' a fixed-cost fraction, a minimum-cost floor, or a zero-denominator safeguard.
 
-*' Learning curve cost multiplier equation with numerical safeguards
-*' Timing: Cost multiplier for YTIME based on capacity growth in previous period (YTIME-1 vs YTIME-2)
-*' This reflects that learning happens from past experience and affects current period costs
-*' Safeguards: Add small epsilon to denominator to avoid division by zero
+*' Calculate the learning-cost multiplier from the ratio of global cumulative
+*' installed capacity in the previous two periods, raised to i10AlphaLC.
+*' The multiplier for YTIME uses YTIME-1 relative to YTIME-2, so capacity
+*' additions affect costs with a lag. Both capacity values must be nonzero
+*' for the ratio to be well-defined; no epsilon is added in this equation.
 Q10CostLC(LCTECH,YTIME)$(TIME(YTIME))..
     VmCostLC(LCTECH,YTIME)
         =E=
     (V10CumCapGlobal(LCTECH,YTIME-1) / (V10CumCapGlobal(LCTECH,YTIME-2))) ** i10AlphaLC(LCTECH);
 
-*' Global cumulative capacity tracking equation
-*' Tracks total cumulative capacity installations since base year
-*' Cumulative = Previous cumulative + New installations this period (converted MW to GW)
+*' Update global cumulative installed capacity for each learning technology.
+*' Add current-period new electricity capacity across countries in runCy to
+*' the previous period's cumulative capacity. The equation contains no explicit
+*' MW-to-GW conversion; units follow those of V04NewCapElec and V10CumCapGlobal.
 Q10CumCapGlobal(LCTECH,YTIME)$(TIME(YTIME))..
     V10CumCapGlobal(LCTECH,YTIME)
         =E=

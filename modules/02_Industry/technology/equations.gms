@@ -1,21 +1,7 @@
-*' @title Equations of OPEN-PROMs INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-*' @code
-
-*' GENERAL INFORMATION
-
-*' Industrial and domestic energy demand is divided (TO DO)
-
-*' Equation format: "typical useful energy demand equation"
-*' The main explanatory variables (drivers) are activity indicators (economic activity) and corresponding energy costs.
-*' The type of "demand" is computed based on its past value, the ratio of the current and past activity indicators (with the corresponding elasticity), 
-*' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
-
-*' * INDUSTRY  - DOMESTIC - NON ENERGY USES - BUNKERS VARIABLES
-*' This equation computes the useful energy demand in each demand subsector (excluding TRANSPORT). This demand is potentially "satisfied" by multiple energy forms/fuels (substitutable demand).
-*' The equation follows the "typical useful energy demand" format where the main explanatory variables are activity indicators and average "weighted" technology costs.
-*' OLD EQUATION: Q02DemFinSubFuelSubsec(allCy,DSBS,YTIME) --> NEW EQUATION:Q02DemUsefulSubsec
-*' OLD VARIABLE: VmDemFinSubFuelSubsec(allCy,DSBS,YTIME) --> NEW VARIABLE:VmDemUsefulSubsec
-*' Note: To check which cost should be used... (this VmPriceFuelAvgSub or another cost (weighted average per technology))
+*' Calculates substitutable useful energy demand for industry, domestic and non-energy
+*' subsectors. Previous-year demand is adjusted by a calibration factor, changes in
+*' activity, current and lagged average fuel-price ratios, and a distributed price lag.
+*' Activity and price responses are controlled by subsector-specific elasticities.
 Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$runCy(allCy))..
     V02DemSubUsefulSubsec(allCy,DSBS,YTIME) 
         =E=
@@ -29,20 +15,28 @@ Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS
     )
     
 ;
-*'NEW EQUATION'
-*' This equation computes the remaining equipment capacity of each technology in each subsector in the beginning of the year YTIME based on the available capacity of the previous year
+*' Calculates the capacity of equipment surviving from the previous year for each
+*' subsector and technology. Previous-year installed capacity is multiplied by the
+*' remaining-capacity ratio, which accounts for regular and premature retirement.
 Q02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and (INDDOM(DSBS) or NENSE(DSBS)))$runCy(allCy))..
     V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) 
         =E=
     V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME-1) * 
     V02RatioRem(allCy,DSBS,ITECH,YTIME);
 
+*' Calculates the fraction of technology capacity retained from the previous year. The
+*' survival fraction combines retirement implied by the inverse technical lifetime with
+*' the premature scrapping fraction.
 Q02RatioRem(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and (INDDOM(DSBS) or NENSE(DSBS)))$runCy(allCy))..
     V02RatioRem(allCy,DSBS,ITECH,YTIME) 
         =E=
     (1 - 1/VmLft(allCy,DSBS,ITECH,YTIME)) * 
     (1 - V02PremScrpIndu(allCy,DSBS,ITECH,YTIME));
 
+*' Estimates premature equipment scrapping using the inverse of lagged variable cost
+*' adjusted for utilization, compared with the inverse costs of alternative
+*' technologies. A technology-specific scaling factor controls the contribution of
+*' alternatives; small constants stabilize the ratios.
 Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and (INDDOM(DSBS) or NENSE(DSBS)))$runCy(allCy))..
     V02PremScrpIndu(allCy,DSBS,ITECH,YTIME)
         =E=
@@ -57,6 +51,9 @@ Q02PremScrpIndu(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(SECTTECH(DSBS,ITECH) and (
 
 *'NEW EQUATION' - kind of --> substitutes Q02ConsRemSubEquipSubSec
 * This equation computes the useful energy covered by the remaining equipment
+*' Calculates useful energy supplied by surviving equipment in a subsector. Remaining
+*' capacity is summed across eligible technologies after multiplying by the
+*' useful-energy conversion factor and technology utilization.
 Q02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$runCy(allCy))..
     V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME) 
         =E=
@@ -65,13 +62,9 @@ Q02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(
       imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) *
       i02util(allCy,DSBS,ITECH,YTIME)
     );
-
-*' This equation calculates the gap in useful energy demand for industry, tertiary, non-energy uses, and bunkers.
-*' It is determined by subtracting the useful energy demand that can be satisfied by existing equipment from the total useful 
-*' energy demand per subsector. The square root term is included to ensure a non-negative result - if the result of the 
-*' the subtraction is negative, the gap will take a zero value.
-*' OLD EQUATION: Q02GapFinalDem(allCy,DSBS,YTIME) --> NEW EQUATION:Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)
-*' OLD VARIABLE: V02GapFinalDem(allCy,DSBS,YTIME) --> NEW VARIABLE:V02GapUsefulDemSubsec(allCy,DSBS,YTIME)
+*' Calculates the non-negative useful-energy demand gap as the positive part of total
+*' substitutable useful-energy demand minus useful energy supplied by surviving
+*' equipment. The square-root-of-square expression sets negative gaps to zero.
 Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS)) $runCy(allCy))..
     V02GapUsefulDemSubsec(allCy,DSBS,YTIME) 
         =E=
@@ -81,12 +74,11 @@ Q02GapUsefulDemSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS
       SQRT(SQR(V02DemSubUsefulSubsec(allCy,DSBS,YTIME) - V02DemUsefulSubsecRemTech(allCy,DSBS,YTIME)))
     )/2
 ;
-
-*' The equation computes the capital cost and fixed O&M cost of each technology in each subsector
-*' OLD EQUATION: Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW EQUATION:Q02CapCostTech(allCy,DSBS,rCon,EF,YTIME)
-*' OLD VARIABLE: V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW VARIABLE:V02CapCostTech(allCy,DSBS,rCon,EF,YTIME)
-*' Add parameter sUnitToKUnit = 1000
-*' Check ITECH and CHPs
+*' Calculates annualized capital and fixed operation and maintenance costs per unit of
+*' useful energy for each technology. Capital expenditure is annualized using the
+*' subsector discount rate and technical lifetime, adjusted by the capital-goods index,
+*' and combined with fixed O&M costs before division by the useful-energy conversion
+*' factor.
 Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
     V02CapCostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
@@ -97,11 +89,10 @@ Q02CapCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS)
       imFixOMCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
     ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME)
 ;
-
-*' The equation computes the variable cost (variable + fuel) of each technology in each subsector - to check about consumer sizes
-*' OLD EQUATION: Q02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW EQUATION:Q02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)
-*' OLD VARIABLE: V02CostTechIntrm(allCy,DSBS,rCon,EF,YTIME) --> NEW VARIABLE:V02VarCostTech(allCy,DSBS,rCon,ITECH,YTIME)
-*' NEW SET TECHEF
+*' Calculates variable cost per unit of useful energy for each technology. Fuel prices
+*' are weighted by technology-specific blending shares and supplemented by carbon
+*' capture and sequestration costs and charges on uncaptured CO2 emissions. Non-fuel
+*' variable O&M costs are added before division by the useful-energy conversion factor.
 Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
   V02VarCostTech(allCy,DSBS,ITECH,YTIME) 
       =E=
@@ -118,6 +109,8 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS)
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
   ) / imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME);
 
+*' Calculates the combined technology cost as annualized capital and fixed O&M cost plus
+*' variable and fuel-related cost, less the technology demand subsidy.
 Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$SECTTECH(DSBS,ITECH)$runCy(allCy))..
     V02CostTech(allCy,DSBS,ITECH,YTIME) 
         =E=
@@ -125,10 +118,10 @@ Q02CostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$S
     V02VarCostTech(allCy,DSBS,ITECH,YTIME) -
     VmSubsiDemTech(allCy,DSBS,ITECH,YTIME)
     ;
-
-*' This equation calculates the technology share in new equipment based on factors such as maturity factor,
-*' cumulative distribution function of consumer size groups, number of consumers, technology cost, distribution function of consumer
-*' size groups, and technology sorting.
+*' Allocates new equipment demand across eligible technologies using a normalized
+*' cost-based share. Technology maturity weights inverse lagged total costs raised to
+*' the subsector substitution elasticity; the denominator sums the same weights over all
+*' eligible technologies.
 Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,ITECH)$(INDDOM(DSBS) or NENSE(DSBS)) $runCy(allCy))..
     V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) 
         =E=
@@ -138,22 +131,18 @@ Q02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME) $SECTTECH(DSBS,I
       imMatrFactor(allCy,DSBS,ITECH2,YTIME) *
       V02CostTech(allCy,DSBS,ITECH2,YTIME-1) ** (-i02ElaSub(allCy,DSBS))
     );
-
-*' This equation computes the equipment capacity of each technology in each subsector
-*'Check if Tech exists in main.gms
+*' Calculates total installed equipment capacity by adding surviving capacity to new
+*' capacity. New capacity is derived from the technology share of the useful-energy
+*' demand gap, divided by its useful-energy conversion factor and utilization rate.
 Q02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME)$(SECTTECH(DSBS,ITECH) and TIME(YTIME) and (INDDOM(DSBS) or NENSE(DSBS)) and runCy(allCy))..
     V02EquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) 
         =E= 
     V02RemEquipCapTechSubsec(allCy,DSBS,ITECH,YTIME) +
     (V02ShareTechNewEquipUseful(allCy,DSBS,ITECH,YTIME) * V02GapUsefulDemSubsec(allCy,DSBS,YTIME)) / 
     (imUsfEneConvSubTech(allCy,DSBS,ITECH,YTIME) * i02util(allCy,DSBS,ITECH,YTIME));
-        
-*' This equation computes the consumption/demand of non-substitutable electricity for subsectors of INDUSTRY and DOMESTIC in the "typical useful energy demand equation".
-*' The main explanatory variables are activity indicators of each subsector and electricity prices per subsector. Corresponding elasticities are applied for activity indicators
-*' and electricity prices.
-*' OLD EQUATION: Q02ConsElecNonSubIndTert(allCy,INDDOM,YTIME) --> NEW EQUATION:Q02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)
-*' OLD VARIABLE: VmConsElecNonSubIndTert(allCy,INDDOM,YTIME) --> NEW VARIABLE:V02UsefulElecNonSubIndTert(allCy,DSBS,YTIME)
-
+*' Projects non-substitutable useful electricity demand for industry and domestic
+*' subsectors. Previous-year demand is scaled by activity growth and current, previous
+*' and distributed-lag electricity price changes, using subsector-specific elasticities.
 Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME) 
         =E=
@@ -164,20 +153,18 @@ Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     prod(KPDL,
       (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-ord(KPDL)) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-(ord(KPDL)+1))) ** (i02ElastNonSubElec(allCy,INDDOM,"c",YTIME)*imFPDL(INDDOM,KPDL))
     );
-
-*' NEW EQUATION - Useful Electricity to Final Electricity (Check if needed to add equipment of electricity)
+*' Converts non-substitutable useful electricity demand into final electricity
+*' consumption for eligible industrial and residential/commercial subsectors by dividing
+*' by the electricity technology useful-energy conversion factor.
 Q02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(TIME(YTIME) and runCy(allCy) and (INDSE(DSBS) or RESCOM(DSBS)))..
     V02FinalElecNonSubIndTert(allCy,DSBS,YTIME) 
         =E=
     V02UsefulElecNonSubIndTert(allCy,DSBS,YTIME) / 
     imUsfEneConvSubTech(allCy,DSBS,"TELC",YTIME);
-
-*' This equation calculates the consumption of fuels in each demand subsector.
-*' It considers the consumption of remaining substitutable equipment, the technology share in new equipment, and the final demand
-*' gap to be filled by new technologies. Additionally, non-substitutable electricity consumption in Industry and Tertiary sectors is included.
-*' OLD EQUATION: Q02ConsFuelInclHP(allCy,DSBS,EF,YTIME) --> NEW EQUATION:Q02ConsFuelIncl(allCy,DSBS,EF,YTIME)
-
-*' OLD VARIABLE: VmConsElecNonSubIndTert(allCy,INDDOM,YTIME) --> NEW VARIABLE:VmUsefulElecNonSubIndTert(allCy,DSBS,YTIME)
+*' Calculates final fuel consumption for each eligible non-transport subsector and fuel.
+*' Technology capacity is multiplied by utilization and fuel blending shares and summed
+*' over compatible technologies. Non-substitutable final electricity is additionally
+*' included for eligible industry and domestic subsectors, excluding agriculture.
 Q02ConsFuel(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) and SECtoEF(DSBS,EFS))$runCy(allCy))..
     VmConsFuel(allCy,DSBS,EFS,YTIME) 
         =E=
@@ -187,21 +174,18 @@ Q02ConsFuel(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$((INDDOM(DSBS) or NENSE(DSBS)) an
       i02util(allCy,DSBS,ITECH,YTIME)
     ) +
     V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS) and not sameas("AG",DSBS) and ELCEF(EFS));
-
-*' Average efficiency of substitutable demand
+*' Calculates the ratio of substitutable useful-energy demand to total final fuel
+*' consumption excluding non-substitutable electricity. A small constant is added to the
+*' denominator to avoid division by zero.
 Q02IndAvrEffFinalUseful(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS))$runCy(allCy))..
     V02IndAvrEffFinalUseful(allCy,DSBS,YTIME)
        =E=
     V02DemSubUsefulSubsec(allCy,DSBS,YTIME) /
     (sum(EF$SECtoEF(DSBS,EF),VmConsFuel(allCy,DSBS,EF,YTIME)) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$(INDDOM(DSBS)) + 1e-3)
     ;
-
-*' This equation calculates the estimated electricity index of the industry price for a given year. The estimated index is derived by considering the historical
-*' trend of the electricity index, with a focus on the fuel prices in the industrial subsector. The equation utilizes the fuel prices for electricity generation,
-*' both in the current and past years, and computes a weighted average based on the historical pattern. The estimated electricity index is influenced by the ratio
-*' of fuel prices in the current and previous years, with a power of 0.3 applied to each ratio. This weighting factor introduces a gradual adjustment to reflect the
-*' historical changes in fuel prices, providing a more dynamic estimation of the electricity index. This equation provides a method to estimate the electricity index
-*' based on historical fuel price trends, allowing for a more flexible and responsive representation of industry price dynamics.
+*' Sets the industrial electricity price index for each CHP technology equal to the
+*' previous-year industrial electricity price. Earlier price-ratio adjustment terms are
+*' commented out and do not affect the equation.
 Q02IndxElecIndPrices(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V02IndxElecIndPrices(allCy,TCHP,YTIME)
         =E=
@@ -210,6 +194,9 @@ Q02IndxElecIndPrices(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     !!(VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-2)/VmPriceFuelAvgSub(allCy,"OI",YTIME-2)) ** (-0.005) *
     !!(VmPriceFuelSubsecCarVal(allCy,"OI","ELC",YTIME-3)/VmPriceFuelAvgSub(allCy,"OI",YTIME-3)) ** (-0.005);
 
+*' Calculates the share of each eligible fuel in a subsector’s total final fuel
+*' consumption. The denominator sums consumption plus a small stabilization term across
+*' all eligible fuels.
 Q02ConsFuelShare(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS) and SECtoEF(DSBS,EF))$runCy(allCy))..
     VmConsFuelShare(allCy,DSBS,EF,YTIME) 
         =E=
@@ -217,6 +204,8 @@ Q02ConsFuelShare(allCy,DSBS,EF,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR
     SUM(EF2$SECtoEF(DSBS,EF2),VmConsFuel(allCy,DSBS,EF2,YTIME) + 1e-6);
 
 
+*' Sums final fuel consumption across all eligible energy forms for each non-transport,
+*' non-CDR demand subsector.
 Q02ConsFuelSum(allCy,DSBS,YTIME)$(TIME(YTIME)$(not TRANSE(DSBS) and not CDR(DSBS))$runCy(allCy))..
     VmConsFuelSum(allCy,DSBS,YTIME) 
         =E=

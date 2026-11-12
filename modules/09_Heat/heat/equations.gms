@@ -3,32 +3,38 @@
 
 *' GENERAL INFORMATION
 
-*' Equation format: "typical useful energy demand equation"
-*' The main explanatory variables (drivers) are activity indicators (economic activity) and corresponding energy costs.
-*' The type of "demand" is computed based on its past value, the ratio of the current and past activity indicators (with the corresponding elasticity), 
-*' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
+*' Steam demand is balanced against available production capacity. Technology capacity
+*' evolves through scrapping and cost-based allocation of new capacity requirements.
+*' Production costs include capital, fixed O&M, fuel, carbon, and capture components.
 
 *' * Heat module
 
-*' This equation calculates the total heat demand in the system. It takes into account the overall need for steam
-*' across sectors like transportation, industry, and power generation, adjusted for any transportation losses or distribution inefficiencies.
+*' Calculates total steam demand as gross inland steam consumption less net imports. The
+*' balance is used to determine domestic steam production requirements.
 Q09DemTotSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmDemTotSte(allCy,YTIME)
         =E=
     V03ConsGrssInl(allCy,"STE",YTIME) - VmImpNetEneBrnch(allCy,"STE",YTIME);
 
+*' Calculates the total steam capacity scrapping fraction from the technical lifetime
+*' retirement rate and the endogenous premature-retirement index.
 Q09ScrapRate(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09ScrapRate(allCy,TSTEAM,YTIME)
         =E=
     1 - (1 - 1 / i09ProdLftSte(TSTEAM)) *
     V09ScrapRatePremature(allCy,TSTEAM,YTIME);
 
+*' Updates installed steam production capacity by retaining the previous-year capacity
+*' after scrapping and allocating the new demand gap according to technology shares.
 Q09CapSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCapSte(allCy,TSTEAM,YTIME)
         =E=
     (1-V09ScrapRate(allCy,TSTEAM,YTIME)) * VmCapSte(allCy,TSTEAM,YTIME-1) +
     V09GapShareSte(allCy,TSTEAM,YTIME) * V09DemGapSte(allCy,YTIME);
 
+*' Allocates total steam demand among production technologies in proportion to their
+*' installed capacities. The technology outputs sum to total demand when aggregate
+*' capacity is positive.
 Q09ProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdSte(allCy,TSTEAM,YTIME)
         =E=
@@ -36,6 +42,9 @@ Q09ProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     SUM(TSTEAM2, VmCapSte(allCy,TSTEAM2,YTIME)) * 
     VmCapSte(allCy,TSTEAM,YTIME);
 
+*' Calculates the positive shortfall between total steam demand and surviving
+*' previous-year capacity. The absolute-value expression implements max(demand minus
+*' surviving capacity, 0), with a small positive offset.
 Q09DemGapSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09DemGapSte(allCy,YTIME)
         =E=
@@ -54,6 +63,10 @@ Q09DemGapSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   ))
   ) / 2 + 1e-3;
 
+*' Calculates variable steam production cost from base-year fuel shares, fuel prices,
+*' carbon capture and sequestration costs, residual emissions charges, and heat
+*' efficiency. Adds variable O&M and subtracts a CHP electricity-related credit for CHP
+*' technologies.
 Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09CostVarProdSte(allCy,TSTEAM,YTIME)
         =E=
@@ -72,6 +85,9 @@ Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       SUM(TCHP$sameas(TCHP,TSTEAM),VmPriceElecInd(allCy,TCHP,YTIME))
     )$TCHP(TSTEAM);
 
+*' Annualizes investment and fixed O&M costs using the sector discount rate and technology
+*' lifetime. Adjusts for the power-to-heat ratio, availability, and energy-unit conversion
+*' to obtain a unit steam production cost.
 Q09CostCapProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09CostCapProdSte(allCy,TSTEAM,YTIME)
         =E=
@@ -90,12 +106,16 @@ Q09CostCapProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       smTWhToMtoe * 1e3
     );
 
+*' Calculates total unit steam production cost as the sum of annualized capital and fixed
+*' costs and variable production costs.
 Q09CostProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V09CostProdSte(allCy,TSTEAM,YTIME)
         =E=
     V09CostCapProdSte(allCy,TSTEAM,YTIME) +
     V09CostVarProdSte(allCy,TSTEAM,YTIME);
 
+*' Calculates the production-weighted average steam cost across all technologies. A small
+*' positive term in each weight stabilizes the ratio when production is very low.
 Q09CostAvgProdSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostAvgProdSte(allCy,YTIME)
         =E=
@@ -105,6 +125,9 @@ Q09CostAvgProdSte(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     ) / 
     sum(TSTEAM,VmProdSte(allCy,TSTEAM,YTIME) + 1e-6);
 
+*' Allocates the steam capacity demand gap among technologies using inverse-squared
+*' previous-year total production costs. Technology maturity factors appear only in
+*' commented-out terms and are not active.
 Q09GapShareSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     V09GapShareSte(allCy,TSTEAM,YTIME)
         =E=
@@ -115,6 +138,9 @@ Q09GapShareSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
       V09CostProdSte(allCy,TSTEAM2,YTIME-1) ** (-2)
     );
 
+*' Calculates the steam-plant CO2 capture rate as a logistic response to the ratio of
+*' sequestration cost to the sector carbon value, scaled by the technology-specific
+*' maximum capture rate.
 Q09CaptRateSte(allCy,TSTEAM,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
     V09CaptRateSte(allCy,TSTEAM,YTIME)
         =E=
@@ -129,6 +155,9 @@ Q09CaptRateSte(allCy,TSTEAM,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
       )
     );
 
+*' Calculates the premature-retirement index using inverse-squared previous-year variable
+*' costs relative to scaled alternative technology costs. Competing CHP and
+*' district-heating technologies are evaluated separately.
 Q09ScrapRatePremature(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy))..
     V09ScrapRatePremature(allCy,TSTEAM,YTIME)
         =E=
@@ -150,5 +179,4 @@ Q09ScrapRatePremature(allCy,TSTEAM,YTIME)$(TIME(YTIME)$runCy(allCy))..
       ) ** (-2)
       )$TDHP(TSTEAM)
     );
-
 

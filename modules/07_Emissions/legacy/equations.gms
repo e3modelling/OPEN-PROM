@@ -2,35 +2,14 @@
 *' @code
 
 *' GENERAL INFORMATION
+*' These equations calculate gross and net CO2 emissions from demand and supply,
+*' process emissions from hydrogen production, and non-CO2 mitigation outcomes.
+*' Non-CO2 abatement is determined using marginal abatement cost (MAC) curves.
 
-*' Equation format: "typical useful energy demand equation"
-*' The main explanatory variables (drivers) are activity indicators (economic activity) and corresponding energy costs.
-*' The type of "demand" is computed based on its past value, the ratio of the current and past activity indicators (with the corresponding elasticity), 
-*' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
+*' EMISSIONS CONSTRAINTS
 
-*' * EMISSIONS CONSTRAINTS 
-
-*' The equation computes the total CO2 equivalent greenhouse gas emissions in all countries
-*' per National Allocation Plan (NAP) sector for a specific year. The result represents the 
-*' sum of CO2 emissions for each NAP sector across all countries.The equation involves several components:
-*' The consumption of fuels in each demand subsector, excluding heat from heat pumps, is considered.
-*' The emissions are calculated based on the fuel consumption and the CO2 emission factor for each subsector.
-*' Transformation Input to Thermal Power Plants is considered,
-*' and the emissions are calculated based on the input and the CO2 emission factor.
-*' Transformation Input to District Heating Plants : The transformation input to district heating plants is considered,
-*' and emissions are calculated based on the input and the CO2 emission factor.
-*' Final Consumption in Energy Sector : The final consumption in the energy sector is considered, and emissions are calculated based
-*' on the consumption and the CO2 emission factor.
-*' Electricity Production: The emissions from electricity production are considered, including adjustments for plant efficiency,
-*' CO2 emission factors, and the CO2 capture rate for plants with carbon capture and storage.
-*' The equation provides a comprehensive approach to calculating CO2eq emissions for each NAP sector, considering various aspects of fuel consumption
-*' and transformation across different subsectors. The result represents the overall CO2 emissions for each NAP sector across
-*' all countries for the specified year.
-
-*' The equation computes the total CO2 equivalent greenhouse gas emissions in all countries for a specific year.
-*' The result represents the sum of total CO2eq emissions across all countries. The summation is performed over the NAP (National Allocation Plan) sectors,
-*' considering the total CO2 GHG emissions per NAP sectorfor each country. This equation provides a concise and systematic approach to aggregating
-*' greenhouse gas emissions at a global level, considering contributions from different sectors and countries. 
+*' Inactive equation for aggregating CO2-equivalent emissions over NAP sectors.
+*' Retained for reference; this equation is inside a GAMS text block.
 $ontext
 q07GrnnHsEmisCO2EquivAllCntr(YTIME)$(TIME(YTIME))..
 
@@ -39,9 +18,10 @@ q07GrnnHsEmisCO2EquivAllCntr(YTIME)$(TIME(YTIME))..
          sum(NAP, V07GrnnHsEmisCO2Equiv(NAP,YTIME));
 $offtext
 
-*' Compute households expenditures on energy by utilizing the sum of consumption of remaining substitutable equipment multiplied by the fuel prices per subsector and fuel 
-*' minus the efficiency values divided by CO2 emission factors per subsector and multiplied by the sum of carbon prices for all countries and adding the Electricity price
-*' to Industrial and Residential Consumers multiplied by Consumption of non-substituable electricity in Industry and Tertiary divided by TWh to Mtoe conversion factor.
+*' Inactive equation estimating household energy expenditure from fuel use and prices.
+*' The expression includes adjustments for efficiency values and carbon costs,
+*' plus electricity expenditure for non-substitutable household electricity.
+*' Retained unchanged for reference, including its legacy variable names.
 $ontext
 q07ExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
                  v07ExpendHouseEne(allCy,YTIME)
@@ -52,11 +32,9 @@ q07ExpendHouseEne(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 VmConsElecNonSubIndTert --> NO LONGER                                          
 $offtext
 
-*' The equation calculates gross CO2 emissions from demand-side activities in million tons of CO2 for a given 
-*' country, demand sector, and year. Gross emissions are determined by summing fuel consumption across all 
-*' energy forms, including general fuel consumption, transport-specific final energy demand, and fuel consumption 
-*' from CDR technologies (Direct Air Capture and Enhanced Weathering), then multiplying by the corresponding 
-*' CO2 emission factors.
+*' Calculates gross demand-side CO2 emissions by country, demand subsector, and year.
+*' Final energy consumption is multiplied by the corresponding fuel emission factor
+*' and summed across energy forms.
 Q07GrossEmissCO2Demand(allCy,DSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
     V07GrossEmissCO2Demand(allCy,DSBS,YTIME)
         =E=   
@@ -65,10 +43,9 @@ Q07GrossEmissCO2Demand(allCy,DSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
       imCo2EmiFac(allCy,DSBS,EFS,YTIME)
     );
 
-*' The equation calculates gross CO2 emissions from supply-side activities in million tons of CO2 for a given 
-*' country, supply sector, and year. Gross emissions are determined by summing total transformed inputs and 
-*' final energy consumption across all energy forms, then multiplying by the corresponding CO2 emission factors. 
-*' The transformed inputs component applies only to sectors designated as emission sources.
+*' Calculates gross supply-side CO2 emissions by country, supply subsector, and year.
+*' Emissions arise from transformation inputs in SSBSENERGY sectors and from final
+*' energy consumption within supply sectors, weighted by fuel emission factors.
 Q07GrossEmissCO2Supply(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
     V07GrossEmissCO2Supply(allCy,SSBS,YTIME)
         =E=   
@@ -79,6 +56,9 @@ Q07GrossEmissCO2Supply(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
       ) * imCo2EmiFac(allCy,SSBS,EFS,YTIME)
     );
 
+*' Calculates gross CO2 process emissions from hydrogen production (H2P) only.
+*' Transformation inputs are multiplied by their sector-specific emission factors
+*' and summed across energy forms; other supply sectors contribute zero.
 Q07GrossEmissCO2Processes(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
     V07GrossEmissCO2Processes(allCy,SSBS,YTIME)
         =E=   
@@ -87,40 +67,41 @@ Q07GrossEmissCO2Processes(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
       imCo2EmiFac(allCy,SSBS,EFS,YTIME)
     )$sameas(SSBS,"H2P");
 
-*' This equation calculates the total absolute abatement of non-CO2 emissions for a specific source, country, and time period.
-*' The determination is based on the Marginal Abatement Cost (MAC) curves, the exogenous carbon price, and specific unit conversion factors. The equation 
-*' identifies the maximum abatement potential by scanning the MAC curve steps and selecting the highest reduction level where the implementation cost is less than or
-*' equal to the adjusted carbon price. This ensures that the model adopts all abatement measures that are economically viable given the current carbon price.
+*' Determines economically available absolute non-CO2 abatement by source and year.
+*' Selects the maximum reduction from MAC steps whose cost does not exceed the
+*' exogenous carbon value adjusted by the source-specific unit conversion factor.
+*' The equation is active only for periods with ord(YTIME) greater than 17.
 Q07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy))$(ord(YTIME) > 17))..
     V07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)
     =E=
     smax(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME) * p07UnitConvFactor(E07SrcMacAbate)), 
          i07DataCh4N2OFMAC(allCy, E07SrcMacAbate, E07MAC, YTIME));
 
-*' This equation calculates the Total Cumulative Cost of all abatement actions combined for non-CO2 sources in a specific country and time period.
-*' The calculation is based on the marginal reduction steps derived from the MAC curves and their corresponding implementation costs. The equation 
-*' computes the total investment required by summing the cost of each individual abatement step (marginal reduction * step cost * cost correction) for all steps that fall
-*' strictly below or equal to the adjusted carbon price. This represents the area under the MAC curve up to the implementation point. 
-*' The 'p07CostCorrection' handles the GWP conversion for F-gases to ensure we are paying for 'C-equivalents', not 'tons of gas'. Output units: [Mil $2015] 
+*' Calculates total non-CO2 abatement costs by source, country, and year.
+*' Sums marginal reductions multiplied by MAC step costs and source-specific cost
+*' correction factors for steps below the adjusted exogenous carbon price.
+*' The correction factor accounts for differences in source-specific units.
 Q07CostAbateBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V07CostAbateBySrcRegTim(E07SrcMacAbate, allCy, YTIME)
     =E=
     sum(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME) * p07UnitConvFactor(E07SrcMacAbate)), 
         p07MarginalRed(allCy, E07SrcMacAbate, E07MAC, YTIME) * p07MacCost(E07MAC) * p07CostCorrection(E07SrcMacAbate));
 
-*' This equation calculates the actual remaining non-CO2 emissions for a specific source, country, and time period after mitigation.
-*' The calculation is based on the exogenous baseline emissions projection (what emissions would be without action) and the total absolute abatement calculated
-*' in the previous step. The equation essentially subtracts the economically feasible abatement quantity from the baseline emissions to derive the final
-*' volume of emissions released into the atmosphere. Output units,  CH4 and N20: Mt C-eq, F-gases: kt-gas
+*' Calculates remaining non-CO2 emissions by source, country, and year.
+*' Subtracts absolute MAC-based abatement from exogenous baseline emissions.
+*' Source-specific output units are retained: CH4 and N2O in Mt C-eq and
+*' F-gases in kt of gas, as specified in the input data.
 Q07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V07EmiActBySrcRegTim(E07SrcMacAbate, allCy, YTIME)
     =E=
     i07DataCh4N2OFEmis(allCy, E07SrcMacAbate, YTIME)  - V07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME);
 
-*' The equation calculates the net CO2 emissions in million tons of CO2 for a given country and year.
-*' Net emissions are determined by summing gross CO2 emissions from both supply-side and demand-side 
-*' sectors, then subtracting CO2 captured through CCS technologies in energy conversion plants and CO2 
-*' captured through dedicated CDR technologies.
+*' Calculates an adjusted net CO2 emissions measure by country and year.
+*' Gross supply- and demand-side emissions are reduced by CCS capture and CDR.
+*' The square-root term adds the absolute value of the negative of this balance,
+*' making the result twice the positive balance, or zero when it is negative,
+*' before adding a small positive constant (1e-6).
+*' The expression is not a simple signed net-emissions balance.
 Q07EmissionsNet(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V07EmissionsNet(allCy,YTIME)
     =E=

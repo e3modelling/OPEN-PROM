@@ -2,18 +2,17 @@
 *' @code
 
 *' GENERAL INFORMATION
-
-*' Equation format: "typical useful energy demand equation"
-*' The main explanatory variables (drivers) are activity indicators (economic activity) and corresponding energy costs.
-*' The type of "demand" is computed based on its past value, the ratio of the current and past activity indicators (with the corresponding elasticity), 
-*' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
-
+*' This module defines energy-balance accounting and transformation equations.
+*' It covers distribution losses, transformation inputs and outputs, transfers,
+*' gross inland consumption, primary production, energy trade, energy-sector own
+*' consumption, and final energy consumption by sector and energy carrier.
+*'
 *' * REST OF ENERGY BALANCE SECTORS
-
-*' The equation computes the distribution losses in million tonnes of oil equivalent for a given energy form sector.
-*' The losses are determined by the rate of losses over available for final consumption multiplied by the sum of total final energy
-*' consumption and final non-energy consumption. This calculation is performed for each time period.
-*' Please note that distribution losses are not considered for the hydrogen sector.
+*'
+*' Calculates distribution losses for each energy carrier by applying its
+*' final-consumption loss rate to total final energy use. For crude oil (CRO), primary
+*' production is also included in the loss base. The formula does not explicitly exclude
+*' hydrogen.
 Q03LossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmLossesDistr(allCy,EFS,YTIME)
         =E=
@@ -26,11 +25,10 @@ Q03LossesDistr(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 ;  
 
 $ontext
-*' The equation calculates the refineries' capacity for a given scenario and year.
-*' The calculation is based on a residual factor, the previous year's capacity, and a production scaling
-*' factor that takes into account the historical consumption trends for different energy forms. The scaling factor is
-*' influenced by the base year and the production scaling parameter. The result represents the refineries'
-*' capacity in million barrels per day (Million Barrels/day).
+*' Inactive equation (inside $ontext): estimates refinery capacity from the
+*' previous-year capacity and a residual capacity factor. After the initial ten periods,
+*' a product of lagged liquid-fuel final-consumption growth ratios adjusts capacity. The
+*' equation is conditional on nonzero refinery capacity in the start year.
 Q03CapRef(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03CapRef(allCy,YTIME)
         =E=
@@ -45,12 +43,12 @@ Q03CapRef(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     ]$i03RefCapacity(allCy,"%fStartHorizon%")+0;
 $offtext
 
-*' The equation calculates the total transformation input for a specific energy branch 
-*' in a given scenario and year. The result is obtained by summing the transformation inputs from different sources, including
-*' thermal power plants, District Heating Plants, nuclear plants, patent
-*' fuel and briquetting plants, and refineries. In the case where the energy branch is "OGS"
-*' (Other Gas), the total transformation input is calculated as the difference between the total transformation output and various consumption
-*' and loss components. The outcome represents the total transformation input in million tons of oil equivalent.
+*' Calculates transformation input by transformation sector and energy carrier. Power
+*' generation input is derived from technology-specific electricity output, fuel shares,
+*' and electrical efficiency. CHP and district-heating input use steam output, base-year
+*' fuel shares, and heat efficiency. Gas, solid, and liquid transformation inputs use
+*' base-year input-to-output coefficients. Hydrogen production input is determined by
+*' feedstock requirements.
 Q03InpTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SSBS,EFS))..
     V03InpTotTransf(allCy,SSBS,EFS,YTIME)
         =E=
@@ -73,10 +71,12 @@ Q03InpTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SSBS,E
     )$(sameas(SSBS,"GAS") or sameas(SSBS,"SLD") or sameas(SSBS,"LQD")) +
     (SUM(H2TECH$H2TECHtoFEEDSTOCK(H2TECH,EFS),VmProdH2(allCy,H2TECH,YTIME) * i05InputOverOutH2ProdFeed(allCy,H2TECH,EFS,YTIME)))$sameas("H2P",SSBS);    
 
-*' The equation calculates the total transformation output for a specific energy branch in a given scenario and year.
-*' The result is obtained by summing the transformation outputs from different sources, including thermal power stations, District Heating Plants,
-*' nuclear plants, patent fuel and briquetting plants, coke-oven plants, blast furnace plants, and gas works
-*' as well as refineries. The outcome represents the total transformation output in million tons of oil equivalent.
+*' Calculates transformation output by sector and energy carrier. Electricity output
+*' includes power plants and estimated CHP electricity generation, converted from TWh to
+*' Mtoe. Steam output includes district heating and CHP production. Liquid, solid, and
+*' gaseous fuel outputs are estimated using gross inland consumption net of imports and
+*' the base-year primary-fuel ratio. Hydrogen output equals total hydrogen demand for
+*' the hydrogen-production sector.
 Q03OutTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$runCy(allCy))..
     V03OutTotTransf(allCy,SSBS,EFS,YTIME)
         =E=
@@ -95,11 +95,9 @@ Q03OutTotTransf(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$runCy(allCy))..
     )$(SECtoEFPROD(SSBS,EFS) and (sameas("LQD",SSBS) or sameas("SLD",SSBS) or sameas("GAS",SSBS))) +
     VmDemTotH2(allCy,YTIME)$(sameas(EFS, "H2F") and sameas("H2P",SSBS));
 
-*' The equation calculates the transfers of a specific energy branch in a given scenario and year.
-*' The result is computed based on a complex formula that involves the previous year's transfers,
-*' the residual for feedstocks in transfers, and various conditions.
-*' In particular, the equation includes terms related to feedstock transfers, residual feedstock transfers,
-*' and specific conditions for the energy branch "CRO" (crop residues). The outcome represents the transfers in million tons of oil equivalent.
+*' Projects transfers for each energy carrier by scaling previous-year transfers with
+*' the ratio of current to previous final energy consumption across demand subsectors. A
+*' small additive constant in each summand prevents a zero denominator.
 Q03Transfers(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03Transfers(allCy,EFS,YTIME) 
         =E=
@@ -107,8 +105,9 @@ Q03Transfers(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     SUM(DSBS,VmFinalEnergy(allCy,DSBS,EFS,YTIME) + 1e-6) / 
     SUM(DSBS,VmFinalEnergy(allCy,DSBS,EFS,YTIME-1) + 1e-6);         
 
-*' The equation calculates the gross inland consumption. This quantity is equal to the total energy
-*' supply for each country.
+*' Calculates gross inland energy consumption for each carrier as final energy
+*' consumption plus energy-sector own consumption and transformation inputs, plus
+*' distribution losses, minus transfers.
 Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03ConsGrssInl(allCy,EFS,YTIME)
         =E=
@@ -120,16 +119,9 @@ Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmLossesDistr(allCy,EFS,YTIME) - 
     V03Transfers(allCy,EFS,YTIME); 
 
-*' The equation calculates the primary production for a specific primary production definition in a given scenario and year.
-*' The computation involves different scenarios based on the type of primary production definition:
-*' For primary production definitions the primary production is directly proportional to the rate of primary production in total primary needs,
-*' and it depends on gross inland consumption not including the consumption of the energy branch.
-*' For Natural Gas primary production, the calculation considers a specific formula involving the rate of primary production in total primary needs, residuals for
-*' hard coal, natural gas, and oil primary production, the elasticity related to gross inland consumption for natural gas, and other factors. Additionally, there is a lag
-*' effect with coefficients for primary oil production.
-*' For Crude Oil primary production, the computation includes the rate of primary production in total primary needs, residuals for hard coal, natural gas, and oil
-*' primary production, the fuel primary production, and a product term involving the polynomial distribution lag coefficients for primary oil production.
-*' The result represents the primary production in million tons of oil equivalent.
+*' Calculates primary production as gross inland consumption minus net energy imports
+*' and the sum of transformation outputs for the corresponding energy carrier. This is
+*' an energy-balance residual, not a separate production-growth or elasticity equation.
 Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03ProdPrimary(allCy,EFS,YTIME)
         =E=  
@@ -137,40 +129,35 @@ Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmImpNetEneBrnch(allCy,EFS,YTIME) -
     SUM(SSBS,V03OutTotTransf(allCy,SSBS,EFS,YTIME));   
 
-*' The equation calculates the fake exports for a specific energy branch
-*' in a given scenario and year. The computation is based on the fuel exports for
-*' the corresponding energy branch. The result represents the fake exports in million tons of oil equivalent.
+*' Estimates exports of each energy carrier as a fixed base-year export-to-import
+*' coefficient multiplied by the sum of previous-year imports across modeled countries.
 Q03Exp(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V03Exp(allCy,EFS,YTIME)
       =E=
     i03RateExpTotImp(allCy,EFS,"%fBaseY%") *
     SUM(runCy2, V03Imp(runCy2,EFS,YTIME-1));
 
-*' The equation computes the fake imports for a specific energy branch 
-*' in a given scenario and year. The calculation is based on different conditions for various energy branches,
-*' such as electricity, crude oil, and natural gas. The equation involves gross inland consumption,
-*' fake exports, consumption of fuels in demand subsectors, electricity imports,
-*' and other factors. The result represents the fake imports in million tons of oil equivalent for all fuels except natural gas.
+*' Estimates imports for each energy carrier by multiplying current gross inland
+*' consumption by the carrier-specific base-year import-to-gross-inland-consumption
+*' ratio.
 Q03Imp(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V03Imp(allCy,EFS,YTIME)
         =E=
     i03RateImpGrossInlCons(allCy,EFS,"%fBaseY%") *
     V03ConsGrssInl(allCy,EFS,YTIME);
 
-*' The equation computes the net imports for a specific energy branch 
-*' in a given scenario and year. It subtracts the fake exports from the fake imports for
-*' all fuels except natural gas . The result represents the net imports in million tons of oil equivalent.
+*' Defines net imports of each energy carrier as estimated imports minus estimated
+*' exports.
 Q03ImpNetEneBrnch(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmImpNetEneBrnch(allCy,EFS,YTIME)
         =E=
     V03Imp(allCy,EFS,YTIME) -
     V03Exp(allCy,EFS,YTIME);
                                
-*' The equation calculates the final energy own consumption in the energy sector.
-*' It considers the rate of energy branch consumption over the total transformation output.
-*' The final consumption is determined based on the total transformation output and primary production for energy
-*' branches, excluding Oil, Coal, and Gas. The result, VmConsFiEneSec, represents the final consumption in million tons of
-*' oil equivalent for the specified scenario and year.
+*' Calculates energy-sector own consumption by sector and carrier. For sectors other
+*' than hydrogen production, applies an energy-branch consumption rate to eligible
+*' transformation outputs and non-renewable primary production. For hydrogen production,
+*' sums technology-specific energy inputs required for hydrogen output.
 Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmConsFiEneSec(allCy,SSBS,EFS,YTIME)
         =E=
@@ -183,6 +170,10 @@ Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     )$(not sameas("H2P",SSBS)) +
     (SUM(H2TECH$H2TECHtoENERGY(H2TECH,EFS),VmProdH2(allCy,H2TECH,YTIME) * i05InputOverOutH2ProdEnergy(allCy,H2TECH,EFS,YTIME)))$sameas("H2P",SSBS);                               
 
+*' Aggregates final energy consumption by demand subsector and carrier. Includes
+*' transport fuel consumption, other subsector fuel consumption, agricultural fuel use
+*' for AG, direct-air-capture technology fuel use for DAC, and TEW fuel use for EW. The
+*' equation is restricted to mapped sector-carrier combinations and excludes ICT.
 Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$(SECtoEF(DSBS,EFS))$(not sameas("ICT",DSBS)))..
     VmFinalEnergy(allCy,DSBS,EFS,YTIME)
         =E= 

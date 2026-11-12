@@ -1,18 +1,14 @@
-*' @title Equations of OPEN-PROMs Economy module
+*' @title Equations of OPEN-PROM's Economy module
 *' @code
 
-*' GENERAL INFORMATION
-
-*' Equation format: "typical useful energy demand equation"
-*' The main explanatory variables (drivers) are activity indicators (economic activity) and corresponding energy costs.
-*' The type of "demand" is computed based on its past value, the ratio of the current and past activity indicators (with the corresponding elasticity), 
-*' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
-
 *' * Economy module
+*' Subsidy budgets, technology allocations, capital grants and net subsidy balances.
 
-*' The equation computes the total state revenues from carbon taxes, as the product of all fuel consumption in all subsectors of the supply side,
-*' along with the relevant fuel emission factor, and the carbon tax posed regionally that year. This is added to the 0.5% of the GDP,
-*' which is assumed to be used by each state for green subsidies.
+*' Defines the available subsidy budget as the positive part of prior-year gross demand
+*' and supply CO2 emissions minus the change in cumulative CO2 capture, multiplied by the
+*' prior-year PG-sector carbon value. Adds 0.5% of current GDP, converted by 1000, and the
+*' previous subsidy-tax balance. The square-root-of-square term implements the positive
+*' part.
 Q11SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V11SubsiTot(allCy,YTIME)
         =E=
@@ -33,15 +29,15 @@ Q11SubsiTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     + 0.005 * i01GDP(YTIME,allCy) * 1000
     + VmNetSubsiTax(allCy,YTIME-1)
 ;
-
-*' The equation splits the available state grants to the various demand technologies through a policy parameter expressing this proportional division.
-*' The resulting amount (in Millions US$2015) is going to be implemented to the cost calculation of each subsidized demand technology.
+*' Allocates the total subsidy budget to eligible demand-sector technologies using the
+*' country-, sector-, technology-, and year-specific subsidy allocation parameter.
 Q11SubsiDemTechAvail(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS,TECH))..
     VmSubsiDemTechAvail(allCy,DSBS,TECH,YTIME)
         =E=
     V11SubsiTot(allCy,YTIME) * i11SubsiPerDemTechAvail(allCy,DSBS,TECH,YTIME);
-
-*' The equation calculates the state support per unit of new capacity in the industrial subsectors and technologies (kUS$2015/toe-year).
+*' Sets industrial technology subsidy per unit of capacity to zero because the entire
+*' calculated expression is multiplied by zero. The inactive expression uses available
+*' grants, previous useful-demand equipment additions, lifetime, and a capital-cost floor.
 Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) and TIME(YTIME) and runCy(allCy))..
     VmSubsiDemITech(allCy,DSBS,ITECH,YTIME)
         =E=
@@ -56,12 +52,10 @@ Q11SubsiDemITech(allCy,DSBS,ITECH,YTIME)$(INDSE(DSBS) and SECTTECH(DSBS,ITECH) a
       (1 - imCapCostTechMin(allCy,DSBS,ITECH,YTIME)) * V02CostTech(allCy,DSBS,ITECH,YTIME-1)
     ))
     )$(ord(YTIME) > 15) / 2;
-
-*' The equation calculates the state support per unit of new capacity in the demand subsectors and technologies for the following units:
-*' - Transport (kUS$2015 per vehicle)
-*' - Industry (kUS$2015/toe-year)
-*' - CDR ()
-*' - Residential electricity ()
+*' Calculates the CDR technology subsidy as the minimum of available grant per
+*' previous-year new CDR capacity and the subsidy-eligible fraction of current CDR
+*' levelized cost. The transport and industry terms are enclosed in a disabled $$ontext
+*' block. The CDR term applies after the specified initial periods.
 Q11SubsiDemTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS,TECH))..
     VmSubsiDemTech(allCy,DSBS,TECH,YTIME)
         =E=
@@ -98,17 +92,18 @@ $$offtext
       ) / 2
     )$(CDR(DSBS) and ord(YTIME) > 15)
 ;
-
-*' The equation splits the available state grants to the various supply technologies through a policy parameter expressing this proportional division.
-*' The resulting amount (in Millions US$2015) is going to be implemented to the cost calculation of each subsided supply technology.
+*' Sets the subsidy amount for every eligible supply technology equal to the full subsidy
+*' budget. The technology-specific allocation factor is commented out and therefore does
+*' not scale the result.
 Q11SubsiSupTech(allCy,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmSubsiSupTech(allCy,STECH,YTIME)
         =E=
         V11SubsiTot(allCy,YTIME) !!* i11SubsiPerSupTech(allCy,STECH,YTIME)
 ;
-
-*' Subsidies in demand (Millions US$2015) 
-*' GIVING DUPLICATES AND NEED TO DEAL WITH SUM
+*' Calculates demand-side capital subsidies for passenger-car transport and industry. Each
+*' term takes the minimum of the available grant and the eligible capital expenditure,
+*' using the identity (a+b-abs(a-b))/2. CDR and household electricity terms are commented
+*' out.
 Q11SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(DSBS,TECH))..
       VmSubsiCapCostTech(allCy,DSBS,TECH,YTIME)
       =E=
@@ -153,7 +148,10 @@ Q11SubsiCapCostTech(allCy,DSBS,TECH,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECTTECH(
 ;
 
 $ontext
-*' Subsidies in supply (Millions US$2015)
+*' Inactive equation for supply-side subsidies to power generation and hydrogen
+*' production. The power term uses new capacity, capital costs, availability and grants;
+*' the hydrogen term uses production costs, demand, technology shares and grant
+*' parameters.
 Q11SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmSubsiCapCostSupply(allCy,SSBS,STECH,YTIME)
       =E=
@@ -175,9 +173,9 @@ Q11SubsiCapCostSupply(allCy,SSBS,STECH,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       )$sameas(SSBS,"H2P")
 ;
 $offtext
-
-*'This equation calculated the difference between the state revenues by collected carbon taxes, and the green grants and subsidies given in
-*'both the supply and demand sectors.
+*' Defines the remaining subsidy-tax balance as the current subsidy budget less total
+*' demand-side capital subsidies over eligible sector-technology pairs. The deduction for
+*' supply-side subsidies is commented out.
 Q11NetSubsiTax(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmNetSubsiTax(allCy,YTIME)
       =E=

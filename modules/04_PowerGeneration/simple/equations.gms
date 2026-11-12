@@ -1,36 +1,27 @@
-*' @title Equations of OPEN-PROMs Power Generation
+*' @title Equations of OPEN-PROM Power Generation
 *' @code
 
 *' GENERAL INFORMATION
 
-*' Equation format: "typical useful energy demand equation"
-*' The main explanatory variables (drivers) are activity indicators (economic activity) and corresponding energy costs.
-*' The type of "demand" is computed based on its past value, the ratio of the current and past activity indicators (with the corresponding elasticity), 
-*' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
+*' These equations describe electricity demand, generation, plant costs, capacity
+*' investment, technology shares, CO2 capture, retrofits, and scrapping.
 
 *' Power Generation
-
-*' This equation calculates the estimated electricity generation of Combined Heat and Power plantsin a specific countryand time period.
-*' The estimation is based on the fuel consumption of CHP plants, their electricity prices, the maximum share of CHP electricity in total demand, and the overall
-*' electricity demand. The equation essentially estimates the electricity generation of CHP plants by considering their fuel consumption, electricity prices, and the maximum
-*' share of CHP electricity in total demand. The square root expression ensures that the estimated electricity generation remains non-negative.
+*' Estimates CHP electricity production from steam production divided by the industrial
+*' electricity price for the CHP technology, then converts from Mtoe to TWh.
 Q04ProdElecEstCHP(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ProdElecEstCHP(allCy,TCHP,YTIME) 
         =E=
     VmProdSte(allCy,TCHP,YTIME) / VmPriceElecInd(allCy,TCHP,YTIME) / smTWhToMtoe;
-
-*' The equation calculates the total electricity demand by summing the components of final energy consumption in electricity, final non-energy consumption in electricity,
-*' distribution losses, and final consumption in the energy sector for electricity, and then subtracting net imports. The result is normalized using a conversion factor 
-*' which converts terawatt-hours (TWh) to million tonnes of oil equivalent (Mtoe). The formula provides a comprehensive measure of the factors contributing
-*' to the total electricity demand.
+*' Calculates total domestic electricity generation requirements from gross inland
+*' electricity consumption minus net electricity imports, converted from Mtoe to TWh.
 Q04DemElecTot(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04DemElecTot(allCy,YTIME)
         =E=
     (V03ConsGrssInl(allCy,"ELC",YTIME) - VmImpNetEneBrnch(allCy,"ELC",YTIME)) / smTWhToMtoe;          
-
-*' This equation calculates the CAPEX and the Fixed Costs of each power generation unit, taking into account its discount rate and life expectancy, 
-*' for each region (country) and year. Learning curves applied only to CAPEX costs with cost breakdown.
-*' Formula: Cost = [LearnableFraction × CostMultiplier + (1-LearnableFraction)] × InitialCost
+*' Calculates annualized capital and fixed operation and maintenance costs for each
+*' generation technology. Capital expenditure is adjusted by the capital goods index and,
+*' when enabled, technology-specific learning-curve factors.
 Q04CapexFixCostPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapexFixCostPG(allCy,PGALL,YTIME)
         =E=         
@@ -48,7 +39,9 @@ $else.curves
 $endif.curves
     ) +
     i04FixOandMCost(allCy,PGALL,YTIME);
-
+*' Calculates capital and fixed cost per unit of electricity output by scaling annualized
+*' costs with the renewable integration cost factor and dividing by available annual
+*' generation.
 Q04CostCapTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
     V04CostCapTech(allCy,PGALL,YTIME) 
         =E=
@@ -56,9 +49,9 @@ Q04CostCapTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
     (i04AvailRate(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME) * 1000)
  !!#UPT   * (imCostCapTechDisc(YTIME)$(sameas(PGALL,"ATHBMSCCS")) + 1$(not sameas(PGALL,"ATHBMSCCS")))
     ;
-
-*' Compute the variable cost of each power plant technology for every region,
-*' By utilizing the gross cost, fuel prices, CO2 emission factors & capture, and plant efficiency. 
+*' Calculates non-negative variable generation cost from variable O&M and fuel costs,
+*' accounting for fuel shares, conversion efficiency, carbon prices, capture rates, and
+*' CO2 storage costs. Adds a small positive offset.
 Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
     V04CostVarTech(allCy,PGALL,YTIME)
         =E=
@@ -86,11 +79,9 @@ Q04CostVarTech(allCy,PGALL,YTIME)$(time(YTIME) $runCy(allCy))..
           )
         ))
       ) / 2 + 1e-3;
-
-*' The equation calculates the hourly production cost of a power generation plant used in investment decisions. The cost is determined based on various factors,
-*' including the discount rate, gross capital cost, fixed operation and maintenance cost, availability rate, variable cost, renewable value, and fuel prices.
-*' The production cost is normalized per unit of electricity generated (kEuro2005/kWh) and is considered for each hour of the day. The equation includes considerations
-*' for renewable plants (excluding certain types) and fossil fuel plants. If a feed-in tariff is defined for this technology, it takes precedence over the calculated sum.
+*' Calculates the cost metric used for power plant investment decisions from capital and
+*' variable generation costs and the feed-in tariff. The square-root expression selects
+*' the smaller of total cost and twice total cost minus the tariff.
 Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CostHourProdInvDec(allCy,PGALL,YTIME)
         =E=             
@@ -101,11 +92,9 @@ Q04CostHourProdInvDec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       sqrt(sqr((V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) -
       (2 * (V04CostCapTech(allCy,PGALL,YTIME) + V04CostVarTech(allCy,PGALL,YTIME)) - i04FIT(allCy,PGALL,YTIME))))
     ) / 2;
-
-*' The equation computes the endogenous scrapping index for power generation plants  during the specified year .
-*' The index is calculated as the variable cost of technology excluding power plants flagged as not subject to scrapping 
-*' divided by the sum of this variable cost and a scaled value based on the scale parameter for endogenous scrapping . The scale
-*' parameter is applied to the sum of full costs and raised to the power of -2. The resulting index is used to determine the endogenous scrapping of power plants.
+*' Computes an endogenous retention index for technologies eligible for scrapping. It
+*' compares the inverse-square of the technology variable cost with scaled inverse-square
+*' costs of alternative plants, adjusted for availability.
 Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(allCy))..
     V04IndxEndogScrap(allCy,PGALL,YTIME)
         =E=
@@ -123,10 +112,8 @@ Q04IndxEndogScrap(allCy,PGALL,YTIME)$(TIME(YTIME) $(not PGSCRN(PGALL)) $runCy(al
         !!V04CostVarTech(allCy,PGALL2,YTIME)
       )
     );
-
-*' The equation calculates the total electricity generation capacity excluding Combined Heat and Power plants for a specified year .
-*' It is derived by subtracting the sum of the capacities of CHP plants multiplied by a factor of 0.85 (assuming an efficiency of 85%) from the
-*' total electricity generation capacity . This provides the total electricity generation capacity without considering the contribution of CHP plants.
+*' Calculates required non-CHP generation capacity by subtracting estimated CHP
+*' electricity output from total electricity requirements and converting annual TWh to GW.
 Q04CapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapElecNonCHP(allCy,YTIME)
         =E=
@@ -135,9 +122,9 @@ Q04CapElecNonCHP(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V04DemElecTot(allCy,YTIME) - 
       SUM(TCHP,V04ProdElecEstCHP(allCy,TCHP,YTIME)) 
     ) / smGwToTwhPerYear(YTIME);      
-
-*' In essence, the equation evaluates the difference between the current and expected power generation capacity, accounting for various factors such as planned capacity,
-*' decommissioning schedules, and endogenous scrapping. The square root term introduces a degree of tolerance in the calculation.
+*' Calculates the non-negative generation capacity gap using the change in required
+*' non-CHP capacity, scrapping, CCS retrofits, and scheduled decommissioning and
+*' investment. Adds a small positive offset.
 Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04GapGenCapPowerDiff(allCy,YTIME)
         =E=
@@ -161,30 +148,15 @@ Q04GapGenCapPowerDiff(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       ))
       ) 
     ) / 2 + 1e-6;
-
-*' Calculates the share of all the unflexible RES penetration into the mixture, and specifically how much above a given threshold it is.
+*' Calculates the share of wind and solar technologies in total installed generation
+*' capacity, using the technologies identified by PGRENSW.
 Q04ShareMixWndSol(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ShareMixWndSol(allCy,YTIME)
         =E=
     sum(PGALL$PGRENSW(PGALL), VmCapElec(allCy,PGALL,YTIME)) /
     sum(PGALL, VmCapElec(allCy,PGALL,YTIME));
- 
-*' The equation calculates a temporary variable which is used to facilitate scaling in the Weibull equation. The scaling is influenced by three main factors:
-*' Maturity Factor for Planned Available Capacity : This factor represents the material-specific influence on the planned available capacity for a power
-*' plant. It accounts for the capacity planning aspect of the power generation technology.
-*' Renewable Technologies Maturity Multiplier: This multiplier reflects the maturity level of renewable technologies. It adjusts the scaling based on how
-*' mature and established the renewable technology is, with a higher maturity leading to a larger multiplier.
-*' Hourly Production Costs : The summation involves the hourly production costs of the technology raised to the power of -6. This suggests that higher
-*' production costs contribute less to the overall scaling, emphasizing the importance of cost efficiency in the scaling process.
-*' The result is a combined measure that takes into account material factors, technology maturity, and cost efficiency in the context of the Weibull
-*' equation, providing a comprehensive basis for scaling considerations.
-
-*' The equation calculates the variable  representing the power plant share in new equipment for a specific power plant  in a given country 
-*' and time period . The calculation depends on whether the power plant has carbon capture and storage technology .
-*' For power plants without CCS , the share in new equipment is determined by the ratio of the value for the specific power plant to the
-*' overall new investment decision for power plants . This ratio provides a proportionate share of new equipment for each power plant, considering factors such
-*' as material-specific scaling and economic considerations.For power plants with CCS , the share is determined by summing the shares of corresponding power plants
-*' without CCS. This allows for the allocation of shares in new equipment for CCS and non-CCS versions of the same power plant.
+*' Allocates new generation investment shares across technologies according to maturity or
+*' availability factors and the inverse square of previous-year investment decision costs.
 Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
     V04SharePowPlaNewEq(allCy,PGALL,YTIME)
         =E=
@@ -196,22 +168,23 @@ Q04SharePowPlaNewEq(allCy,PGALL,YTIME)$(TIME(YTIME)$runCy(allCy)) ..
       !!V04ShareSatPG(allCy,PGALL2,YTIME-1) *
       V04CostHourProdInvDec(allCy,PGALL2,YTIME-1) ** (-2)
     );
-
-*' This equation calculates the variable representing the electricity generation capacity for a specific power plant in a given country
-*' and time period. The calculation takes into account various factors related to new investments, decommissioning, and technology-specific parameters.
-*' The equation aims to model the evolution of electricity generation capacity over time, considering new investments, decommissioning, and technology-specific parameters.
+*' Updates available generation capacity from surviving previous-year capacity plus new
+*' capacity, less scheduled decommissioning adjusted by the availability rate.
 Q04CapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCapElec(allCy,PGALL,YTIME)
           =E=
     VmCapElec(allCy,PGALL,YTIME-1) * (1 - V04ScrpRate(allCy,PGALL,YTIME)) +
     V04NewCapElec(allCy,PGALL,YTIME) -
     i04PlantDecomSched(allCy,PGALL,YTIME) * i04AvailRate(allCy,PGALL,YTIME);
-
+*' Converts available generation capacity into nominal capacity by dividing by the
+*' technology availability rate.
 Q04CapElecNominal(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04CapElecNominal(allCy,PGALL,YTIME)
         =E=
     VmCapElec(allCy,PGALL,YTIME) / i04AvailRate(allCy,PGALL,YTIME);
-         
+*' Calculates new available generation capacity from technology investment shares, the
+*' capacity gap, scheduled investment, and capacity transferred from non-CCS plants
+*' through retrofit.
 Q04NewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04NewCapElec(allCy,PGALL,YTIME)
         =E=
@@ -220,21 +193,14 @@ Q04NewCapElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     SUM(PGALL2$CCS_NOCCS(PGALL,PGALL2),
       (1 - V04CCSRetroFit(allCy,PGALL2,YTIME)) * VmCapElec(allCy,PGALL2,YTIME-1)
     );
-
-*' This equation calculates the variable representing the newly added electricity generation capacity for a specific renewable power plant 
-*' in a given country and time period. The calculation involves subtracting the planned electricity generation capacity in the current time period
-*' from the planned capacity in the previous time period. The purpose of this equation is to quantify the increase in electricity generation capacity for renewable
-*' power plants on a yearly basis.
+*' Calculates the year-on-year change in installed renewable generation capacity. The
+*' difference can be negative when renewable capacity decreases.
 Q04NetNewCapElec(allCy,PGALL,YTIME)$(PGREN(PGALL)$TIME(YTIME)$runCy(allCy))..
     V04NetNewCapElec(allCy,PGALL,YTIME) 
         =E=
     VmCapElec(allCy,PGALL,YTIME) - VmCapElec(allCy,PGALL,YTIME-1);                       
-
-*' This equation calculates the electricity production from power generation plants for a specific country ,
-*' power generation plant type , and time period . The electricity production is determined based on the overall electricity
-*' demand, the required electricity production, and the capacity of the power generation plants.The equation calculates the electricity production
-*' from power generation plants based on the proportion of electricity demand that needs to be met by power generation plants, considering their
-*' capacity and the scaling factor for dispatching.
+*' Allocates total non-CHP electricity generation across technologies in proportion to
+*' their available capacities and converts GW of capacity to annual TWh.
 Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmProdElec(allCy,PGALL,YTIME)
         =E=
@@ -243,23 +209,22 @@ Q04ProdElec(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCapElec(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME);
     !!i04util(allCy,PGALL,YTIME) *
     !!VmCapElec(allCy,PGALL,YTIME) * smGwToTwhPerYear(YTIME);
-
-*' Share of all technologies in the electricity mixture.
+*' Calculates the share of each generation technology in total available electricity
+*' generation capacity.
 Q04ShareTechPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ShareTechPG(allCy,PGALL,YTIME)
         =E=
     VmCapElec(allCy,PGALL,YTIME) /
     sum(PGALL2, VmCapElec(allCy,PGALL2,YTIME));
-
-*'Sigmoid function used as a saturation mechanism for electricity mixture penetration of RES technologies.
+*' Calculates a sigmoid-based saturation factor for renewable generation technologies as a
+*' decreasing function of their capacity share.
 Q04ShareSatPG(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(PGREN(PGALL)))..
     V04ShareSatPG(allCy,PGALL,YTIME)
         =E=
     2 / (1+exp(9*V04ShareTechPG(allCy,PGALL,YTIME)));
-
-*' This equation computes the long-term average power generation cost. It involves summing the long-term average power generation costs for different power generation
-*' plants and energy forms, considering the specific characteristics and costs associated with each. The result is the average power generation cost per unit of
-*' electricity consumed in the given time period.
+*' Calculates the generation-weighted average long-run electricity production cost. For
+*' each technology, the cost expression selects the larger of total generation cost and
+*' the feed-in tariff.
 Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostPowGenAvgLng(allCy,YTIME)
         =E=
@@ -271,14 +236,15 @@ Q04CostPowGenAvgLng(allCy,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         ) / 2
     ) / 
     SUM(PGALL,VmProdElec(allCy,PGALL,YTIME) + 1e-6); 
-
-*' This equation estimates the factor increasing the CAPEX of new RES (unflexible) capacity installation due to simultaneous need for grind upgrade and storage, 
-*' for each region (country) and year. This factor depends on the existing RES (unflexible) penetration in the electriciy mixture.
+*' Calculates an additional capital-cost multiplier for wind and solar technologies based
+*' on their previous-year capacity share and the renewable integration exponent. Other
+*' technologies receive a factor of one.
 Q04CapexRESRate(allCy,PGALL,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V04CapexRESRate(allCy,PGALL,YTIME)
         =E=
     1 + (V04ShareMixWndSol(allCy,YTIME-1)$PGRENSW(PGALL)) ** S04CapexBessRate;
-
+*' Calculates the effective CO2 capture rate using the technology-specific maximum capture
+*' rate and a logistic response to the ratio of CO2 storage costs to carbon prices.
 Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
     V04CO2CaptRate(allCy,PGALL,YTIME)
         =E=
@@ -292,7 +258,9 @@ Q04CO2CaptRate(allCy,PGALL,YTIME)$(TIME(YTIME) $(runCy(allCy)))..
         -1.1)
       )
     );
-
+*' Calculates a non-CCS plant retention factor by comparing inverse-square variable costs
+*' of the existing plant with scaled inverse-square costs of corresponding CCS
+*' alternatives.
 Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
     V04CCSRetroFit(allCy,PGALL,YTIME)
         =E=
@@ -309,7 +277,8 @@ Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
         ) ** (-2)
       )
     );
-
+*' Calculates the total scrapping rate from technical lifetime, the endogenous retention
+*' index, and the CCS retrofit retention factor.
 Q04ScrpRate(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ScrpRate(allCy,PGALL,YTIME)
         =E=
@@ -319,11 +288,9 @@ Q04ScrpRate(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
 
 
 $ontext
-*' The equation computes the electricity production cost per Combined Heat and Power plant for a specific demand sector within a given subsector.
-*' The cost is determined based on various factors, including the discount rate, technical lifetime of CHP plants, capital cost (EUR/kW), fixed O&M cost (EUR/kW), availability rate,
-*' variable cost(EUR/MWh), and fuel-related costs. The equation provides a comprehensive assessment of the overall expenses associated with electricity production from CHP
-*' plants, considering both the fixed and variable components, as well as factors such as carbon prices and CO2 emission factors.
-*' The resulting variable represents the electricity production cost per CHP plant and demand sector, expressed in Euro per kilowatt-hour (Euro/KWh).
+*' Inactive equation in a GAMS text block. Estimates CHP electricity production costs from
+*' annualized capital, fixed and variable O&M, fuel, carbon costs, and conversion
+*' efficiency. The original block includes a FIXME.
 Q09CostElecProdCHP(allCy,DSBS,TCHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allCy))..
     V09CostElecProdCHP(allCy,DSBS,TCHP,YTIME)
         =E=
@@ -349,9 +316,9 @@ Q09CostElecProdCHP(allCy,DSBS,TCHP,YTIME)$(TIME(YTIME) $INDDOM(DSBS) $runCy(allC
     )  
 
 ;
-*' The equation calculates the average electricity production cost per Combined Heat and Power plant .
-*' It involves a summation over demand subsectors . The average electricity production cost is determined by considering the electricity
-*' production cost per CHP plant for each demand subsector. The result is expressed in Euro per kilowatt-hour (Euro/KWh).
+*' Inactive equation in a GAMS text block. Calculates a prior-year
+*' steam-consumption-weighted average CHP electricity production cost across industrial
+*' and domestic subsectors, with a zero-demand safeguard.
 Q09CostElcAvgProdCHP(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostElcAvgProdCHP(allCy,TCHP,YTIME)
       =E=

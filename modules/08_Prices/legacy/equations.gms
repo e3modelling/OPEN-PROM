@@ -1,38 +1,16 @@
 *' @title Equations of OPEN-PROMs Prices
 *' @code
 
-*' GENERAL INFORMATION
 
-*' Equation format: "typical useful energy demand equation"
-*' The main explanatory variables (drivers) are activity indicators (economic activity) and corresponding energy costs.
-*' The type of "demand" is computed based on its past value, the ratio of the current and past activity indicators (with the corresponding elasticity), 
-*' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
 
-*' * Prices
 
-*' The equation computes fuel prices per subsector and fuel with separate carbon values in
-*' each sector for a specific scenario, subsector, fuel, and year.The equation considers various scenarios based
-*' on the type of fuel and whether it is subject to changes in carbon values. It incorporates factors such as carbon emission factors
-*' carbon values for all countries, electricity prices to industrial and residential consumers,
-*' efficiency values, and the total hydrogen cost per sector.The result of the equation is the fuel price per 
-*' subsector and fuel, adjusted based on changes in carbon values, electricity prices, efficiency, and hydrogen costs.
-*'
-*' BMSWAS price modes are derived in main.gms:
-*'   static: standard recursive fuel-price dynamics.
-*'   softlink: absolute backend price read from iPricesMagpie.
-*'   curve/globiom: year-over-year P=a+b*Q^c ratio using lagged BMSWAS Q.
-*'   curve/magpie: H12 P=pa+pb*Q+pc*Q^2 using effective 2G Q,
-*'                 0.4*BMSWAS + 0.6*(BGSL+BKRS+BGAS). Non-EUR regions use
-*'                 current regional Q; all EU28 members use the common EUR
-*'                 price based on preceding-year EU28 Q.
-*'
-*' Every land-use mode writes the final BMSWAS price through Q08PriceBmswas.
-*' V08BmswasPriceFactor is its common year-over-year change for biofuel
-*' price pass-through.
 $IFTHEN.magpieQuantityEquation "%bmswasPriceMode%" == "curve"
 $IFTHEN.magpieQuantityEquationSource "%landUseEmulator%" == "magpie"
 * Non-EUR H12 regions use current regional Q. EUR uses preceding-year EU28 Q
 * so its common price is independent of country solve order.
+*' Computes effective second-generation bioenergy supply for each MAGPIE H12 region.
+*' Fuel-specific weights aggregate primary production across mapped countries. Non-EUR
+*' regions use current-year production, while EUR uses previous-year production.
 Q08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)
         =E=
@@ -46,12 +24,19 @@ Q08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)$(TIME(YTIME) $runCy(allCy))..
 $ENDIF.magpieQuantityEquationSource
 $ENDIF.magpieQuantityEquation
 
+*' Calculates the year-over-year ratio of the BMSWAS fuel price in power generation. A
+*' small offset prevents division by zero; the factor is used for biofuel price
+*' pass-through.
 Q08BmswasPriceFactor(allCy,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V08BmswasPriceFactor(allCy,YTIME)
         =E=
     (VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME) + 1e-6) /
     (VmPriceFuelSubsecCarVal(allCy,"PG","BMSWAS",YTIME-1) + 1e-6);
 
+*' Defines the supply-curve index for BMSWAS, depending on the selected land-use backend.
+*' Softlink reads MAGPIE prices; MAGPIE curve mode uses a quadratic function of effective
+*' bioenergy supply; GLOBIOM curve mode uses a power-law function of BMSWAS output. Other
+*' fuels receive an index of one.
 Q08SupplyCurves(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
     V08SupplyCurves(allCy,EFS,YTIME)
       =E=
@@ -77,6 +62,10 @@ $ENDIF.bmswasBackend
     )$sameas("BMSWAS",EFS) +
     1$(not sameas("BMSWAS",EFS));
 
+*' Updates primary energy prices relative to their base values using crude-oil and
+*' natural-gas price changes and the BMSWAS supply-curve ratio, each with fuel-specific
+*' elasticities. For BMSWAS, removes the previous price adder before updating and adds the
+*' current one.
 Q08PricePrimary(allCy,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and PRIM_PRICES(EFS) and not sameas("CRO",EFS))..
     V08PricePrimary(allCy,EFS,YTIME)
       =E=
@@ -87,12 +76,17 @@ Q08PricePrimary(allCy,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and PRIM_PRICES(E
     (V08SupplyCurves(allCy,"BMSWAS",YTIME) / V08SupplyCurves(allCy,"BMSWAS",YTIME-1)) ** i08ElastPriceSupplyCurve(EFS,"BMSWAS") +
     i08BmswasPriceAdder(YTIME)$sameas(EFS,"BMSWAS");
 
+*' Updates secondary energy prices by applying the change in average production costs to
+*' the previous-year price, raised to a fuel-specific elasticity.
 Q08PriceSecondary(allCy,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     VmPriceSecondary(allCy,EFS,YTIME)
       =E=
     VmPriceSecondary(allCy,EFS,YTIME-1) *
     (VmCostAvgProd(allCy,EFS,YTIME) / VmCostAvgProd(allCy,EFS,YTIME-1)) ** i08ElastPriceSecondary(EFS);
 
+*' Updates final energy prices by applying changes in average production costs and, for
+*' primary-priced fuels, primary fuel prices. Both adjustments use the final-price
+*' elasticity.
 Q08PriceFinal(allCy,DSBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and SECtoEF(DSBS,EFS))..
     VmPriceFinal(allCy,DSBS,EFS,YTIME)
       =E=
@@ -100,13 +94,15 @@ Q08PriceFinal(allCy,DSBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and SECtoEF(DS
     (VmCostAvgProd(allCy,EFS,YTIME) / VmCostAvgProd(allCy,EFS,YTIME-1)) ** i08ElastPriceFinal(EFS) *
     (1 + ((V08PricePrimary(allCy,EFS,YTIME) / V08PricePrimary(allCy,EFS,YTIME-1)) ** i08ElastPriceFinal(EFS) - 1)$PRIM_PRICES(EFS));
 
+*' Updates subsector fuel prices, excluding crude oil, BMSWAS and nuclear fuel. Applies
+*' lagged electricity, hydrogen or steam production-cost changes, biofuel price
+*' pass-through, and crude-oil-linked changes for selected fuels. Adds the change in the
+*' sector-specific carbon price.
 Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CRO",EFS))
    $(not sameas("BMSWAS",EFS)) $TIME(YTIME)
    $(not sameas("NUC",EFS)) $runCy(allCy))..
     VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)
         =E=
-*' Fuel prices follow the preceding value, production-cost or supply indices,
-*' crude-oil pass-through, and the change in carbon cost.
     VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
     (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
     (1 + ((VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2)) ** 0.7 - 1)$sameas("H2F",EFS)) * 
@@ -118,6 +114,9 @@ Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CR
     VmPriceCarbon(allCy,SBS,EFS,YTIME) - VmPriceCarbon(allCy,SBS,EFS,YTIME-1);
 
 * Select the land-use backend price, then apply the global sustainability tax once.
+*' Sets the subsector BMSWAS price according to the selected backend: absolute softlink
+*' prices, a MAGPIE quadratic supply curve, a GLOBIOM year-over-year supply-curve ratio,
+*' or the previous price in static mode. Applies the current BMSWAS price adder once.
 Q08PriceBmswas(allCy,SBS,YTIME)$(
   SECtoEF(SBS,"BMSWAS") $TIME(YTIME) $runCy(allCy)
 )..
@@ -152,6 +151,9 @@ $ENDIF.bmswasBackend
   ) + 
   i08BmswasPriceAdder(YTIME);
 
+*' Calculates each fuel share in subsector final energy use. Excludes non-substitutable
+*' electricity from both the fuel numerator and the total denominator, and includes small
+*' offsets for numerical stability.
 Q08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)$(SECtoEF(DSBS,EF) $TIME(YTIME) $runCy(allCy))..
 V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
       =E=
@@ -160,6 +162,10 @@ V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME)
       SUM(EFS2$SECtoEF(DSBS,EFS2), (VmFinalEnergy(allCy,DSBS,EFS2,YTIME) - V02FinalElecNonSubIndTert(allCy,DSBS,YTIME)$ELCEF(EFS2)) + 1e-6)
     );
   
+*' Calculates the fuel-specific carbon price component from the TRADE carbon value and the
+*' energy CO2 emissions factor. Applies the carbon value to industry and, after the
+*' specified year threshold, selected domestic, transport, bunker and agricultural
+*' sectors.
 Q08PriceCarbon(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmPriceCarbon(allCy,SBS,EFS,YTIME)
      =E=
@@ -167,9 +173,9 @@ Q08PriceCarbon(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       VmCarVal(allCy,"TRADE",YTIME)$(INDSE1(SBS) or ((DOMSE1(SBS) or TRANS1(SBS) or BUN(SBS) or sameas("AG",SBS)) and ord(YTIME) > 17))
     ) * imFactorEmissEnergyCO2(allCy,SBS,EFS);
 
-*' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
-*' (using the OI "other industry" avg price), as well as the aggregate fuel demand (of substitutable fuels) per subsector.
-*' In the transport sector they feed into the calculation of the activity levels.
+*' Calculates a subsector average fuel price as a weighted sum of previous-year fuel
+*' prices, using previous-year final-energy fuel shares. The resulting index feeds into
+*' demand and transport activity calculations.
 Q08PriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmPriceFuelAvgSub(allCy,DSBS,YTIME)
         =E=
@@ -177,12 +183,9 @@ Q08PriceFuelAvgSub(allCy,DSBS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V08PriceFuelSepCarbonWght(allCy,DSBS,EF,YTIME-1) *
       VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME-1));         
 
-*' This equation determines the electricity industry prices based on an estimated electricity index and a technical maximum of the electricity to steam ratio
-*' in Combined Heat and Power plants. The industry prices are calculated as a function of the estimated electricity index and the specified maximum
-*' electricity to steam ratio. The equation ensures that the electricity industry prices remain within a realistic range, considering the technical constraints
-*' of CHP plants. It involves the estimated electricity index, and a technical maximum of the electricity to steam ratio in CHP plants is incorporated to account
-*' for the specific characteristics of these facilities. This equation ensures that the derived electricity industry prices align with the estimated index and
-*' technical constraints, providing a realistic representation of the electricity market in the industrial sector.
+*' Limits the industrial electricity price index for each CHP technology to the technical
+*' electricity-to-steam ratio ceiling. The absolute-value expression implements the
+*' minimum of the index and that ceiling.
 Q08PriceElecInd(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmPriceElecInd(allCy,TCHP,YTIME) 
         =E=
@@ -190,6 +193,10 @@ Q08PriceElecInd(allCy,TCHP,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V02IndxElecIndPrices(allCy,TCHP,YTIME) + smElecToSteRatioChp - SQRT( SQR(V02IndxElecIndPrices(allCy,TCHP,YTIME)-smElecToSteRatioChp))
     )/2;
 
+*' Defines average production cost by fuel. Electricity, hydrogen and steam use their
+*' respective generation-cost estimates. Gasoline and diesel use transformation input and
+*' energy-sector costs, including carbon charges, divided by transformation output. Other
+*' fuels follow a lagged cost rule, with a biofuel adjustment.
 Q08CostAvgProd(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     VmCostAvgProd(allCy,EFS,YTIME)
       =E=
