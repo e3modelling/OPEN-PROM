@@ -366,7 +366,7 @@ OI.THEATPUMP 1.21884 2.66781         20  1.68
 OI.TH2F      2.43133 68.3668 41.1163 25  0.85
 ;
 *---
-imDataIndTechnology("IS",INDITECH,"LFT")$(sameas("BOF",INDITECH) or sameas("SCREAF",INDITECH) or sameas("NGEAF",INDITECH) or sameas("H2EAF",INDITECH)) = 30;
+imDataIndTechnology("IS",INDITECH,"LFT")$(sameas("BOF",INDITECH) or sameas("EAF",INDITECH)) = 30;
 *---
 * Coverting EUR05 to US2015
 imDataIndTechnology(INDSE,TECH,"IC") = imDataIndTechnology(INDSE,TECH,"IC") * 1.3;
@@ -697,7 +697,6 @@ imMatrFactor.LO(runCy,DSBS,TECH,YTIME) = 1e-2;
 imMatrFactor.UP(runCy,DSBS,TECH,YTIME) = 1;
 imMatrFactor.L(runCy,DSBS,TECH,YTIME) = iMatrFactorData(runCy,DSBS,TECH,YTIME);     
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(not (sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or INDDOM(DSBS))) = iMatrFactorData(runCy,DSBS,TECH,YTIME);   
-imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$(sameas(DSBS,"AG") and not EU28(runCy)) = iMatrFactorData(runCy,DSBS,TECH,YTIME); 
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$((sameas(DSBS,"PC") or sameas(DSBS,"PB") or sameas(DSBS,"GU") or INDDOM(DSBS)) and not SECTTECH(DSBS,TECH)) = iMatrFactorData(runCy,DSBS,TECH,YTIME);                                      
 imMatrFactor.FX(runCy,DSBS,TECH,YTIME)$DATAY(YTIME)= iMatrFactorData(runCy,DSBS,TECH,YTIME);        
 $ENDIF.calib
@@ -794,7 +793,7 @@ imCapCostTechMin(allCy,INDSE,TECH,YTIME) = 0.5;
 imFixOMCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"FC");
 imVarCostTech(runCy,INDSE,TECH,YTIME) = imDataIndTechnology(INDSE,TECH,"VC");
 imUsfEneConvSubTech(runCy,INDSE,TECH,YTIME)  = imDataIndTechnology(INDSE,TECH,"USC");
-imUsfEneConvSubTech(runCy,"IS",INDITECH,YTIME)$(sameas("BOF",INDITECH) or sameas("SCREAF",INDITECH) or sameas("NGEAF",INDITECH) or sameas("H2EAF",INDITECH)) = 1; !!FIX ME: define efficiencies
+imUsfEneConvSubTech(runCy,"IS",INDITECH,YTIME)$(sameas("BOF",INDITECH) or sameas("EAF",INDITECH)) = 1; !!FIX ME: define efficiencies
 *imUsfEneConvSubTech(runCy,INDSE,"THCL",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCL","USC") + 0.005 * (ord(YTIME)-14);
 *imUsfEneConvSubTech(runCy,INDSE,"THCLCCS",YTIME)$AN(YTIME)  = imDataIndTechnology(INDSE,"THCLCCS","USC") + 0.005 * (ord(YTIME)-14);
 *---

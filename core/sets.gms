@@ -689,9 +689,7 @@ TEW
 *HPTWND
 *HPTELC
 BOF       "Blast furnace basic oxygen furnace for primary steel production"
-NGEAF     "Direct reduction electric arc furnace fed ny natural gas for primary steel production"
-H2EAF     "Direct reduction electric arc furnace fed ny hydrogen for primary steel production"
-SCREAF    "Electric arc furnace for secondary steel production"  
+EAF     "Direct reduction electric arc furnace for primary steel production"
 /
 
 TTECH(TECH)      Transport Technologies
@@ -931,9 +929,10 @@ PA.(TKRS,TH2F)
 (PN,GN).(TGDO,TH2F,TRFO)
 BAV.(TKRS,TH2F)
 BMAR.(TGDO,TRFO,TH2F)
-(IS,NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
+(NF,CH,BM,PP,FD,EN,TX,OE,OI).(TLGN,THCL,TGDO,TGSL,TRFO,TLPG,TKRS,TOLQ,TNGS,TOGS,
                                 TELC,TBMSWAS,TSTE,TH2F)
-(IS,BM,CH).(TNGSCCS,THCLCCS)
+(BM,CH).(TNGSCCS,THCLCCS)
+IS.(BOF,EAF)
 (HOU,SE).(THCL,TLPG,TKRS,TGDO,TNGS,TOGS,TBMSWAS,TELC,TSTE,TGSL,TLGN,TOLQ,TRFO,TSOL,TGEO)
 (HOU,SE).(THEATPUMP)
 (PCH,NEN).(TLGN,THCL,TGDO,TRFO,TLPG,TOLQ,TNGS,TOGS)
