@@ -6,16 +6,18 @@
 #    the coverage threshold. EU27 shares one calibrated price path, with
 #    member caps summed and eligibility based on the lowest member coverage.
 # 2. Keep the input prices through the fixed year. Search each eligible
-#    group's NDC-year price first. In ndc-ltt mode, hold that price and search
-#    the slope to the first eligible later LTT. Keep each finished path in
-#    place until all groups complete the first pass. Each trial evaluates the
-#    candidate prices of all groups together in one world solve.
-# 3. Repair current misses jointly, prioritizing NDC repair within each group.
-#    If the LTT-year price reaches the ceiling, limit further increases of
-#    the NDC-year price to a fraction of the first settled NDC-achieving price.
-#    Restore the NDC price if the uplift fails to reach LTT or loses a
-#    previously feasible NDC. Re-evaluate the world with the highest legal
-#    slope to each restored group's LTT.
+#    group's NDC-year price up to its configured limit. In ndc-ltt mode,
+#    hold the settled price (including a limit reached with an NDC miss)
+#    and search the slope up to the first eligible LTT's price limit. Keep
+#    each finished path in place until all groups complete the first pass.
+#    Each trial evaluates all groups together in one world solve.
+# 3. Repair misses jointly. Fix an NDC miss first while its group has room
+#    to raise the NDC price. At the NDC price limit, continue repairing LTT.
+#    When LTT reaches its own price limit, any LTT-driven NDC uplift is
+#    bounded by the group's NDC price limit and the configured uplift fraction.
+#    If the uplift reaches its limit with LTT still unmet or loses a previously
+#    met NDC, restore the NDC-only price and the highest legal slope to LTT,
+#    then re-evaluate the full world.
 # 4. Confirm the whole price matrix with a fresh solve. Publish the prices and
 #    reports with any remaining cap misses at the search limits. SearchSummary
 #    records the initial NDC price, the confirmed price, and each cap's gap.
@@ -67,9 +69,9 @@
 #     sufficient coverage is a valid target. Zero coverage means unavailable.
 #   max_ndc_price_increase_for_ltt = 0.25
 #     Fraction above the first settled NDC-achieving price allowed for LTT
-#     repair. For a 400 anchor, 0.25 allows up to 500, also bounded by max_price.
-#     Set 0 to hold the NDC anchor during LTT repair. An actual NDC miss can
-#     still require its own repair up to max_price.
+#     repair. For a 200 anchor, 0.25 allows up to 250 within the group's NDC
+#     limit. Set 0 to hold the NDC anchor during LTT repair. An actual NDC
+#     miss can be repaired up to the group's NDC price limit.
 #   continuation_slope_multiplier_max = 0.2
 #     Maximum tail-to-previous-slope ratio. The previous segment ends at the
 #     LTT anchor when enabled, or at the NDC anchor otherwise. A preceding
@@ -77,12 +79,24 @@
 #     Available headroom under max_price can reduce it further. A zero
 #     multiplier gives a flat tail.
 #
+#   ndc_carbon_price_limit, ltt_carbon_price_limit
+#     Two objects with absolute prices keyed by EU27 and each of the 12 other
+#     groups. Apply the limits at their enabled target years. For each group,
+#     require fixed-year price <= NDC limit <= LTT limit <= search.max_price.
+#     The initial NDC limits used 2023 exogCV_NPi prices multiplied by 10
+#     below 30, 8 from 30 to below 50, and 6 from 50 up. The template includes
+#     manual adjustments that give low-price groups more search room. It sets
+#     the limits for MEA, REF and IND to 30 and the limit for JPN to 200.
+#     Enter the amounts directly. The template LTT limits are all 2000.
+#     Older configurations that omit both maps use search.max_price for both
+#     target years.
+#
 #   search
 #     ndc_start_price = 400          First NDC price to try, clipped to bounds.
 #     initial_ndc_price_step = 200   First change when expanding the NDC search.
 #     ltt_start_slope = 10           First NDC-to-LTT slope to try, clipped to bounds.
 #     initial_ltt_slope_step = 10    First change when expanding the LTT search.
-#     max_price = 5000               Ceiling on the modeled price path.
+#     max_price = 3000               Whole-path ceiling, including the continuation after the last target.
 #     price_resolution = 1          Stop refining at this NDC price bracket width.
 #     slope_resolution = 0.01       Stop refining at this LTT slope bracket width.
 #     max_evaluations = 150          Limit on physical attempts across search and confirmation, including failures. Cache hits use no new attempt.
@@ -97,8 +111,19 @@
 task8Validate <- function(cfg) {
   required <- c("resume_from", "prefix_policy", "fixed_through_year", "target_mode", "target_variant",
     "ndc_year", "end_year", "min_target_coverage", "continuation_slope_multiplier_max", "search")
+  limit_keys <- c("ndc_carbon_price_limit", "ltt_carbon_price_limit")
   if (!is.list(cfg) || anyDuplicated(names(cfg)) || !all(required %in% names(cfg)) ||
-      any(!names(cfg) %in% c(required,"execution","max_ndc_price_increase_for_ltt"))) stop("Use the Task 8 settings in config.template.json")
+      any(!names(cfg) %in% c(required,"execution","max_ndc_price_increase_for_ltt",limit_keys))) stop("Use the Task 8 settings in config.template.json")
+  supplied_limits <- !vapply(cfg[limit_keys], is.null, logical(1))
+  if (sum(supplied_limits) == 1L) stop("Supply both Task 8 carbon price limit maps together")
+  for (key in limit_keys[supplied_limits]) {
+    limits <- cfg[[key]]
+    groups <- names(limits)
+    if (!is.list(limits) || !length(groups) || anyNA(groups) || any(!nzchar(groups)) || anyDuplicated(groups)) {
+      stop(key, " must be an object with unique calibration group keys")
+    }
+    for (g in groups) task7Number(limits[[g]], paste0(key, ".", g))
+  }
   if (!cfg$target_mode %in% c("ndc", "ndc-ltt") || !cfg$target_variant %in% c("unconditional", "conditional")) stop("Invalid target_mode or target_variant")
   task7Number(cfg$fixed_through_year, "fixed_through_year", 2023, TRUE)
   for (k in c("ndc_year", "end_year")) task7Number(cfg[[k]], k, 2024, TRUE)
@@ -178,12 +203,13 @@ task8Targets <- function(folder, regions, cfg) {
 }
 
 task8Setup <- function(cfg,input,regions,targets) {
-  # Fresh campaigns freeze the limit in config.json before setup.
-  # Earlier campaign snapshots use the original search.
-  has_ltt_price_limit <- !is.null(cfg$max_ndc_price_increase_for_ltt)
+  # Frozen configurations select the search and price rules used on resume.
+  has_ltt_uplift_limit <- !is.null(cfg$max_ndc_price_increase_for_ltt)
   cfg <- task8Validate(cfg)
-  if (!has_ltt_price_limit) cfg$max_ndc_price_increase_for_ltt <- NULL
-  cfg$search_algorithm <- if (has_ltt_price_limit) "regional-deferred-repair-v5" else "regional-deferred-repair-v4"
+  has_group_limits <- !is.null(cfg$ndc_carbon_price_limit)
+  if (!has_ltt_uplift_limit && !has_group_limits) cfg$max_ndc_price_increase_for_ltt <- NULL
+  cfg$search_algorithm <- if (has_group_limits) "regional-deferred-repair-v6" else
+    if (has_ltt_uplift_limit) "regional-deferred-repair-v5" else "regional-deferred-repair-v4"
   cfg$regions <- regions; cfg$groups <- targets$groups; cfg$conditions <- targets$conditions
   cfg$policy <- "exogCV_NPi"; cfg$fScenario <- 1L; cfg$emulator <- "NDC_LTT"
   cfg$annual_metric <- "Emissions|Kyoto Gases.Mt CO2-equiv/yr"
@@ -196,13 +222,37 @@ task8Setup <- function(cfg,input,regions,targets) {
   },numeric(1)),regions)
   if (diff(range(cfg$anchors[cfg$groups$EU27]))>1e-8) stop("EU27 prefix endpoints must agree")
   if(any(cfg$anchors>cfg$search$max_price)) stop("An input endpoint exceeds max_price")
+  if (has_group_limits) {
+    groups <- names(cfg$groups)
+    for (key in c("ndc_carbon_price_limit", "ltt_carbon_price_limit")) {
+      if (!setequal(names(cfg[[key]]), groups)) {
+        stop(key, " must contain each Task 8 group: ", paste(groups, collapse = ", "))
+      }
+      cfg[[key]] <- vapply(cfg[[key]][groups], as.numeric, numeric(1))
+    }
+    fixed_prices <- vapply(cfg$groups, function(members) max(cfg$anchors[members]), numeric(1))
+    ndc <- cfg$ndc_carbon_price_limit
+    ltt <- cfg$ltt_carbon_price_limit
+    invalid <- groups[fixed_prices > ndc | ndc > ltt | ltt > cfg$search$max_price]
+    if (length(invalid)) {
+      stop("Require fixed-year price <= NDC price limit <= LTT price limit <= search.max_price for ",
+           paste(invalid, collapse = ", "))
+    }
+  }
   cfg
 }
 
+task8PriceLimit <- function(cfg, group, kind) {
+  limits <- if (kind == "NDC") cfg$ndc_carbon_price_limit else cfg$ltt_carbon_price_limit
+  if (is.null(limits)) return(rep(cfg$search$max_price, length(group)))
+  unname(limits[group])
+}
+
 task8Bounds <- function(cfg,g,ndc) {
-  n <- cfg$ndc_year; p <- max(cfg$anchors[cfg$groups[[g]]]); ceiling <- cfg$search$max_price
+  p <- max(cfg$anchors[cfg$groups[[g]]])
   l <- cfg$conditions[cfg$conditions$Group==g & cfg$conditions$Kind=="LTT" & cfg$conditions$Enabled,]
-  list(ndc=c(p,ceiling),ltt=c(0,if(nrow(l)) max(0,(ceiling-ndc)/(l$Year-n)) else 0))
+  ltt_slope <- if (nrow(l)) max(0, (task8PriceLimit(cfg, g, "LTT") - ndc) / (l$Year - cfg$ndc_year)) else 0
+  list(ndc = c(p, task8PriceLimit(cfg, g, "NDC")), ltt = c(0, ltt_slope))
 }
 
 # Choose the largest allowed tail multiplier that keeps one straight tail below
@@ -247,12 +297,14 @@ task8MakePrices <- function(cfg,input,controls) {
   for (g in names(cfg$groups)) {
     cnd <- cfg$conditions[cfg$conditions$Group==g & cfg$conditions$Enabled,]
     if (!any(cnd$Kind=="NDC")) next
+    limits <- vapply(cnd$Kind, function(kind) task8PriceLimit(cfg, g, kind), numeric(1))
     for (r in cfg$groups[[g]]) {
       src <- task7PolicyRow(input,r,cfg$prefix_policy); dest <- task7PolicyRow(input,r,cfg$policy)
       v <- as.numeric(input[src,as.character(years)])
       use <- years>cfg$fixed_through_year
       v[use] <- task8GroupPrices(cfg,g,controls,years,anchor=cfg$anchors[[r]])[use]
       if (any(!is.finite(v) | v<0) || any(diff(v[years>=2023])< -1e-8) || any(v[years>=2024]>cfg$search$max_price+1e-8)) stop("Invalid full price path for ",g)
+      if (any(v[match(cnd$Year, years)] > limits + 1e-8)) stop("Target-year price exceeds limit for ", g)
       x[dest,as.character(years)] <- vapply(v,function(z) sprintf("%.15g",z),character(1))
     }
   }
@@ -409,8 +461,9 @@ task8NdcSearch <- function(groups) {
 
 task8LttNdcLimit <- function(cfg, group, ndc_search) {
   initial <- ndc_search$initial_prices[[group]]
-  if (is.null(initial) || is.na(initial)) return(cfg$search$max_price)
-  min(cfg$search$max_price, initial * (1 + cfg$max_ndc_price_increase_for_ltt))
+  ndc_limit <- task8PriceLimit(cfg, group, "NDC")
+  if (is.null(initial) || is.na(initial)) return(ndc_limit)
+  min(ndc_limit, initial * (1 + cfg$max_ndc_price_increase_for_ltt))
 }
 
 task8LimitReasons <- function(cfg, result, ndc_search) {
@@ -421,14 +474,14 @@ task8LimitReasons <- function(cfg, result, ndc_search) {
   for (i in which(d$Enabled & !d$Met)) {
     g <- d$Group[i]
     price <- result$controls[g, "ndc"]
-    at_ceiling <- price >= cfg$search$max_price - 1e-10
+    at_ndc_limit <- price >= task8PriceLimit(cfg, g, "NDC") - 1e-10
     if (d$Kind[i] == "NDC") {
-      if (at_ceiling) reasons[i] <- "NDC price ceiling"
+      if (at_ndc_limit) reasons[i] <- "NDC price ceiling"
     } else if (result$controls[g, "ltt"] >= task8Bounds(cfg, g, price)$ltt[2] - 1e-10) {
       if (!is.na(ndc_search$fallback_trials[[g]])) {
         reasons[i] <- ndc_search$fallback_reasons[[g]]
       } else if (price >= task8LttNdcLimit(cfg, g, ndc_search) - 1e-10) {
-        reasons[i] <- if (at_ceiling) "LTT price ceiling" else "LTT NDC price increase limit"
+        reasons[i] <- if (at_ndc_limit) "LTT price ceiling" else "LTT NDC price increase limit"
       }
     }
   }
@@ -460,13 +513,20 @@ task8BoundaryOrigin <- function(state) {
 }
 
 # First finish each group's NDC -> LTT path without reopening completed stages.
-# Only after every group finishes do joint, upward-only repairs of actual cap
-# misses. Logical stages belong to this scheduler, not cached trial labels.
+# After every group finishes, jointly repair actual cap misses. The searched
+# segments rise during repair except for a recorded rollback. The tail is
+# derived from the last searched slope.
 # Optional controls/result start directly from a failed confirmation on resume.
 task8Search <- function(cfg,evaluate,controls=NULL,result=NULL,repair_only=FALSE,ndc_search=NULL) {
   if(is.null(controls)) controls <- task8InitialControls(cfg)
   groups <- unique(cfg$conditions$Group[cfg$conditions$Enabled & cfg$conditions$Kind=="NDC"])
   later <- if(cfg$target_mode=="ndc-ltt") unique(cfg$conditions$Group[cfg$conditions$Enabled & cfg$conditions$Kind=="LTT"]) else character()
+  has_group_limits <- !is.null(cfg$ndc_carbon_price_limit)
+  repair_through <- setNames(rep(cfg$end_year, length(groups)), groups)
+  if (has_group_limits) {
+    ltt <- cfg$conditions[cfg$conditions$Enabled & cfg$conditions$Kind == "LTT", ]
+    repair_through[ltt$Group] <- ltt$Year
+  }
   if (is.null(ndc_search) && !is.null(cfg$max_ndc_price_increase_for_ltt)) {
     if (repair_only) stop("Missing NDC search reference for confirmation repair")
     ndc_search <- task8NdcSearch(groups)
@@ -491,7 +551,7 @@ task8Search <- function(cfg,evaluate,controls=NULL,result=NULL,repair_only=FALSE
     if (mode == "repair" && !is.null(ndc_search)) {
       missed_ndc <- task8Unmet(result$checks)
       missed_ndc <- missed_ndc$Group[missed_ndc$Kind == "NDC"]
-      ndc_pending <- any(controls[missed_ndc, "ndc"] < cfg$search$max_price - 1e-10)
+      ndc_pending <- any(controls[missed_ndc, "ndc"] < task8PriceLimit(cfg, missed_ndc, "NDC") - 1e-10)
       raised <- groups[controls[groups, "ndc"] > ndc_search$ndc_only_prices[groups] + 1e-10]
       # An LTT-driven uplift may affect another group's NDC. Recheck the NDC
       # anchors before any further increase if a previously feasible NDC is
@@ -538,19 +598,24 @@ task8Search <- function(cfg,evaluate,controls=NULL,result=NULL,repair_only=FALSE
       }
       # Repair observes only actual hard-cap misses. Once a cap is met, discard
       # its expansion jump so a later miss cannot revive an old large step.
-      if(gap(g,"NDC")>0) {
+      ndc_missed <- gap(g,"NDC") > 0
+      if(ndc_missed) {
         z <- advance(g,"NDC",ndc_repair[[g]]); ndc_repair[[g]] <- z$state
         candidate[g,"ndc"] <- max(controls[g,"ndc"],z$value)
         candidate[g,"ltt"] <- min(controls[g,"ltt"],task8Bounds(cfg,g,candidate[g,"ndc"])$ltt[2])
-        ltt_repair[g] <- list(NULL)
         if(candidate[g,"ndc"]>controls[g,"ndc"]) {
           if (!is.null(ndc_search)) ndc_search$ndc_only_prices[[g]] <- candidate[g, "ndc"]
           actions <- c(actions,paste(g,"repair NDC; hold/clamp middle slope"))
         } else boundary <- c(boundary,paste(g,"NDC",round(gap(g,"NDC"),3),"Mt gap at price ceiling"))
-        next
+        # An exhausted NDC still leaves room between its limit and the LTT
+        # limit. Keep the LTT search state across rounds at the NDC ceiling.
+        if (!has_group_limits || z$reason != "upper_bound_unmet") {
+          ltt_repair[g] <- list(NULL)
+          next
+        }
       }
       ndc_repair[g] <- list(NULL)
-      if (!is.null(ndc_search) && is.na(ndc_search$initial_prices[[g]])) {
+      if (!ndc_missed && !is.null(ndc_search) && is.na(ndc_search$initial_prices[[g]])) {
         ndc_search$initial_prices[[g]] <- controls[g, "ndc"]
       }
       if(!g %in% later || gap(g,"LTT")<=0) { ltt_repair[g] <- list(NULL); next }
@@ -606,9 +671,12 @@ task8Search <- function(cfg,evaluate,controls=NULL,result=NULL,repair_only=FALSE
       years <- (cfg$fixed_through_year+1):cfg$end_year
       before <- task8GroupPrices(cfg,g,controls,years,anchor=cfg$anchors[[r]])
       after <- task8GroupPrices(cfg,g,candidate,years,anchor=cfg$anchors[[r]])
+      # Raising the NDC anchor against a fixed LTT price can flatten the
+      # middle segment and its derived tail. Protect prices through the LTT.
+      protected <- years <= repair_through[[g]]
       if(any(!is.finite(after) | after<0 | after>cfg$search$max_price+1e-8) ||
-          any(diff(after)< -1e-8) || (!g %in% restored && any(after<before-1e-8))) {
-        stop("Regional repair lowered an annual price or violated path bounds: ",g)
+          any(diff(after)< -1e-8) || (!g %in% restored && any(after[protected]<before[protected]-1e-8))) {
+        stop("Regional repair lowered a searched segment or violated path bounds: ",g)
       }
     }
     message("  Next regional actions: ",paste(actions,collapse="; "))
@@ -787,21 +855,39 @@ task8CheckArchivedPrices <- function(paths, prices, cfg) {
   if (!isTRUE(all.equal(observed, expected, tolerance = 1e-12))) stop("Archived price paths differ from candidate controls")
 }
 
-task8SearchDetails <- function(cfg, checks, ndc_search) {
+task8SearchDetails <- function(cfg, checks, ndc_search, controls) {
   groups <- checks$Group
   initial <- if (is.null(ndc_search)) rep(NA_real_, length(groups)) else unname(ndc_search$initial_prices[groups])
   fallback_trial <- if (is.null(ndc_search)) rep(NA_integer_, length(groups)) else unname(ndc_search$fallback_trials[groups])
-  has_ltt <- groups %in% cfg$conditions$Group[cfg$conditions$Kind == "LTT" & cfg$conditions$Enabled]
-  limit <- pmin(cfg$search$max_price, initial * (1 + cfg$max_ndc_price_increase_for_ltt))
+  ltt <- cfg$conditions[cfg$conditions$Kind == "LTT" & cfg$conditions$Enabled, ]
+  ltt_year <- ltt$Year[match(groups, ltt$Group)]
+  has_ltt <- !is.na(ltt_year)
+  ndc_limit <- task8PriceLimit(cfg, groups, "NDC")
+  limit <- pmin(ndc_limit, initial * (1 + cfg$max_ndc_price_increase_for_ltt))
   limit[!has_ltt] <- NA_real_
-  data.frame(InitialNDCPrice = initial, LTTNDCPriceLimit = limit, LTTFallbackTrial = fallback_trial)
+  details <- data.frame(InitialNDCPrice = initial, LTTNDCPriceLimit = limit, LTTFallbackTrial = fallback_trial)
+  if (!is.null(cfg$ndc_carbon_price_limit)) {
+    has_ndc <- groups %in% cfg$conditions$Group[cfg$conditions$Kind == "NDC" & cfg$conditions$Enabled]
+    details$FixedYearPrice <- vapply(cfg$groups[groups], function(members) max(cfg$anchors[members]),
+                                    numeric(1), USE.NAMES = FALSE)
+    details$NDCPriceLimit <- ndc_limit
+    details$NDCPriceLimit[!has_ndc] <- NA_real_
+    details$LTTPriceLimit <- task8PriceLimit(cfg, groups, "LTT")
+    details$LTTPriceLimit[!has_ltt] <- NA_real_
+    details$LTTPrice <- rep(NA_real_, length(groups))
+    if (any(has_ltt)) {
+      later <- groups[has_ltt]
+      details$LTTPrice[has_ltt] <- controls[later, "ndc"] + controls[later, "ltt"] * (ltt_year[has_ltt] - cfg$ndc_year)
+    }
+  }
+  details
 }
 
 task8ArchiveSearch <- function(cfg, summary, selected) {
   ndc <- selected[selected$Enabled & selected$Kind == "NDC", ]
   search <- task8NdcSearch(ndc$Group)
-  search$initial_prices[] <- ndc$InitialNDCPrice
-  search$fallback_trials[] <- ndc$LTTFallbackTrial
+  search$initial_prices[] <- as.numeric(ndc$InitialNDCPrice)
+  search$fallback_trials[] <- as.numeric(ndc$LTTFallbackTrial)
   prior <- summary[which(summary$ValidRun & summary$Trial < selected$Trial[1L]), ]
   for (g in ndc$Group) {
     initial <- search$initial_prices[[g]]
@@ -842,6 +928,10 @@ task8ValidateArchive <- function(campaign) {
   sheets <- lapply(c("AnnualPaths","SearchSummary","Settings"),function(n) openxlsx::read.xlsx(history,sheet=n,check.names=FALSE))
   status <- sheets[[3]]$Value[sheets[[3]]$Parameter == "Status"]
   if (!task8IsComplete(status)) stop("Archive is not complete")
+  if (!is.null(cfg$ndc_carbon_price_limit)) {
+    recorded_limit <- sheets[[3]]$Value[sheets[[3]]$Parameter == "Maximum carbon price (USD2015/t CO2)"]
+    if (!identical(recorded_limit, as.character(cfg$search$max_price))) stop("Completed price ceiling disagrees")
+  }
   selected <- sheets[[2]][sheets[[2]]$Accepted,]
   if(!nrow(selected) || length(unique(selected$Trial))!=1 || any(selected$Stage!="Confirmation" | !selected$ValidRun)) stop("Invalid archived confirmation")
   controls <- as.matrix(selected[!duplicated(selected$Group),c("NDCPrice","LTTSlope")]);rownames(controls)<-unique(selected$Group);colnames(controls)<-c("ndc","ltt")
@@ -862,10 +952,10 @@ task8ValidateArchive <- function(campaign) {
   checks <- task8Check(cfg,reported)
   search <- NULL
   if (!is.null(cfg$max_ndc_price_increase_for_ltt)) {
-    for (name in c("InitialNDCPrice", "LTTNDCPriceLimit", "LTTFallbackTrial")) selected[[name]] <- as.numeric(selected[[name]])
     selected$LimitReason <- as.character(selected$LimitReason)
     search <- task8ArchiveSearch(cfg, sheets[[2]], selected)
-    details <- task8SearchDetails(cfg, checks, search)
+    details <- task8SearchDetails(cfg, checks, search, controls)
+    selected[names(details)] <- lapply(selected[names(details)], as.numeric)
     details$LimitReason <- task8LimitReasons(cfg, list(checks=checks, controls=controls), search)
     for (part in list(details, checks[names(cfg$conditions)])) {
       if (!isTRUE(all.equal(part, selected[names(part)], tolerance=1e-10, check.attributes=FALSE))) {
@@ -942,7 +1032,9 @@ runTask8 <- function() {
   }
   settings <- run_config$regional_carbon_price_calibration
   cfg <- task8Setup(settings, input, regions, task8Targets(campaign, regions, settings))
-  search_strategy <- if (is.null(cfg$max_ndc_price_increase_for_ltt)) {
+  search_strategy <- if (!is.null(cfg$ndc_carbon_price_limit)) {
+    "Use group-specific NDC and LTT price limits, then repair misses jointly with bounded NDC uplift for LTT and an NDC fallback"
+  } else if (is.null(cfg$max_ndc_price_increase_for_ltt)) {
     "Finish each NDC/LTT path first; all-group barrier; upward joint repair of current misses"
   } else "Finish each NDC/LTT path first, then jointly repair misses with bounded NDC uplift for LTT and an NDC fallback"
   if (resuming) {
@@ -951,10 +1043,12 @@ runTask8 <- function() {
         is.na(task8BoundaryOrigin(retained))) {
       stop("Campaign uses an older Task 8 search algorithm; preserve it and start a fresh campaign with this controller")
     }
+    limit_keys <- c("max_ndc_price_increase_for_ltt", "ndc_carbon_price_limit", "ltt_carbon_price_limit")
     if (!is.null(retained) && !is.null(cfg$max_ndc_price_increase_for_ltt) &&
         (!identical(retained$cfg$conditions, cfg$conditions) ||
-         !identical(retained$cfg$max_ndc_price_increase_for_ltt, cfg$max_ndc_price_increase_for_ltt))) {
-      stop("NDC/LTT targets or the LTT price limit changed since the campaign was frozen")
+         !identical(retained$cfg[limit_keys], cfg[limit_keys]) ||
+         !identical(retained$cfg$search$max_price, cfg$search$max_price))) {
+      stop("NDC/LTT targets or carbon price limits changed since the campaign was frozen")
     }
   }
   default_execution <- cfg$execution
@@ -1043,7 +1137,7 @@ runTask8 <- function() {
         NDCPrice=numeric(),LTTSlope=numeric(),TailSlope=numeric(),TailMultiplier=numeric(),ValidRun=logical(),Accepted=logical(),
         FailureReason=character(),LogExcerpt=character(),PhysicalAttempt=integer(),SolverRetryWarnings=integer(),SolveAcceptance=character())
       if (!is.null(cfg$max_ndc_price_increase_for_ltt)) {
-        d <- cbind(d, task8SearchDetails(cfg, d, NULL), LimitReason=character())
+        d <- cbind(d, task8SearchDetails(cfg, d, NULL, NULL), LimitReason=character())
       }
       return(d)
     }
@@ -1059,7 +1153,7 @@ runTask8 <- function() {
         SolveAcceptance=if(is.null(a$solves$acceptance)) NA_character_ else a$solves$acceptance,row.names=NULL,check.names=FALSE)
       if (!is.null(cfg$max_ndc_price_increase_for_ltt)) {
         limit_reason <- if (isTRUE(row$Accepted[1L])) task8LimitReasons(cfg, a, ndc_search) else NA_character_
-        row <- cbind(row, task8SearchDetails(cfg, d, ndc_search), LimitReason=limit_reason)
+        row <- cbind(row, task8SearchDetails(cfg, d, ndc_search, a$controls), LimitReason=limit_reason)
       }
       row
     }))
@@ -1078,6 +1172,9 @@ runTask8 <- function() {
       "Maximum evaluations"=cfg$search$max_evaluations,"Accounting"="Research Kyoto-GHG convention; source scopes/GWP differ; missing historical weights use known-emissions coverage")
     if (!is.null(cfg$max_ndc_price_increase_for_ltt)) {
       values <- c(values, "Maximum NDC price increase for LTT (fraction)"=cfg$max_ndc_price_increase_for_ltt)
+    }
+    if (!is.null(cfg$ndc_carbon_price_limit)) {
+      values <- c(values, "Maximum carbon price (USD2015/t CO2)"=cfg$search$max_price)
     }
     data.frame(Parameter=names(values),Value=as.character(values),row.names=NULL)
   }
