@@ -74,7 +74,7 @@
     "target_variant": "unconditional",
     "ndc_year": 2030,
     "end_year": 2100,
-    "min_target_coverage": 0.9,
+    "min_target_coverage": 0.65,
     "max_ndc_price_increase_for_ltt": 0.25,
     "continuation_slope_multiplier_max": 0.2,
     "ndc_carbon_price_limit": {
