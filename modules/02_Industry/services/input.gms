@@ -126,11 +126,11 @@ imCO2CaptRateIndustry(runCy,CCSITECH,YTIME) = 0.9;
 *---
 i02DataEnergyService(runCy,INDDOM,IND_SERVS,YTIME)$(INDDOMtoSERVS(INDDOM,IND_SERVS)) = SUM(INDITECH,i02Capacity(runCy,INDDOM,IND_SERVS,INDITECH,YTIME));
 *---
-imCapCostTech(runCy,"IS",INDITECH,YTIME) = i02IndCosts(INDITECH,'Capex',YTIME)*1e3; !!Million $2015 to k$2015
+imCapCostTech(runCy,"IS",INDITECH,YTIME) = i02IndCosts(INDITECH,'Capex',YTIME); 
 *---
-imFixOMCostTech(runCy,"IS",INDITECH,YTIME) = i02IndCosts(INDITECH,'OM',YTIME)*1e6;  !!Million $2015 to $2015
+imFixOMCostTech(runCy,"IS",INDITECH,YTIME) = i02IndCosts(INDITECH,'OM',YTIME) * sUnitToKUnit;  !!Units for other industries than IS needs to be checked to remove sUnitToKUnit
 *--
-imVarCostTech(runCy,"IS",INDITECH,YTIME)= i02IndCosts(INDITECH,'Opex',YTIME)*1e6;   !!Million $2015 to $2015
+imVarCostTech(runCy,"IS",INDITECH,YTIME)= i02IndCosts(INDITECH,'Opex',YTIME) * sUnitToKUnit;  !!Units for other industries than IS needs to be checked to remove sUnitToKUnit
 *--
 VmLft.FX(runCy,INDSE,INDITECH,YTIME)=imDataIndTechnology(INDSE,INDITECH,"LFT");
 VmLft.FX(runCy,INDSE,INDITECH,YTIME)$(sameas("TGEO",INDITECH) or sameas("TSOL",INDITECH) or sameas("TH2F",INDITECH)) = 25; !!FIX ME: revisit this
