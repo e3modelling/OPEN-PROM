@@ -36,3 +36,5 @@ V07GrossEmissCO2Demand(allCy,DSBS,YTIME)                "Gross emissions of dema
 V07EmissionsNet(allCy,YTIME)                            "Net emissions after abatement"
 V07GrossEmissCO2Processes(allCy,SSBS,YTIME)
 *;
+
+Scalar S07FugProdMin                                    "Minimum base-year primary production for fugitive CH4 to follow model production (Mtoe)" /1/;
