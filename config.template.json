@@ -116,8 +116,8 @@
       "price_resolution": 1,
       "slope_resolution": 0.01,
       "max_evaluations": 150,
-      "ndc_tolerance_mtco2eq": 5,
-      "ltt_tolerance_mtco2eq": 5
+      "ndc_tolerance_mtco2eq": 10,
+      "ltt_tolerance_mtco2eq": 10
     }
   }
 }

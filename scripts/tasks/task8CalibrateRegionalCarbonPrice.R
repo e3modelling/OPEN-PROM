@@ -100,9 +100,9 @@
 #     price_resolution = 1          Stop refining at this NDC price bracket width.
 #     slope_resolution = 0.01       Stop refining at this LTT slope bracket width.
 #     max_evaluations = 150          Limit on physical attempts across search and confirmation, including failures. Cache hits use no new attempt.
-#     ndc_tolerance_mtco2eq = 5      Preferred slack below the annual NDC cap.
-#     ltt_tolerance_mtco2eq = 5      Preferred slack below the annual LTT cap.
-#     For a cap of 100 with tolerance 5, the preferred band is 95 to 100.
+#     ndc_tolerance_mtco2eq = 10     Preferred slack below the annual NDC cap.
+#     ltt_tolerance_mtco2eq = 10     Preferred slack below the annual LTT cap.
+#     For a cap of 100 with tolerance 10, the preferred band is 90 to 100.
 #     At a legal floor or at search resolution, the current feasible point
 #     may have extra slack. A positive cap gap always fails.
 
