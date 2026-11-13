@@ -118,8 +118,8 @@ Q03ConsGrssInl(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V03InpTotTransf(allCy,SSBS,EFS,YTIME)
     ) +
     SUM(IS_TRANSF,
-      V02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME) +
-      V02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)
+      V03ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME) +
+      V03ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)
     ) +
     VmLossesDistr(allCy,EFS,YTIME) - 
     V03Transfers(allCy,EFS,YTIME); 
@@ -140,7 +140,7 @@ Q03ProdPrimary(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03ConsGrssInl(allCy,EFS,YTIME) - 
     VmImpNetEneBrnch(allCy,EFS,YTIME) -
     SUM(SSBS,V03OutTotTransf(allCy,SSBS,EFS,YTIME)) -
-    SUM(IS_TRANSF,V02ISTransfOutEF(allCy,IS_TRANSF,EFS,YTIME));   
+    SUM(IS_TRANSF,V03OutputByproductEF(allCy,IS_TRANSF,EFS,YTIME));   
 
 *' The equation calculates the fake exports for a specific energy branch
 *' in a given scenario and year. The computation is based on the fuel exports for
@@ -198,12 +198,19 @@ Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$(SECtoEF(DSBS,E
     VmConsFuelTechCDRProd(allCy,"TEW",EFS,YTIME)$sameas(DSBS,"EW");   
 
 
+* ====================== Supplementary transformation sectors (IS) =============================
+
 Q03DemTot(allCy,IS_TRANSF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V03DemTot(allCy,IS_TRANSF,YTIME)
         =E=
     SUM(MATERIALS$IS_TRANSF_OUT_MATERIAL(IS_TRANSF,MATERIALS),
       V02InputMaterials(allCy,"PRIM_STEEL",MATERIALS,YTIME)
     );
+
+Q03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(time(YTIME) $runCy(allCy))..
+  V03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+    =E=
+  1;
 
 Q03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(time(YTIME)$runCy(allCy)$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH))..
   V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
@@ -218,9 +225,15 @@ Q03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(time(YTIME)$runCy(allCy)$
     ) !!/ imPlantEffByType(allCy,PGALL,"effELC",YTIME)
   ) + 1e-6;
 
+Q03CostTotal(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(time(YTIME) $runCy(allCy))..
+  V03CostTotal(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+    =E=
+  V03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) +
+  V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME);
+
 Q03DemGap(allCy,IS_TRANSF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
-    V03DemGap(allCy,IS_TRANSF,YTIME)
-        =E=
+  V03DemGap(allCy,IS_TRANSF,YTIME)
+    =E=
   ( 
     V03DemTot(allCy,IS_TRANSF,YTIME) -
     sum(IS_TRANSF_TECH$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH),
@@ -251,16 +264,25 @@ Q03ShareGap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(TIME(YTIME)$runCy(allCy)$IS_T
       !!i04MatFacPlaAvailCap(allCy,TSTEAM2,YTIME) *
       V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH2,YTIME-1) ** (-2)
     );
-$ontext
-Q03CostCapital(allCy,IS_TRANSF,YTIME)$(time(YTIME) $runCy(allCy))..
-  V03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
-    =E=
-  1;
 
-Q03CostTotal(allCy,IS_TRANSF,YTIME)$(time(YTIME) $runCy(allCy))..
-  V03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
-    =E=
-  V03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) +
-  V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME);
+* fix me: Output should be related to v03activity. And should be coupled with autoproducers.
+Q03OutputByproductEF(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$IS_TRANSF_OUT(IS_TRANSF,EFS)) ..
+    V03OutputByproductEF(allCy,IS_TRANSF,EFS,YTIME)
+        =E=
+    V03ConsGrssInl(allCy,EFS,YTIME) - VmImpNetEneBrnch(allCy,EFS,YTIME);
 
-$offtext
+Q03ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
+  V03ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)
+      =E=
+  SUM(IS_TRANSF_TECH$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH),
+    i02ratioTransfInputIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EFS,"%fBaseY%") *
+    V03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+  );
+
+Q03ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
+    V03ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)
+        =E=
+    SUM(IS_TRANSF_TECH$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH),
+    !!i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,EFS,"%fBaseY%") *
+    0*V03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+  );

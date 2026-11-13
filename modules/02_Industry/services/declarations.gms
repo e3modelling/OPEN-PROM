@@ -4,7 +4,7 @@ parameter
 imCO2CaptRateIndustry(allCy,INDITECH,YTIME)
 !!i02DataShareBlend(allCy,INDDOM,IND_SERVS,INDITECH,EF,YTIME)
 i02DataEnergyService(allCy,INDDOM,IND_SERVS,YTIME)
-i02ratioTransfInputIS(allCy,IS_TRANSF,EFS,YTIME)
+i02ratioTransfInputIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME)
 i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,EFS,YTIME)
 ;
 
@@ -18,10 +18,7 @@ Q02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
 Q02ScrpRate(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
 Q02ShareTech(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
 Q02ConsFuel(allCy,INDDOM,IND_SERVS,EF,YTIME)
-Q02ISTransfOutEF(allCy,IS_TRANSF,EFS,YTIME)
-Q02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)
 Q02CostCapital(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
-Q02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)
 Q02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
 Q02ConsFuelNonEnergy(allCy,INDDOM,IND_SERVS,EF,YTIME)
 Q02InputMaterials(allCy,IND_SERVS,MATERIALS,YTIME)
@@ -37,8 +34,6 @@ V02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)        "Total cost of techno
 V02ScrpRate(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
 V02ShareTech(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
 V02ConsFuel(allCy,INDDOM,IND_SERVS,EF,YTIME)               "Fuel consumption in the industry sector (Mtoe)"
-V02ISTransfOutEF(allCy,IS_TRANSF,EFS,YTIME)                "Output of energy transfer processes in the industry sector (Mtoe)"
-V02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)                 "Input of energy transfer processes in the industry sector (Mtoe)"
 V02CostCapital(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)      "Capital cost of technologies in the industry sector (k$/Million tonnes for IS)"
 V02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)            "Own energy consumption of energy transfer processes in the industry sector (Mtoe)"
 V02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)

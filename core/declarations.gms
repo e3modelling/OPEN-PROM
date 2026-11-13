@@ -56,6 +56,7 @@ imCapCostTech(allCy,SBS,TECH,YTIME)                          "Capital Cost of te
 imCapCostTechMin(allCy,DSBS,TECH,YTIME)                    !!Factor for the minimum capex of a demand technology after the state subsidy
 imFactorEmissProcessesCO2(allCy,SBS,EF,YTIME)
 imFactorEmissEnergyCO2(allCy,SBS,EF)
+i03DataCap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
 smGwToTwhPerYear(YTIME)                                    "convert GW mean power into TWh/y, depending on whether it's a leap year"
 ;
 Equations

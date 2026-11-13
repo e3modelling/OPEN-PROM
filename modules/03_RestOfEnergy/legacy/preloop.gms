@@ -49,3 +49,15 @@ VmFinalEnergy.FX(runCy,"ICT","ELC",YTIME) = i02FuelConsICT(runCy,"%ICT%","%SSP%"
 V03CostVariable.LO(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) = 0;
 V03CostVariable.FX(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$DATAY(YTIME) = 1;
 *---
+V03OutputByproductEF.LO(runCy,IS_TRANSF,EFS,YTIME) = 0;
+V03OutputByproductEF.L(runCy,IS_TRANSF,EFS,YTIME) = i02ISTransfOutEF(runCy,IS_TRANSF,EFS,"%fBaseY%");
+V03OutputByproductEF.FX(runCy,IS_TRANSF,EFS,YTIME)$DATAY(YTIME) = i02ISTransfOutEF(runCy,IS_TRANSF,EFS,YTIME);
+V03OutputByproductEF.FX(runCy,IS_TRANSF,EFS,YTIME)$(not IS_TRANSF_OUT(IS_TRANSF,EFS)) = 0;
+*---
+V03ISTransfInEF.LO(runCy,IS_TRANSF,EFS,YTIME) = 0;
+V03ISTransfInEF.L(runCy,IS_TRANSF,EFS,YTIME) = -i02ISTransfInEF(runCy,IS_TRANSF,EFS,"%fBaseY%");
+V03ISTransfInEF.FX(runCy,IS_TRANSF,EFS,YTIME)$DATAY(YTIME) = -i02ISTransfInEF(runCy,IS_TRANSF,EFS,YTIME);
+*---
+V03ISownEnergyTransf.LO(runCy,IS_TRANSF,EFS,YTIME) = 0;
+V03ISownEnergyTransf.L(runCy,IS_TRANSF,EFS,YTIME) = i02OwnEnergyTransf(runCy,IS_TRANSF,EFS,"%fBaseY%");
+V03ISownEnergyTransf.FX(runCy,IS_TRANSF,EFS,YTIME)$DATAY(YTIME) = i02OwnEnergyTransf(runCy,IS_TRANSF,EFS,YTIME);

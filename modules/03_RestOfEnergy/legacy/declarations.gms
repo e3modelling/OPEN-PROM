@@ -37,6 +37,11 @@ Q03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
 Q03DemTot(allCy,IS_TRANSF,YTIME)
 Q03DemGap(allCy,IS_TRANSF,YTIME)
 Q03ShareGap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+Q03OutputByproductEF(allCy,IS_TRANSF,EF,YTIME)
+Q03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+Q03CostTotal(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+Q03ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)
+Q03ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)
 ;
 
 Variables
@@ -54,6 +59,11 @@ V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
 V03DemTot(allCy,IS_TRANSF,YTIME)
 V03DemGap(allCy,IS_TRANSF,YTIME)
 V03ShareGap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+V03OutputByproductEF(allCy,IS_TRANSF,EF,YTIME)
+V03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+V03CostTotal(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+V03ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)
+V03ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)
 
 *'                **Interdependent Variables**
 VmImpNetEneBrnch(allCy,EFS,YTIME)	                       "Net Imports (Mtoe)"

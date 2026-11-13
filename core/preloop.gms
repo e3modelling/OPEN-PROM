@@ -84,5 +84,4 @@ openprom.scaleopt=1;
 VmGDPPartGlob.L(runCy,YTIME) = 0.1;
 VmGDPPartGlob.FX(runCy,YTIME)$(DATAY(YTIME)) = i01GDP(YTIME,runCy) / sum(runCy2, i01GDP(YTIME,runCy2));
 *---
-V03Cap.FX(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(DATAY(YTIME) and sameas("DRI",IS_TRANSF) and sameas("CONVDRI",IS_TRANSF_TECH)) = 
-i02ratioMaterialCons("PRIM_STEEL","EAF","SPNGIRN") * i02DataEnergyService(runCy,"IS","PRIM_STEEL",YTIME);
+V03Cap.FX(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$DATAY(YTIME) = i03DataCap(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME);

@@ -97,31 +97,6 @@ Q02ConsFuel(allCy,INDDOM,IND_SERVS,EF,YTIME)$(TIME(YTIME) and runCy(allCy) and I
       i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EF,"%fBaseY%") !!FIXME: Check the SFC. Add SFC for new techs (H2EAF, EAF if applicable)
     );
 
-Q02ISTransfOutEF(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and IS_TRANSF_OUT(IS_TRANSF,EFS))..
-    V02ISTransfOutEF(allCy,IS_TRANSF,EFS,YTIME)
-        =E=
-    V03ConsGrssInl(allCy,EFS,YTIME) - VmImpNetEneBrnch(allCy,EFS,YTIME);
-
-Q02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
-    V02ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)
-        =E=
-    i02ratioTransfInputIS(allCy,IS_TRANSF,EFS,"%fBaseY%") *
-    SUM(EFS2$IS_TRANSF_OUT(IS_TRANSF,EFS2),
-      V02ISTransfOutEF(allCy,IS_TRANSF,EFS2,YTIME)
-    ) +
-    SUM(MATERIALS,
-      i02ratioFuelConsPerMaterial(IS_TRANSF,MATERIALS,EFS) *
-      V02InputMaterials(allCy,"PRIM_STEEL",MATERIALS,YTIME)
-    );
-
-Q02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
-    V02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)
-        =E=
-    i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,EFS,"%fBaseY%") *
-    SUM(EFS2$IS_TRANSF_OUT(IS_TRANSF,EFS2),
-      V02ISTransfOutEF(allCy,IS_TRANSF,EFS2,YTIME)
-    );
-
 Q02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME)$runCy(allCy)$INDDOMtoSERVS(INDDOM,IND_SERVS)$SERVStoTECH(IND_SERVS,INDITECH))..
     V02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
         =E=
