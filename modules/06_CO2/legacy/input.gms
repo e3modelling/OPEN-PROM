@@ -152,8 +152,8 @@ i06FixOandMCDR(CDRTECH)              "Fixed and O&M costs of each CDR technology
 i06FixOandMCDRMin(CDRTECH)           "Minimum possible Fixed and O&M costs of each CDR technology affected by learning curve ($/tCO2)"
 i06LftCDR(allCy,CDRTECH,YTIME)             "Lifetime of each CDR technology (years)"
 i06SubsiFacCDR(CDRTECH)                  "State subsidy factor for the carbon captured applied on the carbon price"
-i06SpecElecCDR(allCy,CDRTECH,YTIME)        "Specific electricity needs of CDR technologies (MWh/tCO2)"
-i06SpecHeatCDR(allCy,CDRTECH,YTIME)        "Specific heat needs of CDR technologies (MWh/tCO2)"
+i06SpecElecCDR(allCy,CDRTECH,YTIME)        "Specific electricity needs of CDR technologies (toe/tCO2)"
+i06SpecHeatCDR(allCy,CDRTECH,YTIME)        "Specific heat needs of CDR technologies (toe/tCO2)"
 ;
 *---
 i06ElastCO2Seq(runCy,CO2SEQELAST) = i06CO2SeqData(CO2SEQELAST);

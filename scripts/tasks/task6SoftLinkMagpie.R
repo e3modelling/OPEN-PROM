@@ -1,4 +1,4 @@
-# Task 7: OPEN-PROM <-> MAgPIE soft-link, iterated to convergence with
+# Task 6: OPEN-PROM <-> MAgPIE soft-link, iterated to convergence with
 # per-phase checkpointing.
 #
 # ============================================================================
@@ -151,8 +151,8 @@
 #                              reportOutput.R
 #   openprom_coupling.mif      last round's forward output (overwritten)
 #   iPrices_magpie.csv         last round's backward price output (overwritten)
-#   iEmissions_magpie.mif      last round's backward emissions output
-#                              (overwritten)
+#   iEmissions_magpie.mif      last round's backward emissions output (overwritten)
+#   iLandCover_magpie.mif      selected MAgPIE round's land areas for reporting
 #   coupling_state.json        full state machine snapshot (see §3)
 #   convergence_log.csv        per-round convergence trajectory (see below)
 #   coupling_summary.json      finalize-time summary: status, thresholds,
@@ -302,7 +302,7 @@
     }
   }
   if (length(diffs)) {
-    stop("[task 7] config mismatch with coupling_state.json:\n",
+    stop("[task 6] config mismatch with coupling_state.json:\n",
          paste(diffs, collapse = "\n"),
          "\nResume requires bit-identical config. To use different params, start a fresh run.")
   }
@@ -319,7 +319,7 @@
     message   = conditionMessage(e)
   )
   try(.saveState(state, stateFile), silent = TRUE)
-  stop(sprintf("[task 7] failed in round=%s phase=%s: %s",
+  stop(sprintf("[task 6] failed in round=%s phase=%s: %s",
                round, phase, conditionMessage(e)))
 }
 
@@ -428,6 +428,7 @@
       quant_max = final_round$delta_quant_max
     ),
     magpie_output_dirs = magpie_dirs,
+    final_magpie_output_dir = final_round$magpie_output_dir,
     final_gdx          = finalGdx,
     started            = state$started,
     completed          = .isoNow()
@@ -452,7 +453,7 @@
 .runOpenPromCold <- function(state, openPromRun, stateFile) {
   k <- 0L; key <- "0"
   tryCatch({
-    cat(">>> [task 7] Round 0: OPEN-PROM cold (softLinkMAgPIE=off)\n")
+    cat(">>> [task 6] Round 0: OPEN-PROM cold (softLinkMAgPIE=off)\n")
     extra <- Sys.getenv("OPENPROM_EXTRA_FLAGS")
     cmd <- paste(gams, "main.gms --DevMode=0 --GenerateInput=off --softLinkMAgPIE=off",
                  extra, "-logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
@@ -477,7 +478,7 @@
 .runForward <- function(state, k, openPromRun, sceName, stateFile) {
   key <- as.character(k)
   tryCatch({
-    cat(sprintf(">>> [task 7] Round %d phase=forward: couplePromToMagpie()\n", k))
+    cat(sprintf(">>> [task 6] Round %d phase=forward: couplePromToMagpie()\n", k))
     prev_gdx <- state$rounds[[as.character(k - 1L)]]$gdx_path
     if (is.null(prev_gdx) || !file.exists(prev_gdx))
       stop(sprintf("previous round gdx missing: %s", prev_gdx))
@@ -501,7 +502,7 @@
                            sceName, stateFile) {
   key <- as.character(k)
   tryCatch({
-    cat(sprintf(">>> [task 7] Round %d phase=magpie: MAgPIE run\n", k))
+    cat(sprintf(">>> [task 6] Round %d phase=magpie: MAgPIE run\n", k))
     couplingMif <- file.path(openPromRun, "openprom_coupling.mif")
     old_wd <- getwd()
     on.exit(setwd(old_wd), add = TRUE)
@@ -540,7 +541,7 @@
 .runBackward <- function(state, k, openPromRun, sceName, stateFile) {
   key <- as.character(k)
   tryCatch({
-    cat(sprintf(">>> [task 7] Round %d phase=backward: coupleMagpieToProm()\n", k))
+    cat(sprintf(">>> [task 6] Round %d phase=backward: coupleMagpieToProm()\n", k))
     mout <- state$rounds[[key]]$magpie_output_dir
     if (is.null(mout) || !dir.exists(mout))
       stop(sprintf("magpie output dir missing for round %d: %s", k, mout))
@@ -567,7 +568,7 @@
 .runOpenPromHot <- function(state, k, openPromRun, stateFile) {
   key <- as.character(k)
   tryCatch({
-    cat(sprintf(">>> [task 7] Round %d phase=openprom_hot: OPEN-PROM (softLinkMAgPIE=on)\n", k))
+    cat(sprintf(">>> [task 6] Round %d phase=openprom_hot: OPEN-PROM (softLinkMAgPIE=on)\n", k))
     extra <- Sys.getenv("OPENPROM_EXTRA_FLAGS")
     cmd <- paste(gams, "main.gms --DevMode=0 --GenerateInput=off --softLinkMAgPIE=on",
                  extra, "-logOption 4 -AsyncSolLst 1 -Idir=./data 2>&1")
@@ -609,7 +610,7 @@
 
 # ============================================================ main entry
 
-runTask7 <- function() {
+runTask6 <- function() {
   scn <- jsonlite::fromJSON(Sys.getenv("OPENPROM_SCENARIO"))
 
   # ---- Read config + scenario fields
@@ -627,23 +628,23 @@ runTask7 <- function() {
   )
 
   if (is.null(magpieRoot) || !nzchar(magpieRoot))
-    stop("[task 7] config.json must define paths.magpie_path.")
+    stop("[task 6] config.json must define paths.magpie_path.")
   if (is.null(magpieProj) || !nzchar(magpieProj))
-    stop("[task 7] scenario must define soft_link_magpie.project.")
+    stop("[task 6] scenario must define soft_link_magpie.project.")
   if (is.null(sceName) || !nzchar(sceName))
-    stop("[task 7] scenario must define scenario_name.")
+    stop("[task 6] scenario must define scenario_name.")
   if (cfg$max_iter < 1L)
-    stop("[task 7] soft_link_magpie.max_iter must be >= 1, got ", cfg$max_iter)
+    stop("[task 6] soft_link_magpie.max_iter must be >= 1, got ", cfg$max_iter)
 
   if (!dir.exists(magpieRoot))
-    stop("[task 7] magpie_path does not exist: ", magpieRoot)
+    stop("[task 6] magpie_path does not exist: ", magpieRoot)
   projDir <- file.path(magpieRoot, "e3m_projects", magpieProj)
   scenCsv <- file.path(projDir, "scenarios.csv")
   if (!dir.exists(projDir))
-    stop("[task 7] project folder not found: ", projDir,
+    stop("[task 6] project folder not found: ", projDir,
          ". Check scenario.soft_link_magpie.project.")
   if (!file.exists(scenCsv))
-    stop("[task 7] scenarios.csv missing at: ", scenCsv)
+    stop("[task 6] scenarios.csv missing at: ", scenCsv)
 
   # Validate scenario_name resolves to exactly one MAgPIE subscenario before
   # spending hours on cold OPEN-PROM. MAgPIE matches by `title` column with
@@ -651,18 +652,18 @@ runTask7 <- function() {
   # so we replicate that here.
   mpTitles <- tryCatch(
     read.csv(scenCsv, stringsAsFactors = FALSE)$title,
-    error = function(e) stop("[task 7] failed to read MAgPIE scenarios.csv (",
+    error = function(e) stop("[task 6] failed to read MAgPIE scenarios.csv (",
                              scenCsv, "): ", conditionMessage(e))
   )
   if (is.null(mpTitles))
-    stop("[task 7] MAgPIE scenarios.csv has no 'title' column: ", scenCsv)
+    stop("[task 6] MAgPIE scenarios.csv has no 'title' column: ", scenCsv)
   hit <- mpTitles[mpTitles == sceName | startsWith(mpTitles, sceName)]
   if (length(hit) == 0L)
-    stop("[task 7] scenario_name='", sceName, "' not found in MAgPIE project '",
+    stop("[task 6] scenario_name='", sceName, "' not found in MAgPIE project '",
          magpieProj, "' scenarios.csv.\nAvailable titles:\n  ",
          paste(mpTitles, collapse = "\n  "))
   if (length(hit) > 1L)
-    stop("[task 7] scenario_name='", sceName, "' ambiguous in MAgPIE project '",
+    stop("[task 6] scenario_name='", sceName, "' ambiguous in MAgPIE project '",
          magpieProj, "' — matches multiple titles via exact-or-prefix:\n  ",
          paste(hit, collapse = "\n  "))
 
@@ -675,35 +676,35 @@ runTask7 <- function() {
 
   if (reuseExisting) {
     if (!dir.exists(existingRun))
-      stop("[task 7] soft_link_magpie.existing_prom_run folder does not exist: ", existingRun)
+      stop("[task 6] soft_link_magpie.existing_prom_run folder does not exist: ", existingRun)
     openPromRun <- normalizePath(existingRun, winslash = "/", mustWork = TRUE)
     setwd(openPromRun)
     stateFile <- file.path(openPromRun, .STATE_FILENAME)
     if (!file.exists(stateFile))
-      stop("[task 7] existing_prom_run=", existingRun,
+      stop("[task 6] existing_prom_run=", existingRun,
            " has no ", .STATE_FILENAME,
-           ". task7 only accepts state files written by this version; ",
+           ". task6 only accepts state files written by this version; ",
            "the bare-blabla.gdx fallback is not supported. ",
            "Start a fresh run.")
     state <- .loadState(stateFile)
     if (identical(state$status, "failed"))
-      stop("[task 7] previous run failed in round=", state$last_failure$round,
+      stop("[task 6] previous run failed in round=", state$last_failure$round,
            " phase=", state$last_failure$phase,
            " (", state$last_failure$message, "). ",
            "This run is considered dead and is not resumable. ",
            "Start a fresh run.")
     if (state$status %in% c("converged", "max_iter"))
-      stop("[task 7] previous run already finished (status=", state$status,
+      stop("[task 6] previous run already finished (status=", state$status,
            "). Start a fresh run.")
     .validateConfigConsistency(state, cfg, sceName)
-    cat(sprintf(">>> [task 7] resuming run folder: %s\n", openPromRun))
+    cat(sprintf(">>> [task 6] resuming run folder: %s\n", openPromRun))
   } else {
     if (withRunFolder) createRunFolder(sceName)
     openPromRun <- getwd()
     stateFile <- file.path(openPromRun, .STATE_FILENAME)
     state <- .newState(sceName, cfg)
     .saveState(state, stateFile)
-    cat(sprintf(">>> [task 7] fresh run folder: %s\n", openPromRun))
+    cat(sprintf(">>> [task 6] fresh run folder: %s\n", openPromRun))
   }
 
   saveMetadata(DevMode = 0)
@@ -765,14 +766,14 @@ runTask7 <- function() {
     if (converged) {
       state$status <- "converged"
       .saveState(state, stateFile)
-      cat(sprintf(">>> [task 7] CONVERGED at round %d (delta_price=%.4g, delta_quant=%.4g)\n",
+      cat(sprintf(">>> [task 6] CONVERGED at round %d (delta_price=%.4g, delta_quant=%.4g)\n",
                   k, dp$max, dq$max))
       break
     }
     if (k >= cfg$max_iter) {
       state$status <- "max_iter"
       .saveState(state, stateFile)
-      cat(sprintf(">>> [task 7] reached max_iter=%d without convergence\n", cfg$max_iter))
+      cat(sprintf(">>> [task 6] reached max_iter=%d without convergence\n", cfg$max_iter))
       break
     }
     k <- k + 1L
@@ -786,7 +787,17 @@ runTask7 <- function() {
   .writeCouplingSummary(state, openPromRun, final_gdx, cfg)
 
   if (withRunFolder && withReport) {
-    cat(">>> [task 7] reportOutput.R\n")
+    final_magpie_dir <- state$rounds[[as.character(final_k)]]$magpie_output_dir
+    tryCatch(
+      postprom::writeMagpieLandCover(
+        reportMifPath = file.path(final_magpie_dir, "report.mif"),
+        outMifPath = file.path(openPromRun, "iLandCover_magpie.mif"),
+        scenario = sceName
+      ),
+      error = function(e) warning("[task 6] Land-cover report skipped: ",
+                                  conditionMessage(e), call. = FALSE)
+    )
+    cat(">>> [task 6] reportOutput.R\n")
     run_path <- getwd()
     setwd("../../")
     system(paste0("Rscript ./scripts/tasks/reportOutput.R ", run_path))

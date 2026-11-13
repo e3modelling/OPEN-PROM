@@ -140,26 +140,29 @@ gets run. The main task modes:
   - existing `data/` and `targets/`
   - no
 * - 6
-  - `CALIBRATE CARBON PRICES`
-  - Runs carbon-price calibration
-  - internal calibration setup
-  - no
-* - 7
   - `OPEN-PROM SOFT-LINK MAgPIE`
   - Runs the MAgPIE soft-link pipeline
   - internal data access + MAgPIE checkout
   - **yes**
+* - 7
+  - `CALIBRATE GLOBAL CARBON PRICE`
+  - Calibrates a straight or net-zero-bent global price path against peak and terminal CO2 budgets, with an optional price-ceiling plateau
+  - research `data/` and `global_carbon_price_calibration` settings
+  - no
+* - 8
+  - `CALIBRATE REGIONAL CARBON PRICE`
+  - Completes each group's NDC then LTT search before jointly repairing current annual-GHG cap failures
+  - research `data/`, paired NDC/LTT target and coverage tables, and `regional_carbon_price_calibration` settings
+  - no
 :::
 
 Task 4 is a debugging path and is not part of the normal run flow. A quick way to read the table: `NEW DATA` means
 the workflow first regenerates model inputs; `DEV` is the lighter development setup; `RESEARCH` is the full research
 setup; `CALIBRATE` modes are specialised runs, not the usual first step.
-
-For tasks 0, 2, 3, 6 and 7, `reportOutput.R` runs automatically when `behavior.withRunFolder` and
-`behavior.withReport` are both `true` in `config.json` (see [What the outputs mean](#running-outputs)).
+For tasks 0, 2, 3 and 6, `reportOutput.R` runs automatically when `behavior.withRunFolder` and `behavior.withReport` are both `true` in `config.json` (see [What the outputs mean](#running-outputs)).
 
 :::{seealso}
-The MAgPIE soft-link (task 7) is covered in {doc}`/guide/05_soft_linking`; see also {ref}`magpie-link`.
+The MAgPIE soft-link (task 6) is covered in {doc}`/guide/05_soft_linking`; see also {ref}`magpie-link`.
 :::
 
 ### Batch mode
@@ -173,7 +176,7 @@ Rscript start.R scenarios.csv
 or click the **RUN BATCH** button in the VS Code Task Runner. The script fails with
 `Batch CSV not found: scenarios.csv` if the file is missing — batch is always opt-in via that file. Each row
 produces its own `runs/<scenario_name>_<timestamp>/` folder; rows are processed sequentially inside one R process.
-Batch supports only `task_id` 2 and 7; other values are rejected per row. A starter template lives at
+Batch supports only `task_id` 2 and 6; other values are rejected per row. A starter template lives at
 `scenarios.template.csv`; the minimal required columns are `scenario_name` and `task_id`.
 
 #### How each row builds its scenario (merge semantics)
@@ -212,7 +215,7 @@ the merged scenario `start.R` runs is:
 ```text
 {
   "scenario_name": "C600_landHigh",        // from CSV
-  "task_id":       7,                       // from CSV
+  "task_id":       6,                       // from CSV
   "description":   "UPTAKE C600 landHigh",  // from CSV
   "gams_flags":    { "fScenario": 600 },    // CSV overrides 200 -> 600
   "soft_link_magpie": {
@@ -250,8 +253,8 @@ Beyond `gams_flags.X`, two scenario groups are read specially by `start.R` rathe
   The current MAgPIE coefficient package covers the 39 research regions only. It works directly in
   task 2 (`DevMode=0`); task 0/1 runs must set `fCountries` to covered regions and must not request
   the development-only aggregates `RWO` or `ELL`.
-- **`soft_link_magpie.*`** configures the task-7 MAgPIE soft-link. This group is **not** turned into GAMS flags by
-  the generic dispatcher; task 7 reads it directly (`project`, `existing_prom_run`, `max_iter`, `price_tol`,
+- **`soft_link_magpie.*`** configures the task-6 MAgPIE soft-link. This group is **not** turned into GAMS flags by
+  the generic dispatcher; task 6 reads it directly (`project`, `existing_prom_run`, `max_iter`, `price_tol`,
   `quant_tol`) and passes `--softLinkMAgPIE` itself. See {doc}`/guide/05_soft_linking`.
 
 Concrete example — sweep end-year horizon and Transport realization with no R-code changes:

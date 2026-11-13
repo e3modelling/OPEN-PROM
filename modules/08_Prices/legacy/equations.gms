@@ -57,7 +57,8 @@ Q08SupplyCurves(allCy,EFS,YTIME)$(TIME(YTIME) $runCy(allCy))..
       =E=
     (
 $IFTHEN.bmswasBackend %bmswasPriceMode% == softlink
-        iPricesMagpie(allCy,SBS,YTIME)
+* The coupling interface broadcasts the same regional market price to every SBS.
+        iPricesMagpie(allCy,"PG",YTIME)
 $ELSEIF.bmswasBackend %bmswasPriceMode% == curve
 $IFTHEN.bmswasEmulatorBackend %landUseEmulator% == magpie
           sum((MAGPIEH12REG,activeMagpieScen)$mapMagpieH12Cy(MAGPIEH12REG,allCy),
@@ -205,6 +206,6 @@ Q08CostAvgProd(allCy,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     )$(sameas("GSL",EFS) or sameas("GDO",EFS)) +
     (
       VmCostAvgProd(allCy,EFS,YTIME-1) *
-      (1 + (V08SupplyCurves(allCy,"BMSWAS",YTIME) / V08SupplyCurves(allCy,"BMSWAS",YTIME) - 1)$BIOFUELS(EFS)) *
+      (1 + (V08BmswasPriceFactor(allCy,YTIME) ** i08PriceTransElast(EFS,"BMSWAS") - 1)$BIOFUELS(EFS)) *
       (1 - 0.008$BIOFUELS(EFS))
     )$(not (sameas(EFS,"STE") or sameas(EFS,"H2F") or sameas(EFS,"ELC") or sameas("GSL",EFS) or sameas("GDO",EFS)));

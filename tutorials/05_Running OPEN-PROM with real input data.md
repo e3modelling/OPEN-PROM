@@ -83,7 +83,7 @@ When you want to run several scenarios in one go, put a `scenarios.csv` file at 
 Rscript start.R scenarios.csv
 ```
 
-or click the **RUN BATCH** button in the VS Code Task Runner. The script fails with `Batch CSV not found: scenarios.csv` if the file is missing — batch is always opt-in via that file. Each row produces its own `runs/<scenario_name>_<timestamp>/` folder; rows are processed sequentially inside one R process (no subprocess overhead). Batch supports only `task_id` 2 and 7; other values are rejected per row.
+or click the **RUN BATCH** button in the VS Code Task Runner. The script fails with `Batch CSV not found: scenarios.csv` if the file is missing — batch is always opt-in via that file. Each row produces its own `runs/<scenario_name>_<timestamp>/` folder; rows are processed sequentially inside one R process (no subprocess overhead). Batch supports only `task_id` 2 and 6; other values are rejected per row.
 
 A starter template lives at `scenarios.template.csv`. The minimal required columns are `scenario_name` and `task_id`; everything else is optional.
 
@@ -125,7 +125,7 @@ the merged scenario `start.R` runs for this row is:
 ```jsonc
 {
   "scenario_name": "C600_landHigh",                                 // from CSV
-  "task_id":       7,                                               // from CSV (also overrides anything else)
+  "task_id":       6,                                               // from CSV (also overrides anything else)
   "description":   "UPTAKE C600 landHigh iterated to convergence",  // from CSV
   "gams_flags":    { "fScenario": 600 },                            // CSV overrides 200 -> 600
   "magpie": {
