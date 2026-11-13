@@ -13,6 +13,7 @@ i03RatioPrimaryFuels(allCy,EFS,YTIME)
 i03InputEffSupply(allCy,SSBS,EFS,YTIME)
 i03RateExpTotImp(allCy,EFS,YTIME)                  "Share of exports in total world trade"
 i03RateImpGrossInlCons(allCy,EFS,YTIME)            "Rate of Imports in Gross inland consumption (1)"
+i03ShareFuels(allCy,IS_TRANSF_TECH,EF,YTIME)
 ;
 
 Equations
@@ -32,6 +33,10 @@ Q03ImpNetEneBrnch(allCy,EFS,YTIME)	                       "Compute net imports"
 Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)	                       "Compute energy branch final consumption"
 Q03LossesDistr(allCy,EFS,YTIME)                            "Compute distribution losses"
 Q03FinalEnergy(allCy,DSBS,EFS,YTIME)                       "Compute total final energy consumption"
+Q03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+Q03DemTot(allCy,IS_TRANSF,YTIME)
+Q03DemGap(allCy,IS_TRANSF,YTIME)
+Q03ShareGap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
 ;
 
 Variables
@@ -45,6 +50,10 @@ V03ConsGrssInl(allCy,EFS,YTIME)	                           "Gross Inland Consump
 V03ProdPrimary(allCy,EFS,YTIME)	                           "Primary Production (Mtoe)"
 V03Exp(allCy,EFS,YTIME)                        	           "Exports fake (Mtoe)"
 V03Imp(allCy,EFS,YTIME)             	                   "Fake Imports for all fuels except natural gas (Mtoe)"
+V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+V03DemTot(allCy,IS_TRANSF,YTIME)
+V03DemGap(allCy,IS_TRANSF,YTIME)
+V03ShareGap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
 
 *'                **Interdependent Variables**
 VmImpNetEneBrnch(allCy,EFS,YTIME)	                       "Net Imports (Mtoe)"

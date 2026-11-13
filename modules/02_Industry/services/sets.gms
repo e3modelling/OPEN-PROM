@@ -102,10 +102,12 @@ BLASTFUR.(BFG)
 COKEOVS.(COKE,COG)
 /
 
-MATERIAL  "Materials used"
+MATERIALS  "Materials used"
 /
-IRNSPNG   "Iron sponge"
+SPNGIRN   "Sponge iron"
 SCRAP     "Scrap"
+PIGIRON   "Pig iron"
+IRONORE   "Iron ore"
 /
 ;
 

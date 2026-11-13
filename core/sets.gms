@@ -690,6 +690,10 @@ TEW
 *HPTELC
 BOF       "Blast furnace basic oxygen furnace for primary steel production"
 EAF     "Direct reduction electric arc furnace for primary steel production"
+BF
+COKEOV
+CONVDRI
+GREENDRI
 /
 
 TTECH(TECH)      Transport Technologies

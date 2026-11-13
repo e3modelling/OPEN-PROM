@@ -118,3 +118,7 @@ i03InputEffSupply(runCy,SSBS,EFS,YTIME)$DATAY(YTIME) =
   -SUM(runCyL,i03InpTotTransfProcess(runCyL,SSBS,EFS,YTIME)) / 
   (SUM((runCyL,EFS2),i03OutTotTransfProcess(runCyL,SSBS,EFS2,YTIME)) + 1e-6)
 )$(not SUM(EFS2, i03OutTotTransfProcess(runCy,SSBS,EFS2,YTIME)));
+*---
+i03ShareFuels(runCy,IS_TRANSF_TECH,EF,YTIME)$DATAY(YTIME) =
+0.1; !! FIXME
+*-i02ISTransfInEF(runCy,IS_TRANSF,EFS,YTIME)

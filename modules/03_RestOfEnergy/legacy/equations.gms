@@ -196,3 +196,71 @@ Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$(SECtoEF(DSBS,E
     SUM(AGRI_MODES,V12ConsFuel(allCy,AGRI_MODES,EFS,YTIME))$sameas("AG",DSBS) +
     sum(DACTECH$TECHtoEF(DACTECH,EFS),VmConsFuelTechCDRProd(allCy,DACTECH,EFS,YTIME))$sameas(DSBS,"DAC") +
     VmConsFuelTechCDRProd(allCy,"TEW",EFS,YTIME)$sameas(DSBS,"EW");   
+
+
+Q03DemTot(allCy,IS_TRANSF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V03DemTot(allCy,IS_TRANSF,YTIME)
+        =E=
+    SUM(MATERIALS$IS_TRANSF_OUT_MATERIAL(IS_TRANSF,MATERIALS),
+      V02InputMaterials(allCy,"PRIM_STEEL",MATERIALS,YTIME)
+    );
+
+Q03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(time(YTIME)$runCy(allCy)$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH))..
+  V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+    =E=
+  sum(EF$IS_TRANSF_TECHtoEF(IS_TRANSF_TECH,EF), 
+    i03ShareFuels(allCy,IS_TRANSF_TECH,EF,"%fBaseY%") * 
+    (
+      VmPriceFuelSubsecCarVal(allCy,"PG",EF,YTIME) +
+      !!V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$sameas("BMSWAS", PGEF)) +
+      !!(1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
+      1e-3 * imCo2EmiFac(allCy,"PG",EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
+    ) !!/ imPlantEffByType(allCy,PGALL,"effELC",YTIME)
+  ) + 1e-6;
+
+Q03DemGap(allCy,IS_TRANSF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
+    V03DemGap(allCy,IS_TRANSF,YTIME)
+        =E=
+  ( 
+    V03DemTot(allCy,IS_TRANSF,YTIME) -
+    sum(IS_TRANSF_TECH$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH),
+      (1-0.05) *
+      V03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME-1)
+    ) +
+  SQRT(SQR(
+    V03DemTot(allCy,IS_TRANSF,YTIME) -
+    sum(IS_TRANSF_TECH$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH),
+      (1-0.05) *
+      V03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME-1)
+    )
+  ))
+  ) / 2 + 1e-3;
+
+Q03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(TIME(YTIME)$runCy(allCy)$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH))..
+    V03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+        =E=
+    (1-0.05) * V03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME-1) +
+    V03ShareGap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) * V03DemGap(allCy,IS_TRANSF,YTIME);
+
+Q03ShareGap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(TIME(YTIME)$runCy(allCy)$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH)) ..
+    V03ShareGap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+        =E=
+    !!i04MatFacPlaAvailCap(allCy,TSTEAM,YTIME) *
+    V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME-1) ** (-2) /
+    SUM(IS_TRANSF_TECH2,
+      !!i04MatFacPlaAvailCap(allCy,TSTEAM2,YTIME) *
+      V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH2,YTIME-1) ** (-2)
+    );
+$ontext
+Q03CostCapital(allCy,IS_TRANSF,YTIME)$(time(YTIME) $runCy(allCy))..
+  V03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+    =E=
+  1;
+
+Q03CostTotal(allCy,IS_TRANSF,YTIME)$(time(YTIME) $runCy(allCy))..
+  V03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+    =E=
+  V03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) +
+  V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME);
+
+$offtext

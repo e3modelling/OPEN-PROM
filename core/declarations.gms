@@ -69,6 +69,7 @@ qDummyObjTRANSE                                            "Define dummy objecti
 qDummyObjINDDOMShares                                       "Define dummy objective function for INDDOM shares"
 qDummyObjINDDOMFinalEnergy                                  "Define dummy objective function for INDDOM final energy"
 $ENDIF.calib
+Q03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
 ;
 
 Variables
@@ -84,6 +85,7 @@ vDummyObjINDDOMFinalEnergy(DSBS)                            "Dummy maximisation 
 Positive Variables
 VmPriceCarbon(allCy,SBS,EFS,YTIME)
 VmCarVal(allCy,NAP,YTIME)                                  "Carbon prices for all countries (US$2015/tn CO2)"
+V03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
 common(allCy,TRANSE,YTIME)
 VmGDPPartGlob(allCy,YTIME)                                           "Global GDP share (1)"
 ;
