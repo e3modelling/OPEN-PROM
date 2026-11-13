@@ -7,7 +7,7 @@ $include"./iProductionIS.csv"
 $offdelim
 ;
 *---
-table i02IndCosts(*,*,YTIME)	      "Costs for industry technologies (Capex, Opex, OM) in Million $2015/ Million tonnes of steel"	
+table i02IndCosts(TECH,*,YTIME)	      "Costs for industry technologies (Capex, Opex, OM) in billion $2015/ Million tonnes of steel"	
 $ondelim
 $include"./iIndustryCosts.csv"
 $offdelim
