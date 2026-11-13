@@ -31,8 +31,7 @@
         "windOffLam": { "tech": "PGAWNO",    "mult": "def", "region": "LAM" },
         "bmsccsMid":  { "tech": "ATHBMSCCS", "mult": "def", "from": 2030, "to": 2050 },
         "bmsccsLate": { "tech": "ATHBMSCCS", "mult": "def", "from": 2051 },
-        "lpgCars":    { "sector": "PC", "tech": "TLPG", "mult": "def" },
-        "geodomse":    { "sector": "DOMSE", "tech": "TGEO", "mult": "very-low" }
+        "lpgCars":    { "sector": "PC", "tech": "TLPG", "mult": "def" }
       }
     },
     "soft_link_magpie": {

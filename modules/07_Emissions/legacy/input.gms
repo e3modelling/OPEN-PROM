@@ -92,6 +92,7 @@ p07CostCorrection(E07SrcMacAbate)$sFGases(E07SrcMacAbate) =
 *' fraction of the exogenous data is preserved (see Q07EmiActBySrcRegTim). Regions whose base-year production is
 *' below S07FugProdMin keep the exogenous baseline: for near-zero producers the ratio is meaningless (e.g. BEL gas
 *' 0.01 Mtoe in the data vs 3.2 Mtoe solved in 2024, a 320x jump).
+scalar S07FugProdMin "Minimum base-year primary production for fugitive CH4 to follow model production (Mtoe)" /1/;
 p07FugProdBase(runCy,E07SrcMacAbate) =
   sum(EFS$E07FugToEF(E07SrcMacAbate,EFS), i03PrimProd(runCy,EFS,"%fBaseY%"));
 p07FugBaseRatio(runCy,E07SrcMacAbate,YTIME)$(p07FugProdBase(runCy,E07SrcMacAbate) >= S07FugProdMin and i07DataCh4N2OFEmis(runCy,E07SrcMacAbate,YTIME)) =
