@@ -14,6 +14,9 @@ i01ShareBlend(allCy,TRANSE,EF,YTIME)
 i01ShareMix(allCy,TRANSE,EF,YTIME)
 i01calb(allCy,TRANSE,EF)
 i01calibweibul(allCy,TRANSE,EF,YTIME)
+i01SFCImprRate(EF)                                      "Yearly improvement of car specific fuel consumption (1)";
+i01SFCImprFloor(EF)                                     "Floor of car specific fuel consumption relative to the base year (1)";
+i01SFCImprIndex(EF,YTIME)                               "Car specific fuel consumption relative to the base year (1)";
 ;
 
 Equations
