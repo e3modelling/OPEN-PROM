@@ -260,7 +260,7 @@ Q03ShareGap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(TIME(YTIME)$runCy(allCy)$IS_T
         =E=
     !!i04MatFacPlaAvailCap(allCy,TSTEAM,YTIME) *
     V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME-1) ** (-2) /
-    SUM(IS_TRANSF_TECH2,
+    SUM(IS_TRANSF_TECH2$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH2),
       !!i04MatFacPlaAvailCap(allCy,TSTEAM2,YTIME) *
       V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH2,YTIME-1) ** (-2)
     );

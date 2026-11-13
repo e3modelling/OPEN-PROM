@@ -48,6 +48,7 @@ VmFinalEnergy.FX(runCy,"ICT","ELC",YTIME) = i02FuelConsICT(runCy,"%ICT%","%SSP%"
 *---
 V03CostVariable.LO(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) = 0;
 V03CostVariable.FX(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$DATAY(YTIME) = 1;
+V03CostVariable.FX(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(not IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH)) = 0;
 *---
 V03OutputByproductEF.LO(runCy,IS_TRANSF,EFS,YTIME) = 0;
 V03OutputByproductEF.L(runCy,IS_TRANSF,EFS,YTIME) = i02ISTransfOutEF(runCy,IS_TRANSF,EFS,"%fBaseY%");
