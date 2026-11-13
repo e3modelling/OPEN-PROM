@@ -28,7 +28,7 @@ REM
 REM This script writes config.json itself (see below) so the run does not depend
 REM on whatever config.json happens to be committed on main. Non-path settings
 REM mirror the repo-root config.json; paths come from the SET vars below; the
-REM magpie block is omitted (task 7 is not run, so it has no effect).
+REM magpie block is omitted (task 6 is not run, so it has no effect).
 REM
 REM ---------------------------------------------------------------------------
 REM CHANGES FROM THE ORIGINAL

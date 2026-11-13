@@ -60,10 +60,10 @@ Apart from installing the software, you should also create a local `config.json`
 * `paths.*`: machine-specific paths
   * `paths.gams_path`: the directory of the GAMS installation, if `gams` is not already available in your system `PATH`
   * `paths.model_runs_path`: the destination used by the optional run-folder sync step
-  * `paths.magpie_path`: only needed for the OPEN-PROM ↔ MAgPIE soft-link (task 7)
+  * `paths.magpie_path`: only needed for the OPEN-PROM ↔ MAgPIE soft-link (task 6)
 * `behavior.*`: four switches controlling the wrapper workflow (see below)
 * `scenario.*`: the scenario to run.
-  * `scenario_name` — also used as the MAgPIE subscenario name for task 7
+  * `scenario_name` — also used as the MAgPIE subscenario name for task 6
   * `description` — free text
   * `gams_flags.*` — flags forwarded as `--<key>=<value>` to the GAMS command line
   * `magpie.*` — soft-link-only sub-block; see Tutorial 12. Contains `project` (MAgPIE subdir under `magpie/e3m_projects/`), `existing_prom_run` (optional resume path), and `max_iter` / `price_tol` / `quant_tol` (iteration / convergence controls). Defaults: `max_iter=1` (single round-trip, legacy behaviour), `price_tol=quant_tol=0.05`.
