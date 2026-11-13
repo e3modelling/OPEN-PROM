@@ -25,13 +25,14 @@
       "carbon_price_scenario": "Npi_Default"
     },
     "maturity_factors": {
-      "levels":  { "low": 0.5, "def": 1, "high": 2 },
+      "levels":  { "very-low":0.02,"low": 0.5, "def": 1, "high": 2 },
       "changes": {
         "solar":      { "tech": "PGSOL",     "mult": "def" },
         "windOffLam": { "tech": "PGAWNO",    "mult": "def", "region": "LAM" },
         "bmsccsMid":  { "tech": "ATHBMSCCS", "mult": "def", "from": 2030, "to": 2050 },
         "bmsccsLate": { "tech": "ATHBMSCCS", "mult": "def", "from": 2051 },
-        "lpgCars":    { "sector": "PC", "tech": "TLPG", "mult": "def" }
+        "lpgCars":    { "sector": "PC", "tech": "TLPG", "mult": "def" },
+        "geodomse":    { "sector": "DOMSE", "tech": "TGEO", "mult": "very-low" }
       }
     },
     "soft_link_magpie": {
