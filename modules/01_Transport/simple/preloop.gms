@@ -51,17 +51,20 @@ V01GapTranspActiv.FX(runCy,TRANSE,YTIME)$DATAY(YTIME) = 0;
 *---
 V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(not sameas(TRANSE,"PC") and SECTTECH(TRANSE,TTECH) and TTECHtoEF(TTECH,EF)) = testSFC(runCy,TRANSE,TTECH);
 * Car specific fuel consumption = base-year data x base-year calibration scaler x autonomous improvement index.
-* The scaler (base-year PC fuel / implied fuel from stock x km x SFC) reaches 2-7 in several regions (MEA 6.8); it
-* reflects inconsistencies in the historical fossil data. It is not applied to electricity and hydrogen, which barely
-* exist in the base year, so a MEA BEV no longer uses ~1 kWh/km.
+* The autonomous improvement index is equal to 1, uncomment the lines in input.gms file to improve efficiency.
 V01ConsSpecificFuel.FX(runCy,TRANSE,TTECH,EF,YTIME)$(sameas(TRANSE,"PC")$(SECTTECH(TRANSE,TTECH)$TTECHtoEF(TTECH,EF))) =
 i01SFCPC(runCy,TTECH,EF,"%fBaseY%") * i01SFCImprIndex(EF,YTIME) *
 (
   (
     SUM(EFS,imFuelCons(runCy,"PC",EFS,"%fBaseY%")) * 1e3 /
     SUM((TTECH2,EF2)$TTECHtoEF(TTECH2,EF2), i01SFCPC(runCy,TTECH2,EF2,"%fBaseY%") * i01StockPC(runCy,TTECH2,"%fBaseY%") * i01ShareBlend(runCy,TRANSE,EF2,"%fBaseY%") * imTransChar(runCy,"KM_VEH","%fBaseY%"))
-  )$(not (sameas(EF,"ELC") or sameas(EF,"H2F"))) +
-  1$(sameas(EF,"ELC") or sameas(EF,"H2F"))
+  )
+* The scaler (base-year PC fuel / implied fuel from stock x km x SFC) reaches 2-7 in several regions (MEA 6.8); it
+* reflects inconsistencies in the historical fossil data. It should not be applied to electricity and hydrogen, which barely
+* exist in the base year, so a MEA BEV would no longer use ~1 kWh/km. However, if the scaler is applied to them as well, it increases the CO2 emissions.
+* Uncomment the following two lines to NOT apply the scaler to electricity and hydrogen as well and reduce the CO2 emissions.
+*  $(not (sameas(EF,"ELC") or sameas(EF,"H2F"))) +
+*   1$(sameas(EF,"ELC") or sameas(EF,"H2F"))
 );
 *---
 V01CapCostAnnualized.LO(runCy,TRANSE,TTECH,YTIME) = 0;

@@ -246,7 +246,7 @@ IND 0.35, OAS 0.35, SSA 0.35
 *' Autonomous improvement of car specific fuel consumption (stock average). i01SFCPC was frozen at the base year for all
 *' projection years, so a 2100 car used as much energy per km as a 2023 one. Consumption falls at
 *' i01SFCImprRate per year from the base year down to a floor of i01SFCImprFloor times the base-year value.
-i01SFCImprIndex(EF) = 1;
+i01SFCImprIndex(EF,YTIME) = 1;
 *' Uncomment to apply autonomous improvement of car specific fuel consumption (stock average) in preloop instead of using the frozen base-year value.
 * i01SFCImprRate(EF)  = 0.010;
 * i01SFCImprFloor(EF) = 0.60;
@@ -254,7 +254,6 @@ i01SFCImprIndex(EF) = 1;
 * i01SFCImprFloor("ELC") = 0.75;
 * i01SFCImprRate("H2F") = 0.008;
 * i01SFCImprFloor("H2F") = 0.70;
-* i01SFCImprIndex(EF,YTIME) = 1;
 * i01SFCImprIndex(EF,YTIME)$(YTIME.val > %fBaseY%) =
 *   max(i01SFCImprFloor(EF), (1 - i01SFCImprRate(EF)) ** (YTIME.val - %fBaseY%));
 *---
