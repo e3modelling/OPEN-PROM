@@ -25,7 +25,7 @@
       "carbon_price_scenario": "Npi_Default"
     },
     "maturity_factors": {
-      "levels":  { "low": 0.5, "def": 1, "high": 2 },
+      "levels":  { "very-low":0.02,"low": 0.5, "def": 1, "high": 2 },
       "changes": {
         "solar":      { "tech": "PGSOL",     "mult": "def" },
         "windOffLam": { "tech": "PGAWNO",    "mult": "def", "region": "LAM" },
