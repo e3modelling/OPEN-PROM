@@ -36,6 +36,7 @@ Q08PriceFinal(allCy,DSBS,EFS,YTIME)
 Q08PriceCarbon(allCy,SBS,EFS,YTIME)
 Q08CostAvgProd(allCy,EFS,YTIME)
 Q08IndxElecIndPrices(allCy,TCHP,YTIME)
+Q08CostAvgMaterial(allCy,MATERIALS,YTIME)
 ;
 
 Parameters
@@ -69,6 +70,7 @@ VmPriceElecInd(allCy,TCHP,YTIME)                           "Electricity index - 
 V08IndxElecIndPrices(allCy,TCHP,YTIME)
 V08SupplyCurves(allCy,EFS,YTIME)
 V08PricePrimary(allCy,EFS,YTIME)
+V08CostAvgMaterial(allCy,MATERIALS,YTIME)
 VmPriceSecondary(allCy,EFS,YTIME)
 VmPriceFinal(allCy,DSBS,EFS,YTIME)                          "End-user price of final energy, excluding carbon taxes (k$2015/toe)"
 VmCostAvgProd(allCy,EFS,YTIME)

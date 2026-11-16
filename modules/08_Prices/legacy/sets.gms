@@ -33,6 +33,9 @@ MAGPIEEMISCOEF "MAgPIE land and agriculture emission coefficients"
 
 PRIM_PRICES(EFS) 
 /CRO,HCL,NGS,BMSWAS/
+
+ENDGMATERIALS(MATERIALS)
+/PIGIRON,SPNGIRN/
 ;
 
 mapMagpieH12Cy("EUR",allCy)$EU28(allCy) = yes;

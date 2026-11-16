@@ -83,7 +83,7 @@ qDummyObjINDDOMFinalEnergy(allCy,YTIME,INDDOM)$(TIME(YTIME) and runCy(allCy))..
     SQR(
       SUM(EFS2$SECtoEF(INDDOM,EFS2),VmFinalEnergy(allCy,INDDOM,EFS2,YTIME)) / t02FinalEnergyINDSE(allCy,INDDOM,YTIME) - 1
     )$(INDSE(INDDOM) and t02FinalEnergyINDSE(allCy,INDDOM,YTIME)) +
-    SQR(i02CalibUsefulEnergy(allCy,INDDOM,YTIME) - i02CalibUsefulEnergy(allCy,INDDOM,YTIME-1));
+    0 *SQR(i02CalibUsefulEnergy(allCy,INDDOM,YTIME) - i02CalibUsefulEnergy(allCy,INDDOM,YTIME-1));
 
 qRestrain(allCy,TRANSE,TTECH,YTIME)$(TIME(YTIME) and SECTTECH(TRANSE,TTECH) and runCy(allCy) and (t01NewShareStockPC(allCy,TRANSE,TTECH,YTIME) < 0)).. 
   imMatrFactor(allCy,TRANSE,TTECH,YTIME)

@@ -283,6 +283,6 @@ Q03ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
     V03ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)
         =E=
     SUM(IS_TRANSF_TECH$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH),
-    !!i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,EFS,"%fBaseY%") *
-    0*V03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+    i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EFS,"%fBaseY%") *
+    V03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
   );
