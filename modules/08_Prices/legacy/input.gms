@@ -177,8 +177,9 @@ i08WgtSecAvgPriFueCons(runCy,SBS,EF)$(SECtoEF(SBS,EF) $sum(ef2$SECtoEF(SBS,EF),i
 i08VAT(runCy, YTIME) = 0;
 *---
 *' H2F consumer price subsidy, as a fraction of the unsubsidised price.
-*' It ramps linearly from 0 in 2024 to s08SubsH2 (declarations.gms) in 2050 and stays there.
-i08SubsH2Shr(YTIME) = s08SubsH2 * min(1, max(0, (YTIME.val - 2024) / (2050 - 2024)));
+*' It ramps linearly from 0 in the base year (order TF) to h2PriceSubsidy (main.gms) in 2050 (ord(YTIME) = 41 for the
+*' 2010 start) and stays there.
+i08SubsH2Shr(YTIME) = %h2PriceSubsidy% * min(1, max(0, (ord(YTIME) - TF) / (41 - TF)));
 *---
 imFuelPrice(runCy,SBS,"CRO",YTIME) = i08PrimaryPrice(runCy,"CRO",YTIME);
 *---

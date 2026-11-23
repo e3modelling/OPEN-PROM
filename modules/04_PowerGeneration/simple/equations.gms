@@ -313,9 +313,9 @@ Q04CCSRetroFit(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy))$(NOCCS(PGALL)))..
 *' The equation calculates the scrapping rate of each plant type: the share of last year's capacity that is not kept, because it reached
 *' the end of its lifetime, was scrapped endogenously for cost reasons, or was retrofitted with CCS.
 *' With the coal phase-out switch on (coalPhaseOut in main.gms), unabated coal plants also retire 1/(T - year + 1) of what is left each
-*' year, where T is the phase-out year: 2030 in regions made up only of EU or OECD members (EU28, USA, JPN, CAZ) and 2040 elsewhere,
-*' including mixed regions. This takes the remaining fleet down linearly to zero in year T and keeps it there. Retrofits to CCS are still
-*' possible until then.
+*' year, where T is the phase-out year: 2030 (ord(YTIME) = 21 for the 2010 start) in regions made up only of EU or OECD members
+*' (EU28, USA, JPN, CAZ) and 2040 (ord(YTIME) = 31) elsewhere, including mixed regions. This takes the remaining fleet down
+*' linearly to zero in year T and keeps it there. Retrofits to CCS are still possible until then.
 Q04ScrpRate(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04ScrpRate(allCy,PGALL,YTIME)
         =E=
@@ -323,7 +323,7 @@ Q04ScrpRate(allCy,PGALL,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V04IndxEndogScrap(allCy,PGALL,YTIME) *
     V04CCSRetroFit(allCy,PGALL,YTIME)
 $ifThen.coalPhaseOut %coalPhaseOut% == on
-    * (1 - (1 / max(1, 2040 - 10$(EU28(allCy) or sameas(allCy,"USA") or sameas(allCy,"JPN") or sameas(allCy,"CAZ")) - YTIME.val + 1))
+    * (1 - (1 / max(1, 31 - 10$(EU28(allCy) or sameas(allCy,"USA") or sameas(allCy,"JPN") or sameas(allCy,"CAZ")) - ord(YTIME) + 1))
            $(sameas(PGALL,"ATHCOAL") or sameas(PGALL,"ATHLGN")))
 $endIf.coalPhaseOut
     ;

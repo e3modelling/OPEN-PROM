@@ -92,15 +92,16 @@ Q07GrossEmissCO2Processes(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
 *' identifies the maximum abatement potential by scanning the MAC curve steps and selecting the highest reduction level where the implementation cost is less than or
 *' equal to the adjusted carbon price. This ensures that the model adopts all abatement measures that are economically viable given the current carbon price.
 *' With the Global Methane Pledge switch on (methanePledge in main.gms), CH4 sources also take every MAC step up to a share of the
-*' curve that grows linearly from the base year to the full curve in 2030. The steps are ordered by cost and shared by all sources and
-*' regions, so this acts as one global CH4 price that rises to the top of the curve, cheapest measures first. A step is taken if either
-*' the carbon price or the pledge allows it, so CH4 always sees the higher of the two.
+*' curve that grows linearly from the base year (order TF) to the full curve in 2030 (ord(YTIME) = 21 for the 2010 start).
+*' The steps are ordered by cost and shared by all sources and regions, so this acts as one global CH4 price that rises to the
+*' top of the curve, cheapest measures first. A step is taken if either the carbon price or the pledge allows it, so CH4 always
+*' sees the higher of the two.
 Q07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy))$(ord(YTIME) > 17))..
     V07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)
     =E=
     smax(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME) * p07UnitConvFactor(E07SrcMacAbate)
 $ifThen.ch4Pledge %methanePledge% == on
-                 or (sCH4(E07SrcMacAbate) and ord(E07MAC) <= card(E07MAC) * (YTIME.val - %fBaseY%) / (2030 - %fBaseY%))
+                 or (sCH4(E07SrcMacAbate) and ord(E07MAC) <= card(E07MAC) * (ord(YTIME) - TF) / (21 - TF))
 $endIf.ch4Pledge
                 ),
          i07DataCh4N2OFMAC(allCy, E07SrcMacAbate, E07MAC, YTIME));
@@ -116,7 +117,7 @@ Q07CostAbateBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)
     =E=
     sum(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME) * p07UnitConvFactor(E07SrcMacAbate)
 $ifThen.ch4Pledge %methanePledge% == on
-                or (sCH4(E07SrcMacAbate) and ord(E07MAC) <= card(E07MAC) * (YTIME.val - %fBaseY%) / (2030 - %fBaseY%))
+                or (sCH4(E07SrcMacAbate) and ord(E07MAC) <= card(E07MAC) * (ord(YTIME) - TF) / (21 - TF))
 $endIf.ch4Pledge
                ),
         p07MarginalRed(allCy, E07SrcMacAbate, E07MAC, YTIME) * p07MacCost(E07MAC) * p07CostCorrection(E07SrcMacAbate));

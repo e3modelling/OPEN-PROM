@@ -245,9 +245,21 @@ $setglobal methanePledge off
 *' *** retrofits, stay allowed. Only power generation is covered: coal CHP plants (module 09) are not. off = no phase-out.
 $setglobal coalPhaseOut off
 
+*' *** H2 consumer price subsidy: fraction of the unsubsidised H2F price removed in 2050, ramped linearly from the base year
+*' *** and held after 2050. Applies to every H2F consumer (module 08). Zero disables the subsidy.
+$setglobal h2PriceSubsidy 0
+
+*' *** H2 supply sensitivity (ACHIEVE): on = from 2030, capital cost -10% for electrolysis with solar (wes) and wind (wew)
+*' *** and -20% for gas reforming with CCS (gss), and their maturity factors doubled (module 05). This changes the
+*' *** technology mix of H2 production, not the amount: production follows H2 demand. off = default values.
+$setglobal h2SupplySensitivity off
+
 $if not "%methanePledge%" == "on" $if not "%methanePledge%" == "off" $abort "methanePledge must be on or off."
 $if not "%coalPhaseOut%" == "on" $if not "%coalPhaseOut%" == "off" $abort "coalPhaseOut must be on or off."
 $if "%coalPhaseOut%" == "on" $if "%Calibration%" == "MatCalibration" $abort "coalPhaseOut cannot be used during maturity calibration."
+$ifE %h2PriceSubsidy%<0 $abort "h2PriceSubsidy must be a fraction in [0, 1); zero disables the subsidy."
+$ifE %h2PriceSubsidy%>=1 $abort "h2PriceSubsidy must be a fraction in [0, 1); zero disables the subsidy."
+$if not "%h2SupplySensitivity%" == "on" $if not "%h2SupplySensitivity%" == "off" $abort "h2SupplySensitivity must be on or off."
 $if set bmswasPriceAdder $abort "Use biomassReferenceEJ (EJ/yr) instead of bmswasPriceAdder."
 $if set ccsAvailabilityCostAdder $abort "Use ccsStorageReferenceGtCO2 (cumulative GtCO2) instead of ccsAvailabilityCostAdder."
 $ifE %biomassReferenceEJ%<0 $abort "biomassReferenceEJ must be non-negative (EJ/yr); zero disables the tax."

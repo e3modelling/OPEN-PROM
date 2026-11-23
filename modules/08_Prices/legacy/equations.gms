@@ -98,8 +98,10 @@ Q08PriceFinal(allCy,DSBS,EFS,YTIME)$(TIME(YTIME) and runCy(allCy) and SECtoEF(DS
       =E=
     VmPriceFinal(allCy,DSBS,EFS,YTIME-1) *
     (VmCostAvgProd(allCy,EFS,YTIME) / VmCostAvgProd(allCy,EFS,YTIME-1)) ** i08ElastPriceFinal(EFS) *
-*' H2F subsidy (same as in Q08PriceFuelSubsecCarVal): transport technology costs read this price.
+$ifThenE.h2Subsidy %h2PriceSubsidy%>0
+*' H2F subsidy (h2PriceSubsidy in main.gms; same factor as in Q08PriceFuelSubsecCarVal): transport technology costs read this price.
     (1 + ((1 - i08SubsH2Shr(YTIME)) / (1 - i08SubsH2Shr(YTIME-1)) - 1)$sameas("H2F",EFS)) *
+$endIf.h2Subsidy
     (1 + ((V08PricePrimary(allCy,EFS,YTIME) / V08PricePrimary(allCy,EFS,YTIME-1)) ** i08ElastPriceFinal(EFS) - 1)$PRIM_PRICES(EFS));
 
 Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CRO",EFS))
@@ -112,8 +114,11 @@ Q08PriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME)$(SECtoEF(SBS,EFS) $(not sameas("CR
     VmPriceFuelSubsecCarVal(allCy,SBS,EFS,YTIME-1) *
     (1 + (VmCostPowGenAvgLng(allCy,YTIME-1) / VmCostPowGenAvgLng(allCy,YTIME-2) - 1)$sameas("ELC",EFS)) *
     (1 + ((VmCostAvgProdH2(allCy,YTIME-1) / VmCostAvgProdH2(allCy,YTIME-2)) ** 0.7 - 1)$sameas("H2F",EFS)) *
-*' H2F subsidy: apply only this year's change in the discount, since last year's is already in the lagged price.
+$ifThenE.h2Subsidy %h2PriceSubsidy%>0
+*' H2F subsidy (h2PriceSubsidy in main.gms): apply only this year's change in the discount, since last year's is already
+*' in the lagged price. The price then equals (1 - i08SubsH2Shr) times the unsubsidised price.
     (1 + ((1 - i08SubsH2Shr(YTIME)) / (1 - i08SubsH2Shr(YTIME-1)) - 1)$sameas("H2F",EFS)) *
+$endIf.h2Subsidy
     (1 + (VmCostAvgProdSte(allCy,YTIME-1) / VmCostAvgProdSte(allCy,YTIME-2) - 1)$sameas("STE",EFS)) *
     (1 + (V08BmswasPriceFactor(allCy,YTIME) ** i08PriceTransElast(EFS,"BMSWAS") - 1)$BIOFUELS(EFS)) *
     (1 + ((VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME) / VmPriceFuelSubsecCarVal(allCy,SBS,"CRO",YTIME-1)) ** i08PriceTransElast(EFS,"CRO") - 1)$sameas("NGS",EFS)) *
