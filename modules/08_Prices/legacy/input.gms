@@ -176,6 +176,10 @@ i08WgtSecAvgPriFueCons(runCy,SBS,EF)$(SECtoEF(SBS,EF) $sum(ef2$SECtoEF(SBS,EF),i
 * FIXME: Check if VAT (value added tax) rates are necessary for the model.
 i08VAT(runCy, YTIME) = 0;
 *---
+*' H2F consumer price subsidy, as a fraction of the unsubsidised price.
+*' It ramps linearly from 0 in 2024 to s08SubsH2 (declarations.gms) in 2050 and stays there.
+i08SubsH2Shr(YTIME) = s08SubsH2 * min(1, max(0, (YTIME.val - 2024) / (2050 - 2024)));
+*---
 imFuelPrice(runCy,SBS,"CRO",YTIME) = i08PrimaryPrice(runCy,"CRO",YTIME);
 *---
 i08ElastPricePrimary("NGS","CRO") = 0.7;

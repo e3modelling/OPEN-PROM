@@ -41,11 +41,13 @@ Parameters
 i08Bioenergy2GEffectiveQMagpie(allCy,YTIME)                "Current regional MAgPIE effective 2G biomass Q (Mtoe)"
 i08Bioenergy2GEffectiveQH12Magpie(allCy,YTIME)             "MAgPIE effective 2G biomass Q used by the mapped H12 land-CO2 curve (Mtoe)"
 i08BmswasPriceAdder(YTIME)                                 "Global BMSWAS sustainability tax (kUS$2015/toe)"
+i08SubsH2Shr(YTIME)                                        "H2F consumer price subsidy share in year YTIME (1)"
 ;
 
 Scalars
 i08BmswasTaxScale                                        "Tax at the annual biomass reference quantity (kUS$2015/toe)" /3.2/
 i08MtoeToEJ                                             "Energy conversion (EJ/Mtoe)" /0.041868/
+s08SubsH2                                                "H2F price subsidy reached in 2050 (fraction of unsubsidised price, 0 = off)" /0.4/
 ;
 
 Variables
