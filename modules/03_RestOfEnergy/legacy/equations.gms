@@ -207,10 +207,11 @@ Q03DemTot(allCy,IS_TRANSF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
       V02InputMaterials(allCy,"PRIM_STEEL",MATERIALS,YTIME)
     );
 
-Q03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(time(YTIME) $runCy(allCy))..
+Q03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(time(YTIME)$runCy(allCy)$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH))..
   V03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
     =E=
-  1;
+  i02IndCosts(IS_TRANSF_TECH,'Capex',YTIME) * imCGI(allCy,YTIME) +
+  i02IndCosts(IS_TRANSF_TECH,'Fix',YTIME);
 
 Q03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(time(YTIME)$runCy(allCy)$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH))..
   V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
@@ -219,11 +220,11 @@ Q03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(time(YTIME)$runCy(allCy)$
     (i02ratioTransfInputIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EF,"%fBaseY%") + i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EF,"%fBaseY%")) *
     (
       VmPriceFinal(allCy,"IS",EF,YTIME) +
-      !!V04CO2CaptRate(allCy,PGALL,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",PGEF,YTIME) + 4.17$sameas("BMSWAS", PGEF)) +
-      !!(1-V04CO2CaptRate(allCy,PGALL,YTIME)) * 1e-3 * imCo2EmiFac(allCy,"PG",PGEF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
-      1e-3 * imCo2EmiFac(allCy,"PG",EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
-    ) !!/ imPlantEffByType(allCy,PGALL,"effELC",YTIME)
+      imCaptRateCO2(IS_TRANSF_TECH) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",EF,YTIME) + 4.17$sameas("BMSWAS", EF)) +
+      (1-imCaptRateCO2(IS_TRANSF_TECH)) * 1e-3 * imCo2EmiFac(allCy,"PG",EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
+    )
   ) + 
+  i02IndCosts(IS_TRANSF_TECH,'Opex',YTIME) +
   SUM(MATERIALS,
     i02ratioMaterialCons("PRIM_STEEL",IS_TRANSF_TECH,MATERIALS) *
     VmPriceMaterials(allCy,MATERIALS,YTIME)
@@ -237,7 +238,7 @@ $ontext
 $offtext
 ;
 
-Q03CostTotal(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(time(YTIME) $runCy(allCy))..
+Q03CostTotal(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(time(YTIME)$runCy(allCy)$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH))..
   V03CostTotal(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
     =E=
   V03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) +

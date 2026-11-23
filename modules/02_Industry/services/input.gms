@@ -112,6 +112,7 @@ PRIM_STEEL.BOF.SCRAP 0.19
 PRIM_STEEL.BOF.IRONORE 0.01
 PRIM_STEEL.BF.IRONORE 1.5891
 PRIM_STEEL.CONVDRI.IRONORE 1.38
+PRIM_STEEL.CONVDRICCS.IRONORE 1.38
 PRIM_STEEL.GREENDRI.IRONORE 1.38
 /;
 
@@ -128,9 +129,9 @@ i02DataEnergyService(runCy,INDDOM,IND_SERVS,YTIME)$(INDDOMtoSERVS(INDDOM,IND_SER
 *---
 imCapCostTech(runCy,"IS",INDITECH,YTIME) = i02IndCosts(INDITECH,'Capex',YTIME); 
 *---
-imFixOMCostTech(runCy,"IS",INDITECH,YTIME) = i02IndCosts(INDITECH,'OM',YTIME) * sUnitToKUnit;  !!Units for other industries than IS needs to be checked to remove sUnitToKUnit
+imFixOMCostTech(runCy,"IS",INDITECH,YTIME) = i02IndCosts(INDITECH,'Fix',YTIME);  !!Units for other industries than IS needs to be checked to remove sUnitToKUnit
 *--
-imVarCostTech(runCy,"IS",INDITECH,YTIME)= i02IndCosts(INDITECH,'Opex',YTIME) * sUnitToKUnit;  !!Units for other industries than IS needs to be checked to remove sUnitToKUnit
+imVarCostTech(runCy,"IS",INDITECH,YTIME)= i02IndCosts(INDITECH,'Opex',YTIME);  !!Units for other industries than IS needs to be checked to remove sUnitToKUnit
 *--
 VmLft.FX(runCy,INDSE,INDITECH,YTIME)=imDataIndTechnology(INDSE,INDITECH,"LFT");
 VmLft.FX(runCy,INDSE,INDITECH,YTIME)$(sameas("TGEO",INDITECH) or sameas("TSOL",INDITECH) or sameas("TH2F",INDITECH)) = 25; !!FIX ME: revisit this
@@ -174,7 +175,10 @@ i02ratioOwnEnergyTransfIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME)$DATAY(YTIME)
 (
   i02OwnEnergyTransf(runCy,IS_TRANSF,EFS,YTIME) / 
   i03DataCap(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
-)$i03DataCap(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME);
+)$i03DataCap(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) +
+(
+  6.6 * 0.02388 * i05H2Production("INOUT_ELC","weg",YTIME)
+)$(sameas("GREENDRI",IS_TRANSF_TECH) and sameas("DRI",IS_TRANSF) and sameas("ELC",EFS));
 *i02ratioOwnEnergyTransfIS("FRA",IS_TRANSF,EFS,"%fBaseY%") = i02ratioOwnEnergyTransfIS("FRA",IS_TRANSF,EFS,"2016");
 *---
 i02InputMaterials(runCy,IND_SERVS,MATERIALS,YTIME) = 

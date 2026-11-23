@@ -581,6 +581,12 @@ $offtext
 *imCumDistrFuncConsSize(runCy,DSBS) = sum(rCon, imDisFunConSize(runCy,DSBS,rCon));
 imCGI(allCy,YTIME) = 1;
 *---
+table i05H2Production(ECONCHARHY2,H2TECH,YTIME)	            "Data for Hydrogen production"
+$ondelim
+$include"./iH2Production.csv"
+$offdelim
+;
+*---
 table iDataDistrLosses(allCy,EF,YTIME)	     "Data for Distribution Losses (Mtoe)"
 $ondelim
 $include"./iDataDistrLosses.csv"
@@ -600,6 +606,7 @@ imCO2CaptRate(PGALL)$CCS(PGALL) = 0.90;
 imEffValueInDollars(runCy,SBS,YTIME) = 0;
 iScenarioPri(WEF,"NOTRADE",YTIME) = 0;
 *---
+imCaptRateCO2(TECH)$sameas("CONVDRICCS",TECH) = 0.9;
 **                   Power Generation
 table iEnvPolicies(allCy,POLICIES_SET,YTIME) "Environmental policies on emissions constraints  and subsidy on renewables (Mtn CO2)"
 $ondelim

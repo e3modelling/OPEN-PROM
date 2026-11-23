@@ -2,12 +2,6 @@
 *' @code
 
 *---
-table i05H2Production(ECONCHARHY2,H2TECH,YTIME)	            "Data for Hydrogen production"
-$ondelim
-$include"./iH2Production.csv"
-$offdelim
-;
-*---
 table i05H2Parameters(allCy,ECONCHARHY)	                    "Data for Hydrogen Parameters"
 $ondelim
 $include"./iH2Parameters.csv"
