@@ -21,6 +21,11 @@ Q02DemSubUsefulSubsec(allCy,DSBS,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS
         =E=
     (1 + i02CalibUsefulEnergy(allCy,DSBS,YTIME)) *
     V02DemSubUsefulSubsec(allCy,DSBS,YTIME-1) *
+$ifthen.climFB %climFeedback% == on
+* Climate feedback loop 1: change in the HDD index since last year (ratio form, so the effect is
+* cumulative through the recursion without double counting). Guarded: 1 if the lagged index is 0.
+    ((i02ClimIdx(allCy,DSBS,"HDD",YTIME) / i02ClimIdx(allCy,DSBS,"HDD",YTIME-1))$i02ClimIdx(allCy,DSBS,"HDD",YTIME-1) + 1$(not i02ClimIdx(allCy,DSBS,"HDD",YTIME-1))) *
+$endif.climFB
     imActv(YTIME,allCy,DSBS) ** imElastA(allCy,DSBS,"a",YTIME) *
     (VmPriceFuelAvgSub(allCy,DSBS,YTIME)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-1) ) ** imElastA(allCy,DSBS,"b1",YTIME) *
     (VmPriceFuelAvgSub(allCy,DSBS,YTIME-1)/VmPriceFuelAvgSub(allCy,DSBS,YTIME-2) ) ** imElastA(allCy,DSBS,"b2",YTIME) *
@@ -158,6 +163,10 @@ Q02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME) 
         =E=
     V02UsefulElecNonSubIndTert(allCy,INDDOM,YTIME-1) *
+$ifthen.climFB %climFeedback% == on
+* Climate feedback loop 1: change in the CDD index since last year (ratio form, see Q02DemSubUsefulSubsec).
+    ((i02ClimIdx(allCy,INDDOM,"CDD",YTIME) / i02ClimIdx(allCy,INDDOM,"CDD",YTIME-1))$i02ClimIdx(allCy,INDDOM,"CDD",YTIME-1) + 1$(not i02ClimIdx(allCy,INDDOM,"CDD",YTIME-1))) *
+$endif.climFB
     imActv(YTIME,allCy,INDDOM) ** i02ElastNonSubElec(allCy,INDDOM,"a",YTIME) *
     (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1)) ** i02ElastNonSubElec(allCy,INDDOM,"b1",YTIME) *
     (VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-1) / VmPriceFuelSubsecCarVal(allCy,INDDOM,"ELC",YTIME-2)) ** i02ElastNonSubElec(allCy,INDDOM,"b2",YTIME) *

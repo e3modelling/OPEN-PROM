@@ -83,6 +83,9 @@ Step-by-step instructions for preparing a Windows modelling server environment f
 - ***15_Pushing technologies through maturity factors:***
 Instructions for making a technology expand faster or slower from `config.json`, using the `maturity_factors` block, without editing GAMS code manually.
 
+- ***16_Climate feedback on buildings demand:***
+Method, switch (`climFeedback`), input files and assumptions of the degree-day (HDD/CDD) feedback on household and services energy demand.
+
 Additional resources in this folder:
 
 - `InputDataOverview.csv` — a CSV overview of input data files and formats used by the model.
