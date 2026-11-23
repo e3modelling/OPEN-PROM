@@ -32,11 +32,12 @@ Q08PriceElecInd(allCy,TCHP,YTIME)                               "Compute electri
 Q08SupplyCurves(allCy,EFS,YTIME)
 Q08PricePrimary(allCy,EFS,YTIME)
 Q08PriceSecondary(allCy,EFS,YTIME)
-Q08PriceFinal(allCy,DSBS,EFS,YTIME)
+Q08PriceFinal(allCy,DSBS,EF,YTIME)
 Q08PriceCarbon(allCy,SBS,EFS,YTIME)
 Q08CostAvgProd(allCy,EFS,YTIME)
 Q08IndxElecIndPrices(allCy,TCHP,YTIME)
 Q08CostAvgMaterial(allCy,MATERIALS,YTIME)
+Q08PriceMaterials(allCy,MATERIALS,YTIME)
 ;
 
 Parameters
@@ -72,8 +73,9 @@ V08SupplyCurves(allCy,EFS,YTIME)
 V08PricePrimary(allCy,EFS,YTIME)
 V08CostAvgMaterial(allCy,MATERIALS,YTIME)
 VmPriceSecondary(allCy,EFS,YTIME)
-VmPriceFinal(allCy,DSBS,EFS,YTIME)                          "End-user price of final energy, excluding carbon taxes (k$2015/toe)"
+VmPriceFinal(allCy,DSBS,EF,YTIME)                          "End-user price of final energy, excluding carbon taxes (k$2015/toe)"
 VmCostAvgProd(allCy,EFS,YTIME)
+VmPriceMaterials(allCy,MATERIALS,YTIME)
 *' *** Miscellaneous
 *V08FuelPriSubNoCarb(allCy,SBS,EF,YTIME)	                   "Fuel prices per subsector and fuel  without carbon value (kUS$2015/toe)"
 ;

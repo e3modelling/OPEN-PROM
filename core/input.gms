@@ -114,6 +114,13 @@ COG 2.5
 COKE 4.2
 /;
 *---
+parameter iPriceMaterial(MATERIALS) "Price of input materials (k$2025/tonne)"
+/
+SCRAP 0.432
+IRONORE 0.199
+/
+;
+*---
 imCo2EmiFac(runCy,SBS,EF,YTIME)$(not (sameas("NEN",SBS) or sameas("PCH",SBS))) = iCo2EmiFacAllSbs(EF);
 *---
 parameter imElaSubData(DSBS)       "Elasticities by subsector (1)" /

@@ -64,7 +64,11 @@ Q02CostVariable(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and INDDOMto
     ) * i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EFS,"%fBaseY%")
   ) +
     0*imVarCostTech(allCy,INDDOM,INDITECH,YTIME) / sUnitToKUnit
-  ) / imUsfEneConvSubTech(allCy,INDDOM,INDITECH,YTIME); !!FIXME: This needs to be changed when technologies replace fuels in industry
+  ) / imUsfEneConvSubTech(allCy,INDDOM,INDITECH,YTIME) +
+  SUM(MATERIALS,
+    i02ratioMaterialCons(IND_SERVS,INDITECH,MATERIALS) *
+    VmPriceMaterials(allCy,MATERIALS,YTIME)
+  );
 
 Q02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH) and runCy(allCy))..
   V02CostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)

@@ -85,3 +85,6 @@ VmGDPPartGlob.L(runCy,YTIME) = 0.1;
 VmGDPPartGlob.FX(runCy,YTIME)$(DATAY(YTIME)) = i01GDP(YTIME,runCy) / sum(runCy2, i01GDP(YTIME,runCy2));
 *---
 V03Cap.FX(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$DATAY(YTIME) = i03DataCap(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME);
+*---
+VmPriceMaterials.LO(runCy,MATERIALS,YTIME) = 0;
+VmPriceMaterials.FX(runCy,MATERIALS,YTIME)$DATAY(YTIME) = iPriceMaterial(MATERIALS);

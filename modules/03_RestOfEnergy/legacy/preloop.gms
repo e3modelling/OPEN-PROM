@@ -46,12 +46,28 @@ VmFinalEnergy.FX(runCy,DSBS,EFS,YTIME)$DATAY(YTIME) = imFuelCons(runCy,DSBS,EFS,
 VmFinalEnergy.FX(runCy,DSBS,EFS,YTIME)$(not SECtoEF(DSBS,EFS)) = 0;
 VmFinalEnergy.FX(runCy,"ICT","ELC",YTIME) = i02FuelConsICT(runCy,"%ICT%","%SSP%",YTIME);
 *---
+V03CostCapital.LO(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) = 0;
+V03CostCapital.FX(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$DATAY(YTIME) = 1;
+*---
 V03CostVariable.LO(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) = 0;
-V03CostVariable.FX(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$DATAY(YTIME) = 1;
+V03CostVariable.FX(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$DATAY(YTIME) = 
+sum(EF$IS_TRANSF_TECHtoEF(IS_TRANSF_TECH,EF), 
+  (i02ratioTransfInputIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EF,"%fBaseY%") + i02ratioOwnEnergyTransfIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EF,"%fBaseY%")) *
+  (
+    VmPriceFinal.L(runCy,"IS",EF,YTIME) +
+    !!V04CO2CaptRate(runCy,PGALL,YTIME) * VmCstCO2SeqCsts(runCy,YTIME) * 1e-3 * (imCo2EmiFac(runCy,"PG",PGEF,YTIME) + 4.17$sameas("BMSWAS", PGEF)) +
+    !!(1-V04CO2CaptRate(runCy,PGALL,YTIME)) * 1e-3 * imCo2EmiFac(runCy,"PG",PGEF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(runCy,NAP,YTIME))
+    1e-3 * imCo2EmiFac(runCy,"PG",EF,YTIME) * sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal.L(runCy,NAP,YTIME))
+  ) !!/ imPlantEffByType(runCy,PGALL,"effELC",YTIME)
+) +
+SUM(MATERIALS,
+    i02ratioMaterialCons("PRIM_STEEL",IS_TRANSF_TECH,MATERIALS) *
+    VmPriceMaterials.L(runCy,MATERIALS,YTIME)
+  );
 V03CostVariable.FX(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(not IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH)) = 0;
 *---
 V03CostTotal.LO(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) = 0;
-V03CostTotal.FX(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$DATAY(YTIME) = V03CostVariable.L(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME);
+V03CostTotal.FX(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$DATAY(YTIME) = V03CostCapital.L(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) + V03CostVariable.L(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME);
 *---
 V03OutputByproductEF.LO(runCy,IS_TRANSF,EFS,YTIME) = 0;
 V03OutputByproductEF.L(runCy,IS_TRANSF,EFS,YTIME) = i02ISTransfOutEF(runCy,IS_TRANSF,EFS,"%fBaseY%");

@@ -13,7 +13,6 @@ i03RatioPrimaryFuels(allCy,EFS,YTIME)
 i03InputEffSupply(allCy,SSBS,EFS,YTIME)
 i03RateExpTotImp(allCy,EFS,YTIME)                  "Share of exports in total world trade"
 i03RateImpGrossInlCons(allCy,EFS,YTIME)            "Rate of Imports in Gross inland consumption (1)"
-i03ShareFuels(allCy,IS_TRANSF_TECH,EF,YTIME)
 ;
 
 Equations
@@ -42,6 +41,8 @@ Q03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
 Q03CostTotal(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
 Q03ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)
 Q03ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)
+Q03ScrpRate(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+Q03ScrpRatePrem(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
 ;
 
 Variables
@@ -64,6 +65,8 @@ V03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
 V03CostTotal(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
 V03ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)
 V03ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)
+V03ScrpRate(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+V03ScrpRatePrem(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
 
 *'                **Interdependent Variables**
 VmImpNetEneBrnch(allCy,EFS,YTIME)	                       "Net Imports (Mtoe)"

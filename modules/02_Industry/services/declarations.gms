@@ -4,8 +4,8 @@ parameter
 imCO2CaptRateIndustry(allCy,INDITECH,YTIME)
 !!i02DataShareBlend(allCy,INDDOM,IND_SERVS,INDITECH,EF,YTIME)
 i02DataEnergyService(allCy,INDDOM,IND_SERVS,YTIME)
-i02ratioTransfInputIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME)
-i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME)
+i02ratioTransfInputIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EF,YTIME)
+i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EF,YTIME)
 i02InputMaterials(allCy,IND_SERVS,MATERIALS,YTIME)
 ;
 
