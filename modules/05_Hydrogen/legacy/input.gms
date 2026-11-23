@@ -138,3 +138,12 @@ endloop;
 i05MatFacH2(allCy,H2TECH,YTIME) = 1;
 i05MatFacH2(allCy,H2TECH,YTIME)$(H2CCS(H2TECH) and ord(YTIME) <= 25) = 0.5;
 i05MatFacH2(allCy,H2TECH,YTIME)$(H2CCS(H2TECH) and ord(YTIME) <= 20) = 0;
+
+*--- ACHIEVE scenario sensitivities from 2030 (ord(YTIME) = 21 for the 2010 start)
+i05CostCapH2Prod(runCy,"wes",YTIME)$(ord(YTIME) >= 21) = 0.9 * i05CostCapH2Prod(runCy,"wes",YTIME);
+i05CostCapH2Prod(runCy,"wew",YTIME)$(ord(YTIME) >= 21) = 0.9 * i05CostCapH2Prod(runCy,"wew",YTIME);
+i05CostCapH2Prod(runCy,"gss",YTIME)$(ord(YTIME) >= 21) = 0.8 * i05CostCapH2Prod(runCy,"gss",YTIME);
+
+i05MatFacH2(runCy,"wes",YTIME)$(ord(YTIME) >= 21) = 2 * i05MatFacH2(runCy,"wes",YTIME);
+i05MatFacH2(runCy,"wew",YTIME)$(ord(YTIME) >= 21) = 2 * i05MatFacH2(runCy,"wew",YTIME);
+i05MatFacH2(runCy,"gss",YTIME)$(ord(YTIME) >= 21) = 2 * i05MatFacH2(runCy,"gss",YTIME);
