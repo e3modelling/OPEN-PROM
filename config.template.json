@@ -2,7 +2,17 @@
   "paths": {
     "model_runs_path": "local/path/to/model/runs/",
     "magpie_path": "path/to/magpie/folder/including/trailing/slash/",
-    "gams_path": "path/to/gams/folder/including/trailing/slash/"
+    "gams_path": "path/to/gams/folder/including/trailing/slash/",
+    "climate_assessment_path": "../climate-assessment",
+    "climate_cloud_repo": "e3modelling/climate-runner"
+  },
+  "rime": {
+    "cdd_file": null,
+    "cdd_variable": "sdd_c_18p3|Hazard|Absolute|Population weighted",
+    "hdd_file": null,
+    "hdd_variable": null,
+    "ssp": "SSP2",
+    "regionmapping": null
   },
   "behavior": {
     "withRunFolder": true,

@@ -73,8 +73,48 @@ the GAMS log.
   `CDD` (cooling share). Source: IEA Energy End-uses and Efficiency Indicators.
   Only `HOU` and `SE` are used; everything else is 0.
 
-The templates are neutral placeholders. Real data still have to be produced
-(planned in mrprom).
+The templates are neutral placeholders.
+
+### Generating `iClimDegDays.csv` with RIME
+
+The VS Code task **RUN CLIMATE EMULATOR** (tutorial 13) can produce the file from
+a finished run:
+
+1. MAGICC/CICERO turns `runs/<run>/emissions.csv` into a median GSAT pathway.
+2. `scripts/tools/rimeDegreeDays.py` looks up, for each year, the degree days of
+   every country at that year's warming level. It uses RIME's nearest
+   (year, warming level) lookup for the chosen SSP, the same method as
+   `rime.table_impacts_gwl`. It then writes `DD(t)/DD(2023)`.
+3. The result is `runs/<run>/EmissionsOutput-<model>/iClimDegDays.csv`. Copy it
+   to `data/` and run OPEN-PROM with `--climFeedback=on`.
+
+Settings in `config.json`:
+
+```json
+"rime": {
+  "cdd_file": "C:/.../sdd_c_18p3_COUNTRIES.nc",
+  "cdd_variable": "sdd_c_18p3|Hazard|Absolute|Population weighted",
+  "hdd_file": null,
+  "hdd_variable": null,
+  "ssp": "SSP2",
+  "regionmapping": "C:/.../regionmappingOPDEV5.csv"
+}
+```
+
+* `cdd_file` is a RIME region dataset (dimensions gwl, year, ssp, region), as
+  written by RIME's `generate_aggregated_inputs.py` from the Climate Solutions
+  Explorer tables (Werning et al. 2024, doi:10.5281/zenodo.14524342). Cooling
+  degree days are available with base temperatures 26, 24, 20 and 18.3 °C
+  (`sdd_c`, `sdd_c_24p0`, `sdd_c_20p0`, `sdd_c_18p3`). In RIME, `cdd` means
+  *consecutive dry days*, not cooling degree days.
+* **That dataset has no heating degree days.** HDD rows are written only if
+  `hdd_file` and `hdd_variable` point to a RIME-format dataset with HDD.
+  Otherwise HDD stays 1 and only the cooling side of the feedback is active.
+* `regionmapping` (columns `CountryCode`, `RegionCode`) lets aggregate regions
+  (LAM, OAS, RWO, …) be filled with the unweighted mean of their member
+  countries. Without it, those regions stay 1.
+* To rerun only this step on an existing emulator output, use
+  `--steps degreedays`.
 
 ## 5. Assumptions
 

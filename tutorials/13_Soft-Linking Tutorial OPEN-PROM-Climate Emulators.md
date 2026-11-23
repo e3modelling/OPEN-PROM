@@ -247,9 +247,88 @@ MAGICC_WORKER_ROOT_DIR=/mnt/tmp/workers
 
 ## 6. Typical Workflow
 
-1. Place emissions input files under the designated runs/<runFolder>/emissions.csv directory (or specify a custom path).
-2. Run the script with model and folder options, e.g.: `Rscript scripts/tools/runClimateModels.r --model magicc --runFolder daily_npi`
-3. The script will:
-   * Call the Python workflow inside the correct virtual environment.
-   * Save processed outputs to runs/<runFolder>/EmissionsOutput-<model>/.
-   * Compare against reference outputs and generate a global mean temperature plot (Global_Mean_Temperature.png).
+1. Make sure `runs/<runFolder>/emissions.csv` exists (or use a custom path with `--emissions`).
+2. If `climate-assessment` is not in the same parent folder as OPEN-PROM, set its location in `config.json`:
+   ```json
+   "paths": { "climate_assessment_path": "C:/Users/<user>/Models/climate-assessment" }
+   ```
+3. Run the VS Code task **RUN CLIMATE EMULATOR** (pick `magicc` or `ciceroscm`, then a run folder or `latest`), or from the OPEN-PROM root:
+   ```
+   Rscript scripts/tools/runClimateModels.r --model magicc --runFolder <runFolder>
+   ```
+   `--runFolder latest` (the default) picks the newest run folder that has an `emissions.csv`.
+4. The script will:
+   * Run `run_workflow.py` with the `.venv` of climate-assessment **inside WSL** for both emulators (from inside WSL it calls bash directly).
+   * Stop with an error if the workflow fails.
+   * Save outputs to `runs/<runFolder>/EmissionsOutput-<model>/`.
+   * Plot median GSAT against the climate-assessment reference output (`Global_Mean_Temperature.png`).
+   * If `config.json` has a `rime` block with `cdd_file`, convert the GSAT into degree-day ratios
+     (`iClimDegDays.csv`) for the buildings climate feedback. See tutorial 16 for the settings.
+5. `--steps` (also asked by the task): `all` (default), `emulator` (skip the degree-day step) or
+   `degreedays` (rerun only the degree-day step on an existing emulator output, without rerunning MAGICC).
+   The degree-day step needs `netCDF4` in the climate-assessment `.venv` (`pip install netCDF4`, already in the install script).
+## 7. Running in the cloud (no WSL, nothing committed)
+
+The VS Code task **RUN CLIMATE EMULATOR (CLOUD)** runs MAGICC and the RIME degree-day step on a GitHub-hosted
+Linux machine. It runs in **one private runner repository** shared by all users, e.g. `e3modelling/climate-runner`.
+That repository contains only the workflow file and holds no data.
+
+How a run works:
+
+1. You choose a local run folder. `runs/<runFolder>/emissions.csv` is compressed and sent as a workflow **input**.
+   It is never committed to any repository.
+2. The workflow downloads MAGICC, its probabilistic file, the AR6 infiller database and the RIME data from a
+   secret link, runs them, and stores the outputs for at most one day.
+3. The script downloads the outputs to `runs/<runFolder>/EmissionsOutput-magicc/` (`emissions_alloutput.xlsx`,
+   `Global_Mean_Temperature.png`, `iClimDegDays.csv`).
+4. The script then **deletes the GitHub run**, which removes its logs, inputs and outputs. Use `--keepRun` to keep
+   it for debugging.
+
+Until the run is deleted, only members of the private runner repository can see it.
+
+### 7.1 Each user, once
+
+1. Install the GitHub CLI from <https://cli.github.com> (version 2.40 or newer, for `gh run delete`) and run `gh auth login`.
+2. Ask for write access to the runner repository.
+3. In your `config.json`, add `"climate_cloud_repo": "e3modelling/climate-runner"` under `paths`.
+
+Then run the task, or from the OPEN-PROM root:
+
+```
+Rscript scripts/tools/runClimateCloud.R --runFolder <runFolder|latest> --numCfgs 600
+```
+
+Options: `--numCfgs 50` for a quick test, `--degreeDays false`, `--ssp SSP1..SSP5`, `--keepRun`.
+
+### 7.2 Maintainer, once
+
+1. Pack the assets into one `.zip` (or `.tar.gz`) with this layout:
+   ```
+   magicc/                       # extracted MAGICC v7.5.3 Linux distribution
+     bin/magicc
+     run/...
+     0fd0f62-derived-metrics-id-f023edb-drawnset.json
+   infiller/
+     1652361598937-ar6_emissions_vetted_infillerdatabase_10.5281-zenodo.6390768.csv   (or .csv.gz)
+   rime/                         # optional, for the degree-day step
+     sdd_c_18p3_COUNTRIES.nc     (or .nc.gz)
+     regionmappingOPDEV5.csv     # optional, fills aggregate regions
+   ```
+   An archive with one top-level folder around these three folders also works.
+2. Upload it to OneDrive and create a share link of type **"Anyone with the link"**. Organisation-only links
+   need a login, which the workflow cannot do. The workflow adds `download=1` to get the raw file.
+3. Create the **private** repository `climate-runner` and copy `scripts/cloud/climate_assessment.yml` from OPEN-PROM
+   to `.github/workflows/climate_assessment.yml` in it, on the default branch.
+4. In that repository: **Settings → Secrets and variables → Actions → New repository secret**
+   `CLIMATE_ASSETS_URL` = the OneDrive link.
+5. Give colleagues write access to that repository. Write access is needed to start and delete runs.
+
+Notes:
+
+* Anyone who has the link can download the assets. Keep it only in the repository secret, and replace the link if
+  it leaks. The assets are downloaded fresh for each run and are never cached or uploaded.
+* Runs in a private repository use the organisation's Actions minutes: 2,000 per month on the GitHub Free plan.
+  MAGICC with 600 configurations is the main cost. Use `--numCfgs 50` for tests.
+* File names and the climate-assessment version (`v0.1.6`) are set in the `env:` block of the workflow. The helper
+  scripts (`plotGsat.py`, `rimeDegreeDays.py`) come from the public OPEN-PROM repository; select a branch with
+  `--openpromRef`. CICERO-SCM is not part of the cloud workflow yet.

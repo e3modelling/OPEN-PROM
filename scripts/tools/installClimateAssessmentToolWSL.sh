@@ -42,6 +42,7 @@ source .venv/bin/activate
 pip install --editable .[docs,tests,deploy,linter,notebooks] # The --editable flag ensures that changes to the source code are picked up every time import climate-assessment is used in Python code.
 pip install "xarray<2023.12.0"
 pip install -U pytest
+pip install netCDF4  # read RIME region datasets (scripts/tools/rimeDegreeDays.py)
 
 # Test installation # Typical and normal result:4 failed, 151 passed, 17250 warnings
 pytest tests/integration -m "not nightly and not wg3" 

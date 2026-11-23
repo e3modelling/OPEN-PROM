@@ -172,7 +172,64 @@
             "presentation": {
                 "focus": true
             }
+        },
+
+        {
+            "label": "RUN CLIMATE EMULATOR",
+            "type": "shell",
+            "command": "Rscript scripts/tools/runClimateModels.r --model ${input:climateModel} --runFolder ${input:climateRunFolder} --steps ${input:climateSteps}",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
+        },
+
+        {
+            "label": "RUN CLIMATE EMULATOR (CLOUD)",
+            "type": "shell",
+            "command": "Rscript scripts/tools/runClimateCloud.R --runFolder ${input:climateRunFolder} --numCfgs ${input:climateNumCfgs}",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
         }
 
+    ],
+    "inputs": [
+        {
+            "id": "climateModel",
+            "type": "pickString",
+            "description": "Climate emulator (runs in WSL)",
+            "options": ["magicc", "ciceroscm"],
+            "default": "magicc"
+        },
+        {
+            "id": "climateRunFolder",
+            "type": "promptString",
+            "description": "Run folder under runs/ ('latest' = newest folder with emissions.csv)",
+            "default": "latest"
+        },
+        {
+            "id": "climateSteps",
+            "type": "pickString",
+            "description": "all = emulator + RIME degree days (if config.json rime.cdd_file is set); degreedays = reuse existing emulator output",
+            "options": ["all", "emulator", "degreedays"],
+            "default": "all"
+        },
+        {
+            "id": "climateNumCfgs",
+            "type": "pickString",
+            "description": "MAGICC configurations: 600 = full ensemble, 50 = quick test",
+            "options": ["600", "50"],
+            "default": "600"
+        }
     ]
 }
