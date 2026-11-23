@@ -17,3 +17,8 @@ Set sFGases(E07SrcMacAbate) "F-gases (Input data in kt)"
     HFC_23,  HFC_236fa, HFC_32,   HFC_43_10, HFC_245ca
     CF4,     C2F6,      C6F14,    SF6
 /
+Set sCH4(E07SrcMacAbate) "CH4 sources (targeted by the Global Methane Pledge switch)"
+/
+    CH4_manure, CH4_enteric, CH4_coal,  CH4_sewage
+    CH4_ngas,   CH4_landfills, CH4_oilp, CH4_rice
+/

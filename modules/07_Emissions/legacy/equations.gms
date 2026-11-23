@@ -91,21 +91,34 @@ Q07GrossEmissCO2Processes(allCy,SSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
 *' The determination is based on the Marginal Abatement Cost (MAC) curves, the exogenous carbon price, and specific unit conversion factors. The equation 
 *' identifies the maximum abatement potential by scanning the MAC curve steps and selecting the highest reduction level where the implementation cost is less than or
 *' equal to the adjusted carbon price. This ensures that the model adopts all abatement measures that are economically viable given the current carbon price.
+*' With the Global Methane Pledge switch on (methanePledge in main.gms), CH4 sources also take every MAC step up to a share of the
+*' curve that grows linearly from the base year to the full curve in 2030. The steps are ordered by cost and shared by all sources and
+*' regions, so this acts as one global CH4 price that rises to the top of the curve, cheapest measures first. A step is taken if either
+*' the carbon price or the pledge allows it, so CH4 always sees the higher of the two.
 Q07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy))$(ord(YTIME) > 17))..
     V07RedAbsBySrcRegTim(E07SrcMacAbate, allCy, YTIME)
     =E=
-    smax(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME) * p07UnitConvFactor(E07SrcMacAbate)), 
+    smax(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME) * p07UnitConvFactor(E07SrcMacAbate)
+$ifThen.ch4Pledge %methanePledge% == on
+                 or (sCH4(E07SrcMacAbate) and ord(E07MAC) <= card(E07MAC) * (YTIME.val - %fBaseY%) / (2030 - %fBaseY%))
+$endIf.ch4Pledge
+                ),
          i07DataCh4N2OFMAC(allCy, E07SrcMacAbate, E07MAC, YTIME));
 
 *' This equation calculates the Total Cumulative Cost of all abatement actions combined for non-CO2 sources in a specific country and time period.
 *' The calculation is based on the marginal reduction steps derived from the MAC curves and their corresponding implementation costs. The equation 
 *' computes the total investment required by summing the cost of each individual abatement step (marginal reduction * step cost * cost correction) for all steps that fall
 *' strictly below or equal to the adjusted carbon price. This represents the area under the MAC curve up to the implementation point. 
-*' The 'p07CostCorrection' handles the GWP conversion for F-gases to ensure we are paying for 'C-equivalents', not 'tons of gas'. Output units: [Mil $2015] 
+*' The 'p07CostCorrection' handles the GWP conversion for F-gases to ensure we are paying for 'C-equivalents', not 'tons of gas'. Output units: [Mil $2015]
+*' The step selection is the same as in Q07RedAbsBySrcRegTim, including the Global Methane Pledge, so the cost of the pledge is reported here.
 Q07CostAbateBySrcRegTim(E07SrcMacAbate, allCy, YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     V07CostAbateBySrcRegTim(E07SrcMacAbate, allCy, YTIME)
     =E=
-    sum(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME) * p07UnitConvFactor(E07SrcMacAbate)), 
+    sum(E07MAC$(p07MacCost(E07MAC) <= iCarbValYrExog(allCy, YTIME) * p07UnitConvFactor(E07SrcMacAbate)
+$ifThen.ch4Pledge %methanePledge% == on
+                or (sCH4(E07SrcMacAbate) and ord(E07MAC) <= card(E07MAC) * (YTIME.val - %fBaseY%) / (2030 - %fBaseY%))
+$endIf.ch4Pledge
+               ),
         p07MarginalRed(allCy, E07SrcMacAbate, E07MAC, YTIME) * p07MacCost(E07MAC) * p07CostCorrection(E07SrcMacAbate));
 
 *' This equation calculates the actual remaining non-CO2 emissions for a specific source, country, and time period after mitigation.

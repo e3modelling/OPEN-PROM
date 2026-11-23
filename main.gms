@@ -233,6 +233,12 @@ $setglobal biomassReferenceEJ 150
 *' *** Energy CCS and DAC share this charge; TEW is excluded. Zero disables the tax.
 $setglobal ccsStorageReferenceGtCO2 1445
 
+*' *** Global Methane Pledge: on = CH4 MAC curves are unlocked step by step, from the cheapest
+*' *** in the base year to the full curve in 2030 (the deepest cut the MAC data allow).
+*' *** N2O and F-gases keep the exogenous carbon price. off = CH4 sees the carbon price only.
+$setglobal methanePledge off
+
+$if not "%methanePledge%" == "on" $if not "%methanePledge%" == "off" $abort "methanePledge must be on or off."
 $if set bmswasPriceAdder $abort "Use biomassReferenceEJ (EJ/yr) instead of bmswasPriceAdder."
 $if set ccsAvailabilityCostAdder $abort "Use ccsStorageReferenceGtCO2 (cumulative GtCO2) instead of ccsAvailabilityCostAdder."
 $ifE %biomassReferenceEJ%<0 $abort "biomassReferenceEJ must be non-negative (EJ/yr); zero disables the tax."
@@ -295,6 +301,7 @@ $evalGlobal fEndHorizon 2100
 $evalGlobal fEndY 2100
 $evalGlobal fStartY 2024
 $evalGlobal fBaseY %fStartY% - %fPeriodOfYears%
+$if "%methanePledge%" == "on" $ifE %fBaseY%>=2030 $abort "methanePledge ramps to 2030 and needs a base year before 2030."
 $evalGlobal fScenario 1 !! Setting the model scenario: 0 is No carbon price, 1 is NPi_Default, 2 is 1.5C and 3 is 2C
 
 *** end of dollar commands section, no further flag definitions allowed 
