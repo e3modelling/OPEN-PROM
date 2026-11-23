@@ -123,6 +123,11 @@ i04MatFacPlaAvailCap(runCy,PGALL,YTIME)$(i04MatFacMultSupply(PGALL,YTIME)
     i04MatFacPlaAvailCap(runCy,PGALL,YTIME) * i04MatFacMultSupply(PGALL,YTIME);
 i04MatFacPlaAvailCap(runCy,PGALL,YTIME)$i04MatFacMultSupplyCy(runCy,PGALL,YTIME) =
     i04MatFacPlaAvailCap(runCy,PGALL,YTIME) * i04MatFacMultSupplyCy(runCy,PGALL,YTIME);
+
+$ifThen.coalPhaseOut %coalPhaseOut% == on
+*' Coal phase-out (coalPhaseOut in main.gms): unabated coal plants get no share of new capacity in any model year.
+i04MatFacPlaAvailCap(runCy,PGALL,YTIME)$((sameas(PGALL,"ATHCOAL") or sameas(PGALL,"ATHLGN")) and an(YTIME)) = 0;
+$endIf.coalPhaseOut
 $ENDIF.calib
 *---
 $$ontext
@@ -144,6 +149,10 @@ i04TechLftPlaType(runCy,"PGH2F") = 20;
 i04GrossCapCosSubRen(runCy,PGALL,YTIME) = i04GrossCapCosSubRen(runCy,PGALL,YTIME)/1000;
 *---
 i04DecInvPlantSched(runCy,PGALL,YTIME) = i04InvPlants(runCy,PGALL,YTIME);
+$ifThen.coalPhaseOut %coalPhaseOut% == on
+*' Coal phase-out (coalPhaseOut in main.gms): the decided pipeline of unabated coal plants is cancelled in model years.
+i04DecInvPlantSched(runCy,PGALL,YTIME)$((sameas(PGALL,"ATHCOAL") or sameas(PGALL,"ATHLGN")) and an(YTIME)) = 0;
+$endIf.coalPhaseOut
 *---
 i04MxmShareChpElec(runCy,YTIME) = 0.2;
 *---

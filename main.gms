@@ -238,7 +238,16 @@ $setglobal ccsStorageReferenceGtCO2 1445
 *' *** N2O and F-gases keep the exogenous carbon price. off = CH4 sees the carbon price only.
 $setglobal methanePledge off
 
+*' *** Coal phase-out (Powering Past Coal Alliance): on = no new unabated coal power plants (ATHCOAL, ATHLGN) from the
+*' *** first model year, and the existing unabated fleet retires linearly to zero by 2030 in the EU and OECD regions
+*' *** and by 2040 in all other regions. A region counts as EU/OECD only if all its countries are EU or OECD members
+*' *** (EU28, USA, JPN, CAZ). Mixed regions (e.g. NEU, OAS, LAM, MEA) get 2040. Coal plants with CCS, including
+*' *** retrofits, stay allowed. Only power generation is covered: coal CHP plants (module 09) are not. off = no phase-out.
+$setglobal coalPhaseOut off
+
 $if not "%methanePledge%" == "on" $if not "%methanePledge%" == "off" $abort "methanePledge must be on or off."
+$if not "%coalPhaseOut%" == "on" $if not "%coalPhaseOut%" == "off" $abort "coalPhaseOut must be on or off."
+$if "%coalPhaseOut%" == "on" $if "%Calibration%" == "MatCalibration" $abort "coalPhaseOut cannot be used during maturity calibration."
 $if set bmswasPriceAdder $abort "Use biomassReferenceEJ (EJ/yr) instead of bmswasPriceAdder."
 $if set ccsAvailabilityCostAdder $abort "Use ccsStorageReferenceGtCO2 (cumulative GtCO2) instead of ccsAvailabilityCostAdder."
 $ifE %biomassReferenceEJ%<0 $abort "biomassReferenceEJ must be non-negative (EJ/yr); zero disables the tax."
