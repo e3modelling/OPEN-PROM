@@ -118,6 +118,8 @@ parameter iPriceMaterial(MATERIALS) "Price of input materials (k$2025/tonne)"
 /
 SCRAP 0.432
 IRONORE 0.199
+SPNGIRN 0.8 !! FIXME: Should be endogenously calculated per country based on cost of production
+PIGIRON 0.5 !! FIXME: Same (author: mmadianos)
 /
 ;
 *---

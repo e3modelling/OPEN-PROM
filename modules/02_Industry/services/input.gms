@@ -174,6 +174,10 @@ i02ratioTransfInputIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME)$DATAY(YTIME) =
   -SUM(runCy2,i02ISTransfInEF(runCy2,IS_TRANSF,EFS,YTIME)) /
   SUM(runCy2,i03DataCap(runCy2,IS_TRANSF,IS_TRANSF_TECH,YTIME))
 )$(not i03DataCap(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) and (SUM(runCy2,i03DataCap(runCy2,IS_TRANSF,IS_TRANSF_TECH,YTIME)) > 0));
+* Handle the case where there is capacity but no historical fuel
+i02ratioTransfInputIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME)$(DATAY(YTIME) and (i03DataCap(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) > 0) and (SUM(EFS2,i02ISTransfInEF(runCy,IS_TRANSF,EFS2,YTIME)) = 0)) =
+-SUM(runCy2,i02ISTransfInEF(runCy2,IS_TRANSF,EFS,YTIME)) /
+SUM(runCy2,i03DataCap(runCy2,IS_TRANSF,IS_TRANSF_TECH,YTIME));
 *---
 i02ratioOwnEnergyTransfIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME)$DATAY(YTIME) = 
 (
@@ -187,7 +191,10 @@ i02ratioOwnEnergyTransfIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME)$DATAY(YTIME)
 (
   6.6 * 0.02388 * i05H2Production("INOUT_ELC","weg",YTIME)
 )$(sameas("GREENDRI",IS_TRANSF_TECH) and sameas("DRI",IS_TRANSF) and sameas("ELC",EFS));
-*i02ratioOwnEnergyTransfIS("FRA",IS_TRANSF,EFS,"%fBaseY%") = i02ratioOwnEnergyTransfIS("FRA",IS_TRANSF,EFS,"2016");
+* Handle the case where there is capacity but no historical fuel
+i02ratioOwnEnergyTransfIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME)$(DATAY(YTIME) and (i03DataCap(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) > 0) and (SUM(EFS2,i02OwnEnergyTransf(runCy,IS_TRANSF,EFS2,YTIME)) = 0)) =
+SUM(runCy2,i02OwnEnergyTransf(runCy2,IS_TRANSF,EFS,YTIME)) /
+SUM(runCy2,i03DataCap(runCy2,IS_TRANSF,IS_TRANSF_TECH,YTIME));
 *---
 i02InputMaterials(runCy,IND_SERVS,MATERIALS,YTIME) = 
 SUM(INDITECH,

@@ -228,21 +228,20 @@ Q03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(time(YTIME)$runCy(allCy)$
   SUM(MATERIALS,
     i02ratioMaterialCons("PRIM_STEEL",IS_TRANSF_TECH,MATERIALS) *
     VmPriceMaterials(allCy,MATERIALS,YTIME)
-  )
-$ontext
-  -
-  SUM((DSBS,EFS)$IS_TRANSF_OUT(IS_TRANSF,EFS),
-    VmFinalEnergy(allCy,DSBS,EFS,YTIME) *
-    VmPriceFinal(allCy,DSBS,EFS,YTIME)
-  )
-$offtext
-;
+  );
 
 Q03CostTotal(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(time(YTIME)$runCy(allCy)$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH))..
   V03CostTotal(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
     =E=
   V03CostCapital(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) +
   V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME);
+$ontext
+FIX ME:
+  -SUM(EFS$IS_TRANSF_OUT(IS_TRANSF,EFS),
+    V03OutputByproductEF(allCy,IS_TRANSF,EFS,YTIME) *
+    VmPriceFinal(allCy,"IS",EFS,YTIME)
+  ) / (V03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) + 1e-2);
+$offtext
 
 Q03DemGap(allCy,IS_TRANSF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   V03DemGap(allCy,IS_TRANSF,YTIME)
@@ -250,13 +249,13 @@ Q03DemGap(allCy,IS_TRANSF,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
   ( 
     V03DemTot(allCy,IS_TRANSF,YTIME) -
     sum(IS_TRANSF_TECH$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH),
-      (1-0.05) *
+      (1-V03ScrpRate(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)) *
       V03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME-1)
     ) +
   SQRT(SQR(
     V03DemTot(allCy,IS_TRANSF,YTIME) -
     sum(IS_TRANSF_TECH$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH),
-      (1-0.05) *
+      (1-V03ScrpRate(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)) *
       V03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME-1)
     )
   ))
@@ -309,4 +308,11 @@ Q03ScrpRate(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(TIME(YTIME)$runCy(allCy)$IS_T
 Q03ScrpRatePrem(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(TIME(YTIME)$runCy(allCy)$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH))..
   V03ScrpRatePrem(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
     =E=
-  0;
+  1 - V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME-1) ** (-2) /
+  (
+    V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME-1) ** (-2) +
+    0.05 *
+    sum(IS_TRANSF_TECH2$(not sameas(IS_TRANSF_TECH2,IS_TRANSF_TECH) and IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH2)),
+      V03CostTotal(allCy,IS_TRANSF,IS_TRANSF_TECH2,YTIME-1) ** (-2)
+    )
+  );
