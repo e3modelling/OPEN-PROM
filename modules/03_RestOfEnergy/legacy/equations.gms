@@ -188,15 +188,14 @@ Q03ConsFiEneSec(allCy,SSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
     )$(not sameas("H2P",SSBS)) +
     (SUM(H2TECH$H2TECHtoENERGY(H2TECH,EFS),VmProdH2(allCy,H2TECH,YTIME) * i05InputOverOutH2ProdEnergy(allCy,H2TECH,EFS,YTIME)))$sameas("H2P",SSBS);                               
 
-Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$(SECtoEF(DSBS,EFS))$(not sameas("ICT",DSBS)))..
+Q03FinalEnergy(allCy,DSBS,EFS,YTIME)$(TIME(YTIME)$runCy(allCy)$SECtoEF(DSBS,EFS)$(not sameas("ICT",DSBS)))..
     VmFinalEnergy(allCy,DSBS,EFS,YTIME)
         =E= 
     SUM(TRANSE$sameas(TRANSE,DSBS),V01ConsFuelTransport(allCy,TRANSE,EFS,YTIME)) +
-    SUM((INDDOM,IND_SERVS)$sameas(INDDOM,DSBS),V02ConsFuel(allCy,INDDOM,IND_SERVS,EFS,YTIME)) +
+    SUM((INDDOM,IND_SERVS)$(sameas(INDDOM,DSBS) and INDDOMtoSERVS(INDDOM,IND_SERVS)),V02ConsFuel(allCy,INDDOM,IND_SERVS,EFS,YTIME)) +
     SUM(AGRI_MODES,V12ConsFuel(allCy,AGRI_MODES,EFS,YTIME))$sameas("AG",DSBS) +
     sum(DACTECH$TECHtoEF(DACTECH,EFS),VmConsFuelTechCDRProd(allCy,DACTECH,EFS,YTIME))$sameas(DSBS,"DAC") +
     VmConsFuelTechCDRProd(allCy,"TEW",EFS,YTIME)$sameas(DSBS,"EW");   
-
 
 * ====================== Supplementary transformation sectors (IS) =============================
 

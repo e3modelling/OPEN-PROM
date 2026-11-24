@@ -564,9 +564,9 @@ ELC     "Electricity"
 *EGSL    "Synthetic Gasoline"
 *EBGDO   "Synthetic Diesel"
 *EKRS    "Synthetic Kerosene"
-BFG
-COKE
-COG
+BFG     "Blast furnace gas"
+COKE    "Coke"
+COG     "Coke oven gas"
 /
 
 EFtoEFS(EF,EFS)    Fuel Aggregation for Supply Side
@@ -913,6 +913,8 @@ CHYBV(TTECH) CONVENTIONAL hybrids
 TCHEVGSL
 TCHEVGDO
 /
+
+CALIB_DSBS(DSBS) "Calibrated demand sectors" /PC,PB,GU,NF,CH,BM,PP,FD,EN,TX,OE,OI,SE,HOU/
 
 IMPEXP "Imports/Exports" /IMPORTS,EXPORTS/
 

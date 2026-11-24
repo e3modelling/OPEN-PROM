@@ -72,11 +72,13 @@ variable i02CalibUsefulEnergy(allCy,INDDOM,YTIME);
 i02ScaleEndogScrap.LO(runCy,INDDOM,INDITECH,YTIME) = 0.01;                                      
 i02ScaleEndogScrap.UP(runCy,INDDOM,INDITECH,YTIME) = 10;
 i02ScaleEndogScrap.L(runCy,INDDOM,INDITECH,YTIME) = 1;
+i02ScaleEndogScrap.FX(runCy,INDDOM,INDITECH,YTIME)$(not CALIB_DSBS(INDDOM)) = 1;
 *i02ScaleEndogScrap.FX(runCy,INDDOM,INDITECH,YTIME)$(DATAY(YTIME) or not SECTTECH(INDDOM,INDITECH)) = 0;
 
 i02CalibUsefulEnergy.LO(runCy,INDDOM,YTIME) = -0.05;  
 i02CalibUsefulEnergy.UP(runCy,INDDOM,YTIME) = 0.05;  
 i02CalibUsefulEnergy.FX(runCy,INDDOM,YTIME)$DATAY(YTIME) = 0;
+i02CalibUsefulEnergy.FX(runCy,INDDOM,YTIME)$(not CALIB_DSBS(INDDOM)) = 0;
 *---
 table t02SharesFuelBuildings(allCy,DSBS,EFS,YTIME)    "Targets for share of new passenger cars"
 $ondelim

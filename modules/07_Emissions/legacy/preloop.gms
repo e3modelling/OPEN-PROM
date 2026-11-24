@@ -15,9 +15,13 @@ SUM(EFS,
 *---
 V07GrossEmissCO2Demand.LO(runCy,DSBS,YTIME) = 0;
 V07GrossEmissCO2Demand.FX(runCy,DSBS,YTIME)$DATAY(YTIME) =   
-SUM(EF,
-  imFuelCons(runCy,DSBS,EF,YTIME) *
-  imCo2EmiFac(runCy,DSBS,EF,YTIME)
+SUM(EFS,
+  imFuelCons(runCy,DSBS,EFS,YTIME) *
+  imCo2EmiFac(runCy,DSBS,EFS,YTIME) +
+  SUM(IS_TRANSF,
+    V03ISownEnergyTransf.L(runCy,IS_TRANSF,EFS,YTIME) *
+    imCo2EmiFac(runCy,"IS",EFS,YTIME)
+  )$sameas("IS",DSBS)
 );
 *---
 V07EmiActBySrcRegTim.FX(E07SrcMacAbate, allCy, YTIME)$DATAY(YTIME) = i07DataCh4N2OFEmis(allCy,E07SrcMacAbate,YTIME) ;

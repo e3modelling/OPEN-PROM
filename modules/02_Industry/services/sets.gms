@@ -5,7 +5,22 @@
 sets
 
 ICTSCEN "Scenarios for projected ICT growth" /Lower,Upper,Central,Mean/
-IND_SERVS "Industry & Domestic energy services" /PRIM_STEEL,SEC_STEEL,SHOU,SSE,SNF,SCH,SBM,SPP,SFD,SEN,STX,SOE,SOI/
+IND_SERVS "Industry & Domestic energy services" 
+/
+PRIM_STEEL  "Primary steel"
+SEC_STEEL   "Secondary steel"
+SHOU
+SSE
+SNF
+SCH
+SBM
+SPP
+SFD
+SEN
+STX
+SOE
+SOI
+/
 
 INDDOMtoSERVS(INDDOM,IND_SERVS)    "Mapping between industry"
 /

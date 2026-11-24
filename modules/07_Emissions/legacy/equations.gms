@@ -59,10 +59,14 @@ $offtext
 *' CO2 emission factors.
 Q07GrossEmissCO2Demand(allCy,DSBS,YTIME)$(TIME(YTIME)$runCy(allCy))..
     V07GrossEmissCO2Demand(allCy,DSBS,YTIME)
-        =E=   
+      =E=   
     SUM(EFS,
       VmFinalEnergy(allCy,DSBS,EFS,YTIME) *
-      imCo2EmiFac(allCy,DSBS,EFS,YTIME)
+      imCo2EmiFac(allCy,DSBS,EFS,YTIME) +
+      SUM(IS_TRANSF,
+        V03ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME) *
+        imCo2EmiFac(allCy,"IS",EFS,YTIME)
+      )$sameas("IS",DSBS)
     );
 
 *' The equation calculates gross CO2 emissions from supply-side activities in million tons of CO2 for a given 
