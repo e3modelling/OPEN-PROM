@@ -13,7 +13,7 @@ REM   - postprom : reportOutput.R (run after every solve, withReport=TRUE)
 REM                does library(postprom).
 REM
 REM Scenarios run one-by-one in single mode (Rscript start.R task_id=N), NOT
-REM the CSV batch -- batch only allows task_id in {2,7}, but the first run needs
+REM the CSV batch -- batch only allows task_id in {2,6}, but the first run needs
 REM task 3. Order matters: the task-3 run must come first because it is the one
 REM that rebuilds data/ + targets/ (and copies them back to the repo root); the
 REM later task-2 runs reuse that freshly built data.

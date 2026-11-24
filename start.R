@@ -179,6 +179,8 @@ nestDottedKeys <- function(flat) {
 # ---- runScenario(): set env vars + dispatch to the right task body --------
 runScenario <- function(scn) {
   if (is.null(scn$task_id)) stop("task_id is missing in the scenario.")
+  task_id <- as.character(scn$task_id)
+  calibrating_carbon_price <- task_id %in% c("7", "8")
 
   land_use_extra <- ""
   if (length(scn$gams_flags)) {
@@ -191,7 +193,7 @@ runScenario <- function(scn) {
   # Land-use emulator config group -> GAMS flags (the soft_link_magpie group is
   # consumed by task6, which passes --softLinkMAgPIE itself).
   # Tasks 7 and 8 build their own emulator flags; skip this unused block.
-  lue <- if (as.character(scn$task_id) %in% c("7", "8")) NULL else scn$land_use_emulator
+  lue <- if (calibrating_carbon_price) NULL else scn$land_use_emulator
   if (length(lue)) {
     emulator_source <- lue$source %||% "magpie"
     allowed_sources <- c("legacy", "globiom", "magpie")
@@ -228,10 +230,12 @@ runScenario <- function(scn) {
   Sys.setenv(OPENPROM_SCENARIO             = toJSON(scn, auto_unbox = TRUE))
   Sys.setenv(OPENPROM_SCENARIO_DESCRIPTION = scn$description %||% "")
 
-  switch(as.character(scn$task_id),
+  if (calibrating_carbon_price) source(file.path("scripts", "tasks", "carbonPriceCalibrationCommon.R"))
+  switch(task_id,
          "0" = runTask0(), "1" = runTask1(), "2" = runTask2(),
          "3" = runTask3(), "4" = runTask4(), "5" = runTask5(),
-         "6" = runTask6(), "7" = runTask7(), "8" = runTask8(),
+         "6" = runTask6(), "7" = runTask7(config, gams, saveMetadata, args),
+         "8" = runTask8(config, gams, saveMetadata, args),
          stop("Unknown task_id: ", scn$task_id))
 
   message(sprintf("[%s] task_id=%d done",

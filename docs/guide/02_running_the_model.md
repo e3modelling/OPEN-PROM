@@ -159,7 +159,7 @@ gets run. The main task modes:
 Task 4 is a debugging path and is not part of the normal run flow. A quick way to read the table: `NEW DATA` means
 the workflow first regenerates model inputs; `DEV` is the lighter development setup; `RESEARCH` is the full research
 setup; `CALIBRATE` modes are specialised runs, not the usual first step.
-For tasks 0, 2, 3 and 6, `reportOutput.R` runs automatically when `behavior.withRunFolder` and `behavior.withReport` are both `true` in `config.json` (see [What the outputs mean](#running-outputs)).
+For tasks 0, 1, 2, 3 and 6, `reportOutput.R` runs automatically when `behavior.withRunFolder` and `behavior.withReport` are both `true` in `config.json` (see [What the outputs mean](#running-outputs)).
 
 :::{seealso}
 The MAgPIE soft-link (task 6) is covered in {doc}`/guide/05_soft_linking`; see also {ref}`magpie-link`.
@@ -207,7 +207,7 @@ and one CSV row:
 
 ```text
 scenario_name,task_id,description,gams_flags.fScenario,soft_link_magpie.existing_prom_run
-C600_landHigh,7,UPTAKE C600 landHigh,600,
+C600_landHigh,6,UPTAKE C600 landHigh,600,
 ```
 
 the merged scenario `start.R` runs is:
@@ -277,8 +277,8 @@ overlay is merged, so it never leaks into the scenario object.
 scenario_name,start,task_id,description,gams_flags.fScenario
 C200_biolim100,1,2,UPTAKE C200 biolim100,200
 C200_landHigh,1,2,UPTAKE C200 landHigh,200
-C600_biolim100,0,7,UPTAKE C600 biolim100 -- temporarily off,600
-C600_landHigh,1,7,UPTAKE C600 landHigh,600
+C600_biolim100,0,6,UPTAKE C600 biolim100 -- temporarily off,600
+C600_landHigh,1,6,UPTAKE C600 landHigh,600
 ```
 
 ```
@@ -289,18 +289,14 @@ Loaded 4 row(s) from scenarios.csv, 3 active, 1 skipped
 (running-outputs)=
 ### What the outputs mean
 
-When `behavior.withReport: true` (and the run-folder workflow is active), the task body automatically calls
-`scripts/tasks/reportOutput.R` after tasks 0, 2, 3, 6 or 7. That script converts the model output into a MIF report,
-typically `reporting.mif`. It may also try to create plots, but PDF generation depends on the local LaTeX/TinyTeX
-setup. `outputForProject.mif` is not part of the default workflow; it is created only when project reporting is
-explicitly enabled.
+Tasks 0, 1, 2, 3 and 6 call `scripts/tasks/reportOutput.R` when `behavior.withRunFolder` and `behavior.withReport` are both `true` in `config.json`. The script converts the model output into a MIF report, typically `reporting.mif`. PDF generation depends on the local LaTeX/TinyTeX setup. Tasks 7 and 8 generate research reports after confirming a calibration path, independently of `behavior.withReport`. `outputForProject.mif` is specific to separately enabled project reporting.
 
 For a quick success check:
 
 - `modelstat.txt` should show successful model-status lines for the solved years and regions.
 - `outputData.gdx` should exist after a normal model run.
 - `reporting.mif` only appears when the reporting step actually runs.
-- with `behavior.withReport: false`, the model can still solve successfully even though no MIF or plots are created.
+- for tasks 0, 1, 2, 3 and 6, setting `behavior.withReport` to `false` skips automatic reporting.
 
 Do not confuse "the model solved" with "the full reporting workflow also ran".
 

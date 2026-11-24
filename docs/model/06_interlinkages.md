@@ -1,19 +1,14 @@
 # Model interlinkages
 
 :::{note}
-**In brief** — This chapter describes how OPEN-PROM is linked to companion models: openTEPES (power-sector
-detail), METEOR (spatial climate emulation), OMNIA-ENGAGE (circular economy), FTT:Heat (residential heating) and
-MAgPIE (land use and bioenergy). Of these, only the MAgPIE soft-link is operational in the repository today (task
-7); the others are external links that are planned or under development within DIAMOND.
+**In brief** — This chapter describes OPEN-PROM's links to openTEPES (power-sector detail), METEOR (spatial climate emulation), OMNIA-ENGAGE (circular economy), FTT:Heat (residential heating) and MAgPIE (land use and bioenergy). The MAgPIE soft-link is operational in the repository as Task 6. The other links are planned or under development within DIAMOND.
 :::
 
 (opentepes)=
 ## Link with openTEPES
 
 :::{note}
-**Status — external / planned.** The openTEPES link is described here as an intended DIAMOND development, not as a
-feature of the current OPEN-PROM code. There is no operational openTEPES step in the model's task dispatch
-(`start.R`, tasks 0–7), and the soft-link itself is scheduled for completion in July 2026.
+**Status — external / planned.** The openTEPES link is an intended DIAMOND development. The model harness (`start.R`, tasks 0–8) has no operational openTEPES step. The documented completion target is July 2026.
 :::
 
 During the DIAMOND project, a link between OPEN-PROM and openTEPES[^opentepes-fn] is being developed.

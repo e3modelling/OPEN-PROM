@@ -57,10 +57,8 @@
     "search": {
       "start_slope": 18,
       "initial_slope_step": 40,
-      "initial_end_price_step": 200,
       "max_price": 5000,
       "slope_resolution": 0.01,
-      "end_price_resolution": 1,
       "max_evaluations": 50,
       "peak_tolerance_gtco2": 5,
       "end_tolerance_gtco2": 5
