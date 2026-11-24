@@ -29,7 +29,12 @@ Q06CO2CaptureCCS(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy))$SECtoEF(SBS,EF
         i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EFS,"%fBaseY%") *
         V02Capacity(allCy,INDDOM,IND_SERVS,INDITECH,YTIME) *
         imCO2CaptRateIndustry(allCy,INDITECH,YTIME)
-      )$INDSE1(SBS)
+      )$INDSE1(SBS) +
+      (
+        i02ratioTransfInputIS(allCy,"DRI","CONVDRICCS",EFS,YTIME) *
+        V03Cap(allCy,"DRI","CONVDRICCS",YTIME) * 
+        0.9
+      )$sameas("IS",SBS)
     ) *
     (imCo2EmiFac(allCy,SBS,EFS,YTIME) + 4.17$sameas("BMSWAS",EFS));
 

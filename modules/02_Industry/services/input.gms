@@ -37,6 +37,22 @@ $ondelim
 $include"./iDataIndustrySFC.csv"
 $offdelim
 ;
+
+parameter i02EffImprovement(TECH)      "Eff improvement per year"/
+EAF 0.004
+BOF 0.003
+CONVDRI 0.004
+CONVDRICCS 0.004
+GREENDRI 0.006
+COKEOV 0.003
+BF 0.003
+/;
+
+** EFF improvement
+i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EF,YTIME)$(ord(YTIME) < 42 and not DATAY(YTIME)) = 
+i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EF,"%fBaseY%") * 
+(1-i02EffImprovement(INDITECH)) ** (2010 + ord(YTIME) - %fBaseY% - 1);
+i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EF,YTIME)$(ord(YTIME) >= 42) = i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EF,"2050");
 *---
 table i02ISTransfInEF(allCy,IS_TRANSF,EF,YTIME)	      ""	
 $ondelim
@@ -161,7 +177,7 @@ SUM(EF2$(INDDOMtoSERVS(INDDOM,IND_SERVS) or SERVStoTECH(IND_SERVS,INDITECH) and 
 );
 $offtext
 *---
-i03DataCap(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(DATAY(YTIME) and IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH) and not sameas("GREENDRI",IS_TRANSF_TECH)) = 
+i03DataCap(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(DATAY(YTIME) and IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH) and not sameas("GREENDRI",IS_TRANSF_TECH) and not sameas("CONVDRICCS",IS_TRANSF_TECH)) = 
 SUM((INDITECH,MATERIALS)$IS_TRANSF_OUT_MATERIAL(IS_TRANSF,MATERIALS),
   i02ratioMaterialCons("PRIM_STEEL",INDITECH,MATERIALS) *
   i02Capacity(runCy,"IS","PRIM_STEEL",INDITECH,YTIME)
@@ -193,10 +209,25 @@ i02ratioOwnEnergyTransfIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME)$DATAY(YTIME)
 (
   6.6 * 0.02388 * i05H2Production("INOUT_ELC","weg",YTIME)
 )$(sameas("GREENDRI",IS_TRANSF_TECH) and sameas("DRI",IS_TRANSF) and sameas("ELC",EFS));
+
 * Handle the case where there is capacity but no historical fuel
 i02ratioOwnEnergyTransfIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME)$(DATAY(YTIME) and (i03DataCap(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME) > 0) and (SUM(EFS2,i02OwnEnergyTransf(runCy,IS_TRANSF,EFS2,YTIME)) = 0)) =
 SUM(runCy2,i02OwnEnergyTransf(runCy2,IS_TRANSF,EFS,YTIME)) /
 SUM(runCy2,i03DataCap(runCy2,IS_TRANSF,IS_TRANSF_TECH,YTIME));
+
+* Add extra consumption for CCS 
+i02ratioTransfInputIS(runCy,"DRI","CONVDRICCS",EFS,YTIME) = i02ratioTransfInputIS(runCy,"DRI","CONVDRI",EFS,YTIME) + 0.00573$sameas("ELC",EFS);
+
+* Efficiency improvements
+i02ratioOwnEnergyTransfIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME)$(ord(YTIME) < 42 and not DATAY(YTIME)) = 
+i02ratioOwnEnergyTransfIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,"%fBaseY%") *
+(1-i02EffImprovement(IS_TRANSF_TECH)) ** (2010 + ord(YTIME) - %fBaseY% - 1);
+i02ratioOwnEnergyTransfIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME)$(ord(YTIME) >= 42) = i02ratioOwnEnergyTransfIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,"2050");
+
+i02ratioTransfInputIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME)$(ord(YTIME) < 42 and not DATAY(YTIME)) = 
+i02ratioTransfInputIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,"%fBaseY%") *
+(1-i02EffImprovement(IS_TRANSF_TECH)) ** (2010 + ord(YTIME) - %fBaseY% - 1);
+i02ratioTransfInputIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME)$(ord(YTIME) >= 42) = i02ratioTransfInputIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,"2050");
 *---
 i02InputMaterials(runCy,IND_SERVS,MATERIALS,YTIME) = 
 SUM(INDITECH,

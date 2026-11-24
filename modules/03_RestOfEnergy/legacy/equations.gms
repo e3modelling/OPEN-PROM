@@ -216,7 +216,7 @@ Q03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(time(YTIME)$runCy(allCy)$
   V03CostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
     =E=
   sum(EF$IS_TRANSF_TECHtoEF(IS_TRANSF_TECH,EF), 
-    (i02ratioTransfInputIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EF,"%fBaseY%") + i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EF,"%fBaseY%")) *
+    (i02ratioTransfInputIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EF,YTIME) + i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EF,YTIME)) *
     (
       VmPriceFinal(allCy,"IS",EF,YTIME) +
       imCaptRateCO2(IS_TRANSF_TECH) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * (imCo2EmiFac(allCy,"PG",EF,YTIME) + 4.17$sameas("BMSWAS", EF)) +
@@ -286,7 +286,7 @@ Q03ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
   V03ISTransfInEF(allCy,IS_TRANSF,EFS,YTIME)
       =E=
   SUM(IS_TRANSF_TECH$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH),
-    i02ratioTransfInputIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EFS,"%fBaseY%") *
+    i02ratioTransfInputIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME) *
     V03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
   );
 
@@ -294,7 +294,7 @@ Q03ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)$(TIME(YTIME) and runCy(allCy))..
   V03ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)
     =E=
   SUM(IS_TRANSF_TECH$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH),
-    i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EFS,"%fBaseY%") *
+    i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME) *
     V03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
   );
 
