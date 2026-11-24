@@ -38,7 +38,8 @@ suppressPackageStartupMessages({
   library(quitte)
 })
 
-`%||%` <- function(a, b) if (is.null(a) || !nzchar(a)) b else a
+# Default for missing settings: NULL or a single empty string (lists and vectors are kept as they are).
+`%||%` <- function(a, b) if (is.null(a) || (is.character(a) && length(a) == 1 && !nzchar(a))) b else a
 onWindows <- .Platform$OS.type == "windows"
 
 # ------------------- Paths ----------------------
@@ -109,8 +110,7 @@ runAssessment <- function(model, caDir, emissionsFile, outputDir) {
     cfg$extraArgs
   )
 
-  cat("Running", toupper(model), "assessment in WSL...
-")
+  cat("Running", toupper(model), "assessment in WSL...\n")
   # cd into climate-assessment so its .env (MAGICC executable, workers) is picked up.
   runPython(caDir, ".venv/bin/python", "scripts/run_workflow.py", args, "climate-assessment workflow")
 }
@@ -126,8 +126,7 @@ runPython <- function(workDir, python, script, args, what) {
   )
   shFile <- tempfile(fileext = ".sh")
   con <- file(shFile, open = "wb")
-  writeLines(enc2utf8(lines), con, sep = "
-", useBytes = TRUE)
+  writeLines(enc2utf8(lines), con, sep = "\n", useBytes = TRUE)
   close(con)
   status <- if (onWindows) {
     system2("wsl", c("bash", shQuote(toLinuxPath(shFile))))
@@ -159,8 +158,7 @@ runRime <- function(cfg, gsatFile, outputDir) {
   ssp <- fb$ssp %||% "SSP2"
   root <- getwd()
 
-  cat("RIME maps (", paste(indicators, collapse = ", "), ", ", ssp, ") in WSL...
-", sep = "")
+  cat("RIME maps (", paste(indicators, collapse = ", "), ", ", ssp, ") in WSL...\n", sep = "")
   runPython(root, python, toLinuxPath("scripts/tools/rimeMaps.py"), c(
     "--gsat", toLinuxPath(gsatFile), "--indicators", indicators, "--ssp", ssp,
     "--impact-dir", toLinuxPath(dataDir), "--out-dir", toLinuxPath(outputDir)), "RIME map step")
@@ -175,12 +173,10 @@ runRime <- function(cfg, gsatFile, outputDir) {
   for (k in c("floor_cdd", "floor_hdd", "cap")) {
     if (!is.null(fb[[k]])) args <- c(args, paste0("--", gsub("_", "-", k)), fb[[k]])
   }
-  cat("Degree-day ratios per OPEN-PROM region...
-")
+  cat("Degree-day ratios per OPEN-PROM region...\n")
   runPython(root, python, toLinuxPath("scripts/tools/climDegreeDays.py"), args, "Degree-day step")
   cat("To use it: copy", file.path(outputDir, "iClimDegDays.csv"),
-      "to data/ and run OPEN-PROM with --climFeedback=on
-")
+      "to data/ and run OPEN-PROM with --climFeedback=on\n")
 }
 
 # ------------------- Plot median GSAT vs reference ----------------------
