@@ -220,8 +220,8 @@
         {
             "id": "climateSteps",
             "type": "pickString",
-            "description": "all = emulator + RIME degree days (if config.json rime.cdd_file is set); degreedays = reuse existing emulator output",
-            "options": ["all", "emulator", "degreedays"],
+            "description": "all = MAGICC + RIME degree days; emulator = MAGICC only; rime = RIME degree days from an existing MAGICC output",
+            "options": ["all", "emulator", "rime"],
             "default": "all"
         },
         {

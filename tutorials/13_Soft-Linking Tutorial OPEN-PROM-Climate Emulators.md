@@ -262,11 +262,11 @@ MAGICC_WORKER_ROOT_DIR=/mnt/tmp/workers
    * Stop with an error if the workflow fails.
    * Save outputs to `runs/<runFolder>/EmissionsOutput-<model>/`.
    * Plot median GSAT against the climate-assessment reference output (`Global_Mean_Temperature.png`).
-   * If `config.json` has a `rime` block with `cdd_file`, convert the GSAT into degree-day ratios
-     (`iClimDegDays.csv`) for the buildings climate feedback. See tutorial 16 for the settings.
-5. `--steps` (also asked by the task): `all` (default), `emulator` (skip the degree-day step) or
-   `degreedays` (rerun only the degree-day step on an existing emulator output, without rerunning MAGICC).
-   The degree-day step needs `netCDF4` in the climate-assessment `.venv` (`pip install netCDF4`, already in the install script).
+   * Run RIME on the GSAT and convert the result into degree-day ratios (`iClimDegDays.csv`) for the buildings
+     climate feedback. See tutorial 16 for the RIME installation and the method.
+5. `--steps` (also asked by the task): `all` (default), `emulator` (MAGICC only) or `rime` (rerun RIME and the
+   degree days on an existing MAGICC output, without rerunning MAGICC).
+
 ## 7. Running in the cloud (no WSL, nothing committed)
 
 The VS Code task **RUN CLIMATE EMULATOR (CLOUD)** runs MAGICC and the RIME degree-day step on a GitHub-hosted
@@ -277,8 +277,9 @@ How a run works:
 
 1. You choose a local run folder. `runs/<runFolder>/emissions.csv` is compressed and sent as a workflow **input**.
    It is never committed to any repository.
-2. The workflow downloads MAGICC, its probabilistic file, the AR6 infiller database and the RIME data from a
-   secret link, runs them, and stores the outputs for at most one day.
+2. The workflow downloads MAGICC, its probabilistic file and the AR6 infiller database from a secret link. It runs
+   MAGICC and the degree-day step, with the cooling degree days taken from OPEN-PROM, and stores the outputs for at
+   most one day.
 3. The script downloads the outputs to `runs/<runFolder>/EmissionsOutput-magicc/` (`emissions_alloutput.xlsx`,
    `Global_Mean_Temperature.png`, `iClimDegDays.csv`).
 4. The script then **deletes the GitHub run**, which removes its logs, inputs and outputs. Use `--keepRun` to keep
@@ -288,9 +289,24 @@ Until the run is deleted, only members of the private runner repository can see 
 
 ### 7.1 Each user, once
 
-1. Install the GitHub CLI from <https://cli.github.com> (version 2.40 or newer, for `gh run delete`) and run `gh auth login`.
-2. Ask for write access to the runner repository.
-3. In your `config.json`, add `"climate_cloud_repo": "e3modelling/climate-runner"` under `paths`.
+Nothing has to be installed: the script talks to GitHub over HTTPS from R (package `curl`, already present
+with the OPEN-PROM R setup). Everything below is done in the browser and in R.
+
+1. Ask for **write access** to the runner repository.
+2. Create a **personal access token** on github.com: profile picture → **Settings → Developer settings →
+   Personal access tokens → Fine-grained tokens → Generate new token**.
+   * *Resource owner*: the organisation (e.g. `e3modelling`). *Repository access*: **Only select repositories** →
+     the runner repository.
+   * *Permissions → Repository permissions → Actions*: **Read and write**. Nothing else is needed.
+   * Pick an expiry date, generate, and copy the token.
+   * If the organisation requires approval of fine-grained tokens, the token works once an owner approves it.
+3. Store the token for R. In R run `usethis::edit_r_environ()` (or open `C:/Users/<you>/Documents/.Renviron` in
+   a text editor). Add the line
+   ```
+   GITHUB_PAT=github_pat_xxxxxxxx
+   ```
+   Then save the file and restart R/VS Code. Do not put the token in `config.json` or any repository.
+4. In your `config.json`, add `"climate_cloud_repo": "e3modelling/climate-runner"` under `paths`.
 
 Then run the task, or from the OPEN-PROM root:
 
@@ -310,11 +326,11 @@ Options: `--numCfgs 50` for a quick test, `--degreeDays false`, `--ssp SSP1..SSP
      0fd0f62-derived-metrics-id-f023edb-drawnset.json
    infiller/
      1652361598937-ar6_emissions_vetted_infillerdatabase_10.5281-zenodo.6390768.csv   (or .csv.gz)
-   rime/                         # optional, for the degree-day step
-     sdd_c_18p3_COUNTRIES.nc     (or .nc.gz)
-     regionmappingOPDEV5.csv     # optional, fills aggregate regions
+   rime/                         # optional
+     regionmappingOPDEV5.csv     # fills aggregate regions (LAM, RWO, ...) in iClimDegDays.csv
    ```
-   An archive with one top-level folder around these three folders also works.
+   An archive with one top-level folder around these folders also works. The cooling degree days are not needed
+   here: they come from OPEN-PROM.
 2. Upload it to OneDrive and create a share link of type **"Anyone with the link"**. Organisation-only links
    need a login, which the workflow cannot do. The workflow adds `download=1` to get the raw file.
 3. Create the **private** repository `climate-runner` and copy `scripts/cloud/climate_assessment.yml` from OPEN-PROM
@@ -322,6 +338,8 @@ Options: `--numCfgs 50` for a quick test, `--degreeDays false`, `--ssp SSP1..SSP
 4. In that repository: **Settings → Secrets and variables → Actions → New repository secret**
    `CLIMATE_ASSETS_URL` = the OneDrive link.
 5. Give colleagues write access to that repository. Write access is needed to start and delete runs.
+6. If the organisation restricts fine-grained tokens, approve colleagues' tokens under **Organisation settings →
+   Personal access tokens → Pending requests**.
 
 Notes:
 

@@ -20,10 +20,11 @@
 # Outputs: <output>/<emissions>_alloutput.xlsx and <output>/Global_Mean_Temperature.png
 # (default <output> = runs/<runFolder>/EmissionsOutput-<model>).
 #
-# RIME degree-day step (climate feedback loop 1): when config.json has a "rime"
-# block with cdd_file, the median GSAT is turned into <output>/iClimDegDays.csv
-# by scripts/tools/rimeDegreeDays.py (same .venv, in WSL). --steps degreedays
-# reruns only this step on an existing emulator output.
+# Climate feedback loop 1 (OPEN-PROM -> MAGICC -> RIME -> OPEN-PROM): after MAGICC,
+#   scripts/tools/rimeMaps.py       median GSAT -> RIME degree-day maps (rime_maps_<ind>.nc)
+#   scripts/tools/climDegreeDays.py maps -> iClimDegDays.csv (+ _absolute.csv, _diagnostics.png)
+# run with the RIME environment (paths.rime_path, installed by scripts/tools/installRimeWSL.sh).
+# Settings: config.json -> "climate_feedback". --steps rime reruns RIME on an existing MAGICC output.
 #
 # R packages: optparse, jsonlite, readxl, dplyr, ggplot2, magclass, quitte
 
@@ -108,23 +109,25 @@ runAssessment <- function(model, caDir, emissionsFile, outputDir) {
     cfg$extraArgs
   )
 
-  cat("Running", toupper(model), "assessment in WSL...\n")
-  runVenvPython(caDir, "scripts/run_workflow.py", args, "climate-assessment workflow")
+  cat("Running", toupper(model), "assessment in WSL...
+")
+  # cd into climate-assessment so its .env (MAGICC executable, workers) is picked up.
+  runPython(caDir, ".venv/bin/python", "scripts/run_workflow.py", args, "climate-assessment workflow")
 }
 
-# Run a Python script with the climate-assessment .venv inside WSL. The command
-# goes through a temporary bash script (avoids Windows -> WSL quoting problems;
-# binary mode keeps the LF line endings bash requires). We cd into
-# climate-assessment so its .env (MAGICC executable, workers) is picked up.
-runVenvPython <- function(caDir, script, args, what) {
+# Run a Python script inside WSL (or bash directly when R runs in Linux). The command
+# goes through a temporary bash script: avoids Windows -> WSL quoting problems; binary
+# mode keeps the LF line endings bash requires.
+runPython <- function(workDir, python, script, args, what) {
   lines <- c(
     "set -e",
-    paste("cd", bashQuote(toLinuxPath(caDir))),
-    paste(".venv/bin/python", bashQuote(script), paste(bashQuote(args), collapse = " "))
+    paste("cd", bashQuote(toLinuxPath(workDir))),
+    paste(bashQuote(python), bashQuote(script), paste(bashQuote(args), collapse = " "))
   )
   shFile <- tempfile(fileext = ".sh")
   con <- file(shFile, open = "wb")
-  writeLines(enc2utf8(lines), con, sep = "\n", useBytes = TRUE)
+  writeLines(enc2utf8(lines), con, sep = "
+", useBytes = TRUE)
   close(con)
   status <- if (onWindows) {
     system2("wsl", c("bash", shQuote(toLinuxPath(shFile))))
@@ -135,31 +138,49 @@ runVenvPython <- function(caDir, script, args, what) {
   if (!identical(as.integer(status), 0L)) stop(what, " failed (exit status ", status, ").")
 }
 
-# ------------------- RIME degree days (climate feedback loop 1) ----------------------
-# Turns the median GSAT into iClimDegDays.csv with scripts/tools/rimeDegreeDays.py.
-# Settings in config.json -> "rime" (see config.template.json and tutorial 16).
+# ------------------- RIME: degree days for the buildings climate feedback ----------------------
 
-runDegreeDays <- function(caDir, gsatFile, outputDir, rime) {
-  if (is.null(rime$cdd_file)) stop("config.json: rime.cdd_file is not set (RIME CDD region netCDF).")
-  for (f in c(rime$cdd_file, rime$hdd_file, rime$regionmapping)) {
-    if (!file.exists(f)) stop("config.json rime: file not found: ", f)
+findRegionMapping <- function(fb) {
+  path <- fb$regionmapping %||% system.file("extdata", "regional", "regionmappingOPDEV5.csv", package = "mrprom")
+  if (!nzchar(path) || !file.exists(path)) {
+    stop("OPEN-PROM region mapping not found. Install mrprom or set climate_feedback.regionmapping in config.json.")
   }
-  args <- c(
-    "--gsat", toLinuxPath(gsatFile),
-    "--cdd-file", toLinuxPath(rime$cdd_file),
-    "--sets", toLinuxPath("core/sets.gms"),
-    "--ssp", rime$ssp %||% "SSP2",
-    "--out", toLinuxPath(file.path(outputDir, "iClimDegDays.csv"))
-  )
-  if (!is.null(rime$cdd_variable))  args <- c(args, "--cdd-var", rime$cdd_variable)
-  if (!is.null(rime$hdd_file))      args <- c(args, "--hdd-file", toLinuxPath(rime$hdd_file),
-                                              "--hdd-var", rime$hdd_variable %||% "")
-  if (!is.null(rime$regionmapping)) args <- c(args, "--regionmapping", toLinuxPath(rime$regionmapping))
+  path
+}
 
-  cat("Computing RIME degree-day ratios in WSL...\n")
-  runVenvPython(caDir, toLinuxPath("scripts/tools/rimeDegreeDays.py"), args, "RIME degree-day step")
+runRime <- function(cfg, gsatFile, outputDir) {
+  fb <- cfg$climate_feedback %||% list()
+  rimePath <- normalizePath(cfg$paths$rime_path %||% file.path("..", "rime"), winslash = "/", mustWork = FALSE)
+  if (!dir.exists(rimePath)) stop("RIME not found at ", rimePath, ". Run scripts/tools/installRimeWSL.sh (tutorial 16).")
+  dataDir <- normalizePath(cfg$paths$rime_data_path %||% file.path("..", "rime-data"), winslash = "/", mustWork = FALSE)
+  dir.create(dataDir, recursive = TRUE, showWarnings = FALSE)
+  python <- paste0(toLinuxPath(rimePath), "/.venv/bin/python")
+  indicators <- c(fb$cdd_indicator %||% "sdd_c_24p0", fb$hdd_indicator)
+  ssp <- fb$ssp %||% "SSP2"
+  root <- getwd()
+
+  cat("RIME maps (", paste(indicators, collapse = ", "), ", ", ssp, ") in WSL...
+", sep = "")
+  runPython(root, python, toLinuxPath("scripts/tools/rimeMaps.py"), c(
+    "--gsat", toLinuxPath(gsatFile), "--indicators", indicators, "--ssp", ssp,
+    "--impact-dir", toLinuxPath(dataDir), "--out-dir", toLinuxPath(outputDir)), "RIME map step")
+
+  args <- c("--maps-dir", toLinuxPath(outputDir),
+            "--regionmapping", toLinuxPath(findRegionMapping(fb)),
+            "--natural-earth", toLinuxPath(dataDir),
+            "--out", toLinuxPath(file.path(outputDir, "iClimDegDays.csv")),
+            "--cdd-ind", indicators[1])
+  if (!is.null(fb$hdd_indicator)) args <- c(args, "--hdd-ind", fb$hdd_indicator)
+  if (!is.null(fb$pop_grid))      args <- c(args, "--pop-grid", toLinuxPath(fb$pop_grid))
+  for (k in c("floor_cdd", "floor_hdd", "cap")) {
+    if (!is.null(fb[[k]])) args <- c(args, paste0("--", gsub("_", "-", k)), fb[[k]])
+  }
+  cat("Degree-day ratios per OPEN-PROM region...
+")
+  runPython(root, python, toLinuxPath("scripts/tools/climDegreeDays.py"), args, "Degree-day step")
   cat("To use it: copy", file.path(outputDir, "iClimDegDays.csv"),
-      "to data/ and run OPEN-PROM with --climFeedback=on\n")
+      "to data/ and run OPEN-PROM with --climFeedback=on
+")
 }
 
 # ------------------- Plot median GSAT vs reference ----------------------
@@ -218,10 +239,10 @@ opt <- parse_args(OptionParser(option_list = list(
   make_option("--output", type = "character", default = NULL,
               help = "Custom output directory"),
   make_option("--steps", type = "character", default = "all",
-              help = paste("all = emulator, then RIME degree days if config.json has rime.cdd_file;",
-                           "emulator = emulator only; degreedays = degree days from an existing emulator output"))
+              help = paste("all = MAGICC, then RIME degree days; emulator = MAGICC only;",
+                           "rime = RIME degree days from an existing MAGICC output"))
 )))
-if (!opt$steps %in% c("all", "emulator", "degreedays")) stop("--steps must be all, emulator or degreedays")
+if (!opt$steps %in% c("all", "emulator", "rime")) stop("--steps must be all, emulator or rime")
 
 cfg <- if (file.exists("config.json")) fromJSON("config.json") else list()
 caDir <- findClimateAssessment(cfg)
@@ -245,15 +266,13 @@ cat("Model:    ", opt$model, "\nEmissions:", emissions, "\nOutput:   ", output,
 
 outputFile <- file.path(output, paste0(tools::file_path_sans_ext(basename(emissions)), "_alloutput.xlsx"))
 
-if (opt$steps != "degreedays") {
+if (opt$steps != "rime") {
   runAssessment(opt$model, caDir, emissions, output)
   if (!file.exists(outputFile)) stop("Workflow finished but output is missing: ", outputFile)
   plotTemperature(outputFile, getModelConfig(opt$model, caDir)$expectedFile, output)
 }
 
-if (opt$steps == "degreedays" || (opt$steps == "all" && !is.null(cfg$rime$cdd_file))) {
+if (opt$steps %in% c("all", "rime")) {
   if (!file.exists(outputFile)) stop("No emulator output to read GSAT from: ", outputFile, ". Run --steps emulator first.")
-  runDegreeDays(caDir, outputFile, output, cfg$rime)
-} else if (opt$steps == "all") {
-  cat("RIME degree-day step skipped: set rime.cdd_file in config.json to enable it.\n")
+  runRime(cfg, outputFile, output)
 }
