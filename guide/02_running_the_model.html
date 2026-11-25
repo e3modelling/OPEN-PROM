@@ -399,27 +399,32 @@ gets run. The main task modes:</p>
 <td><p>no</p></td>
 </tr>
 <tr class="row-odd"><td><p>6</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">CALIBRATE</span> <span class="pre">CARBON</span> <span class="pre">PRICES</span></code></p></td>
-<td><p>Runs carbon-price calibration</p></td>
-<td><p>internal calibration setup</p></td>
-<td><p>no</p></td>
-</tr>
-<tr class="row-even"><td><p>7</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">OPEN-PROM</span> <span class="pre">SOFT-LINK</span> <span class="pre">MAgPIE</span></code></p></td>
 <td><p>Runs the MAgPIE soft-link pipeline</p></td>
 <td><p>internal data access + MAgPIE checkout</p></td>
 <td><p><strong>yes</strong></p></td>
 </tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CALIBRATE</span> <span class="pre">GLOBAL</span> <span class="pre">CARBON</span> <span class="pre">PRICE</span></code></p></td>
+<td><p>Calibrates a straight or net-zero-bent global price path against peak and terminal CO2 budgets, with an optional price-ceiling plateau</p></td>
+<td><p>research <code class="docutils literal notranslate"><span class="pre">data/</span></code> and <code class="docutils literal notranslate"><span class="pre">global_carbon_price_calibration</span></code> settings</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CALIBRATE</span> <span class="pre">REGIONAL</span> <span class="pre">CARBON</span> <span class="pre">PRICE</span></code></p></td>
+<td><p>Completes each group’s NDC then LTT search before jointly repairing current annual-GHG cap failures</p></td>
+<td><p>research <code class="docutils literal notranslate"><span class="pre">data/</span></code>, paired NDC/LTT target and coverage tables, and <code class="docutils literal notranslate"><span class="pre">regional_carbon_price_calibration</span></code> settings</p></td>
+<td><p>no</p></td>
+</tr>
 </tbody>
 </table>
 <p>Task 4 is a debugging path and is not part of the normal run flow. A quick way to read the table: <code class="docutils literal notranslate"><span class="pre">NEW</span> <span class="pre">DATA</span></code> means
 the workflow first regenerates model inputs; <code class="docutils literal notranslate"><span class="pre">DEV</span></code> is the lighter development setup; <code class="docutils literal notranslate"><span class="pre">RESEARCH</span></code> is the full research
-setup; <code class="docutils literal notranslate"><span class="pre">CALIBRATE</span></code> modes are specialised runs, not the usual first step.</p>
-<p>For tasks 0, 2, 3, 6 and 7, <code class="docutils literal notranslate"><span class="pre">reportOutput.R</span></code> runs automatically when <code class="docutils literal notranslate"><span class="pre">behavior.withRunFolder</span></code> and
-<code class="docutils literal notranslate"><span class="pre">behavior.withReport</span></code> are both <code class="docutils literal notranslate"><span class="pre">true</span></code> in <code class="docutils literal notranslate"><span class="pre">config.json</span></code> (see <a class="reference internal" href="#running-outputs">What the outputs mean</a>).</p>
+setup; <code class="docutils literal notranslate"><span class="pre">CALIBRATE</span></code> modes are specialised runs, not the usual first step.
+For tasks 0, 1, 2, 3 and 6, <code class="docutils literal notranslate"><span class="pre">reportOutput.R</span></code> runs automatically when <code class="docutils literal notranslate"><span class="pre">behavior.withRunFolder</span></code> and <code class="docutils literal notranslate"><span class="pre">behavior.withReport</span></code> are both <code class="docutils literal notranslate"><span class="pre">true</span></code> in <code class="docutils literal notranslate"><span class="pre">config.json</span></code> (see <a class="reference internal" href="#running-outputs">What the outputs mean</a>).</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p>The MAgPIE soft-link (task 7) is covered in <a class="reference internal" href="05_soft_linking.html"><span class="doc">Soft-linking</span></a>; see also <a class="reference internal" href="../model/06_interlinkages.html#magpie-link"><span class="std std-ref">Link with MAgPIE</span></a>.</p>
+<p>The MAgPIE soft-link (task 6) is covered in <a class="reference internal" href="05_soft_linking.html"><span class="doc">Soft-linking</span></a>; see also <a class="reference internal" href="../model/06_interlinkages.html#magpie-link"><span class="std std-ref">Link with MAgPIE</span></a>.</p>
 </div>
 </section>
 <section id="batch-mode">
@@ -431,7 +436,7 @@ setup; <code class="docutils literal notranslate"><span class="pre">CALIBRATE</s
 <p>or click the <strong>RUN BATCH</strong> button in the VS Code Task Runner. The script fails with
 <code class="docutils literal notranslate"><span class="pre">Batch</span> <span class="pre">CSV</span> <span class="pre">not</span> <span class="pre">found:</span> <span class="pre">scenarios.csv</span></code> if the file is missing — batch is always opt-in via that file. Each row
 produces its own <code class="docutils literal notranslate"><span class="pre">runs/&lt;scenario_name&gt;_&lt;timestamp&gt;/</span></code> folder; rows are processed sequentially inside one R process.
-Batch supports only <code class="docutils literal notranslate"><span class="pre">task_id</span></code> 2 and 7; other values are rejected per row. A starter template lives at
+Batch supports only <code class="docutils literal notranslate"><span class="pre">task_id</span></code> 2 and 6; other values are rejected per row. A starter template lives at
 <code class="docutils literal notranslate"><span class="pre">scenarios.template.csv</span></code>; the minimal required columns are <code class="docutils literal notranslate"><span class="pre">scenario_name</span></code> and <code class="docutils literal notranslate"><span class="pre">task_id</span></code>.</p>
 <section id="how-each-row-builds-its-scenario-merge-semantics">
 <h4>How each row builds its scenario (merge semantics)<a class="headerlink" href="#how-each-row-builds-its-scenario-merge-semantics" title="Link to this heading"></a></h4>
@@ -457,13 +462,13 @@ CSV changes.</p></li>
 </div>
 <p>and one CSV row:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>scenario_name,task_id,description,gams_flags.fScenario,soft_link_magpie.existing_prom_run
-C600_landHigh,7,UPTAKE C600 landHigh,600,
+C600_landHigh,6,UPTAKE C600 landHigh,600,
 </pre></div>
 </div>
 <p>the merged scenario <code class="docutils literal notranslate"><span class="pre">start.R</span></code> runs is:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{
   "scenario_name": "C600_landHigh",        // from CSV
-  "task_id":       7,                       // from CSV
+  "task_id":       6,                       // from CSV
   "description":   "UPTAKE C600 landHigh",  // from CSV
   "gams_flags":    { "fScenario": 600 },    // CSV overrides 200 -&gt; 600
   "soft_link_magpie": {
@@ -501,8 +506,8 @@ key for rows where the cell is non-empty.</p></li>
 The current MAgPIE coefficient package covers the 39 research regions only. It works directly in
 task 2 (<code class="docutils literal notranslate"><span class="pre">DevMode=0</span></code>); task 0/1 runs must set <code class="docutils literal notranslate"><span class="pre">fCountries</span></code> to covered regions and must not request
 the development-only aggregates <code class="docutils literal notranslate"><span class="pre">RWO</span></code> or <code class="docutils literal notranslate"><span class="pre">ELL</span></code>.</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">soft_link_magpie.*</span></code></strong> configures the task-7 MAgPIE soft-link. This group is <strong>not</strong> turned into GAMS flags by
-the generic dispatcher; task 7 reads it directly (<code class="docutils literal notranslate"><span class="pre">project</span></code>, <code class="docutils literal notranslate"><span class="pre">existing_prom_run</span></code>, <code class="docutils literal notranslate"><span class="pre">max_iter</span></code>, <code class="docutils literal notranslate"><span class="pre">price_tol</span></code>,
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">soft_link_magpie.*</span></code></strong> configures the task-6 MAgPIE soft-link. This group is <strong>not</strong> turned into GAMS flags by
+the generic dispatcher; task 6 reads it directly (<code class="docutils literal notranslate"><span class="pre">project</span></code>, <code class="docutils literal notranslate"><span class="pre">existing_prom_run</span></code>, <code class="docutils literal notranslate"><span class="pre">max_iter</span></code>, <code class="docutils literal notranslate"><span class="pre">price_tol</span></code>,
 <code class="docutils literal notranslate"><span class="pre">quant_tol</span></code>) and passes <code class="docutils literal notranslate"><span class="pre">--softLinkMAgPIE</span></code> itself. See <a class="reference internal" href="05_soft_linking.html"><span class="doc">Soft-linking</span></a>.</p></li>
 </ul>
 <p>Concrete example — sweep end-year horizon and Transport realization with no R-code changes:</p>
@@ -522,8 +527,8 @@ overlay is merged, so it never leaks into the scenario object.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>scenario_name,start,task_id,description,gams_flags.fScenario
 C200_biolim100,1,2,UPTAKE C200 biolim100,200
 C200_landHigh,1,2,UPTAKE C200 landHigh,200
-C600_biolim100,0,7,UPTAKE C600 biolim100 -- temporarily off,600
-C600_landHigh,1,7,UPTAKE C600 landHigh,600
+C600_biolim100,0,6,UPTAKE C600 biolim100 -- temporarily off,600
+C600_landHigh,1,6,UPTAKE C600 landHigh,600
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Skipping</span> <span class="n">row</span> <span class="mi">3</span> <span class="p">(</span><span class="n">scenario_name</span><span class="o">=</span><span class="n">C600_biolim100</span><span class="p">):</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span>
@@ -534,17 +539,13 @@ C600_landHigh,1,7,UPTAKE C600 landHigh,600
 </section>
 <section id="running-outputs">
 <span id="what-the-outputs-mean"></span><h3>What the outputs mean<a class="headerlink" href="#running-outputs" title="Link to this heading"></a></h3>
-<p>When <code class="docutils literal notranslate"><span class="pre">behavior.withReport:</span> <span class="pre">true</span></code> (and the run-folder workflow is active), the task body automatically calls
-<code class="docutils literal notranslate"><span class="pre">scripts/tasks/reportOutput.R</span></code> after tasks 0, 2, 3, 6 or 7. That script converts the model output into a MIF report,
-typically <code class="docutils literal notranslate"><span class="pre">reporting.mif</span></code>. It may also try to create plots, but PDF generation depends on the local LaTeX/TinyTeX
-setup. <code class="docutils literal notranslate"><span class="pre">outputForProject.mif</span></code> is not part of the default workflow; it is created only when project reporting is
-explicitly enabled.</p>
+<p>Tasks 0, 1, 2, 3 and 6 call <code class="docutils literal notranslate"><span class="pre">scripts/tasks/reportOutput.R</span></code> when <code class="docutils literal notranslate"><span class="pre">behavior.withRunFolder</span></code> and <code class="docutils literal notranslate"><span class="pre">behavior.withReport</span></code> are both <code class="docutils literal notranslate"><span class="pre">true</span></code> in <code class="docutils literal notranslate"><span class="pre">config.json</span></code>. The script converts the model output into a MIF report, typically <code class="docutils literal notranslate"><span class="pre">reporting.mif</span></code>. PDF generation depends on the local LaTeX/TinyTeX setup. Tasks 7 and 8 generate research reports after confirming a calibration path, independently of <code class="docutils literal notranslate"><span class="pre">behavior.withReport</span></code>. <code class="docutils literal notranslate"><span class="pre">outputForProject.mif</span></code> is specific to separately enabled project reporting.</p>
 <p>For a quick success check:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">modelstat.txt</span></code> should show successful model-status lines for the solved years and regions.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">outputData.gdx</span></code> should exist after a normal model run.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">reporting.mif</span></code> only appears when the reporting step actually runs.</p></li>
-<li><p>with <code class="docutils literal notranslate"><span class="pre">behavior.withReport:</span> <span class="pre">false</span></code>, the model can still solve successfully even though no MIF or plots are created.</p></li>
+<li><p>for tasks 0, 1, 2, 3 and 6, setting <code class="docutils literal notranslate"><span class="pre">behavior.withReport</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code> skips automatic reporting.</p></li>
 </ul>
 <p>Do not confuse “the model solved” with “the full reporting workflow also ran”.</p>
 </section>

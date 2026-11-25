@@ -262,18 +262,13 @@
 <h1><span class="section-number">6. </span>Model interlinkages<a class="headerlink" href="#model-interlinkages" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><strong>In brief</strong> — This chapter describes how OPEN-PROM is linked to companion models: openTEPES (power-sector
-detail), METEOR (spatial climate emulation), OMNIA-ENGAGE (circular economy), FTT:Heat (residential heating) and
-MAgPIE (land use and bioenergy). Of these, only the MAgPIE soft-link is operational in the repository today (task
-7); the others are external links that are planned or under development within DIAMOND.</p>
+<p><strong>In brief</strong> — This chapter describes OPEN-PROM’s links to openTEPES (power-sector detail), METEOR (spatial climate emulation), OMNIA-ENGAGE (circular economy), FTT:Heat (residential heating) and MAgPIE (land use and bioenergy). The MAgPIE soft-link is operational in the repository as Task 6. The other links are planned or under development within DIAMOND.</p>
 </div>
 <section id="opentepes">
 <span id="link-with-opentepes"></span><h2><span class="section-number">6.1. </span>Link with openTEPES<a class="headerlink" href="#opentepes" title="Link to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><strong>Status — external / planned.</strong> The openTEPES link is described here as an intended DIAMOND development, not as a
-feature of the current OPEN-PROM code. There is no operational openTEPES step in the model’s task dispatch
-(<code class="docutils literal notranslate"><span class="pre">start.R</span></code>, tasks 0–7), and the soft-link itself is scheduled for completion in July 2026.</p>
+<p><strong>Status — external / planned.</strong> The openTEPES link is an intended DIAMOND development. The model harness (<code class="docutils literal notranslate"><span class="pre">start.R</span></code>, tasks 0–8) has no operational openTEPES step. The documented completion target is July 2026.</p>
 </div>
 <p>During the DIAMOND project, a link between OPEN-PROM and openTEPES<a class="footnote-reference brackets" href="#opentepes-fn" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> is being developed.</p>
 <p>The openTEPES model presents a decision-support system for defining the integrated generation, storage and
@@ -518,7 +513,7 @@ distributional analyses in future work.</p>
 <span id="link-with-magpie"></span><h2><span class="section-number">6.5. </span>Link with MAgPIE<a class="headerlink" href="#magpie-link" title="Link to this heading"></a></h2>
 <p>OPEN-PROM is soft-linked, during the DIAMOND project, with MAgPIE to connect the evolution of the energy system with
 land-use, bioenergy and AFOLU emission dynamics. This is the one interlinkage that runs as an operational workflow
-in the repository today: it is implemented as task 7 of the model harness. The link is designed as a sequential
+in the repository today: it is implemented as task 6 of the model harness. The link is designed as a sequential
 exchange between two independently solved models rather than as a single integrated optimisation problem. OPEN-PROM
 provides an energy-system pathway, including carbon-price signals and demand for advanced bioenergy, while MAgPIE
 evaluates the associated land-use implications and returns land-system information that is relevant for the
