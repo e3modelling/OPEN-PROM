@@ -112,15 +112,3 @@ Q02ConsFuelNonEnergy(allCy,INDDOM,IND_SERVS,EF,YTIME)$(TIME(YTIME) and runCy(all
     V02ConsFuelNonEnergy(allCy,INDDOM,IND_SERVS,EF,YTIME)
         =E=
     0;
-
-Q02InputMaterials(allCy,IND_SERVS,MATERIALS,YTIME)$(TIME(YTIME) and runCy(allCy))..
-    V02InputMaterials(allCy,IND_SERVS,MATERIALS,YTIME)
-        =E=
-    SUM(INDITECH,
-      i02ratioMaterialCons(IND_SERVS,INDITECH,MATERIALS) *
-      V02Capacity(allCy,"IS",IND_SERVS,INDITECH,YTIME)
-    ) +
-    SUM((IS_TRANSF,IS_TRANSF_TECH)$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH),
-      i02ratioMaterialCons(IND_SERVS,IS_TRANSF_TECH,MATERIALS) *
-      V03Cap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
-    );

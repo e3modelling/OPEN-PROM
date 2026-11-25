@@ -216,7 +216,7 @@ SUM(runCy2,i02OwnEnergyTransf(runCy2,IS_TRANSF,EFS,YTIME)) /
 SUM(runCy2,i03DataCap(runCy2,IS_TRANSF,IS_TRANSF_TECH,YTIME));
 
 * Add extra consumption for CCS 
-i02ratioTransfInputIS(runCy,"DRI","CONVDRICCS",EFS,YTIME) = i02ratioTransfInputIS(runCy,"DRI","CONVDRI",EFS,YTIME) + 0.00573$sameas("ELC",EFS);
+i02ratioOwnEnergyTransfIS(runCy,"DRI","CONVDRICCS",EFS,YTIME) = i02ratioOwnEnergyTransfIS(runCy,"DRI","CONVDRI",EFS,YTIME) + 0.00573$sameas("ELC",EFS);
 
 * Efficiency improvements
 i02ratioOwnEnergyTransfIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EFS,YTIME)$(ord(YTIME) < 42 and not DATAY(YTIME)) = 

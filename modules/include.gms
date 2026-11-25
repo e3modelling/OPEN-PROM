@@ -13,5 +13,6 @@ $include "./modules/09_Heat/module.gms";
 $include "./modules/10_Curves/module.gms";
 $include "./modules/11_Economy/module.gms";
 $include "./modules/12_Agriculture/module.gms";
+$include "./modules/14_Commodities/module.gms";
 *######################## R SECTION END (MODULES) ##############################
 $offrecurse

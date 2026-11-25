@@ -22,7 +22,6 @@ Q02ConsFuel(allCy,INDDOM,IND_SERVS,EF,YTIME)
 Q02CostCapital(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
 Q02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
 Q02ConsFuelNonEnergy(allCy,INDDOM,IND_SERVS,EF,YTIME)
-Q02InputMaterials(allCy,IND_SERVS,MATERIALS,YTIME)
 ;
 
 Variables
@@ -39,5 +38,4 @@ V02CostCapital(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)      "Capital cost of tech
 V02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)            "Own energy consumption of energy transfer processes in the industry sector (Mtoe)"
 V02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
 V02ConsFuelNonEnergy(allCy,INDDOM,IND_SERVS,EF,YTIME)
-V02InputMaterials(allCy,IND_SERVS,MATERIALS,YTIME)
 ;
