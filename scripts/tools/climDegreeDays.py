@@ -21,122 +21,26 @@ days only): without --hdd-ind, HDD = 1 for all regions and years.
 
 import argparse
 import os
-import re
 import sys
-import urllib.request
 import warnings
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
-import xarray as xr  # noqa: E402
 import matplotlib  # noqa: E402
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from rimeRegions import PopWeights, Regions, natural_earth, regional_by_year  # noqa: E402
 
 CDD_IND = "sdd_c_24p0"      # RIME cooling degree days, 24 °C base
 FLOOR = {"CDD": 50.0, "HDD": 100.0}  # °C·days: smallest base used in the ratio
 CAP = 3.0                   # upper bound of the ratio
 BASE_YEAR = 2023            # ratio = 1 (last historical year of OPEN-PROM)
 END_YEAR = 2100
-SUBCELLS = 10               # sub-sampling per cell side for the region fractions
-NE_URL = "https://naciscdn.org/naturalearth/50m/cultural/ne_50m_admin_0_countries.zip"
-
-
-# =============================================================== regions
-def read_mapping(path):
-    """Country (ISO3) -> OPEN-PROM region, from an mrprom region mapping (either column convention)."""
-    m = pd.read_csv(path, sep=None, engine="python")
-    iso = next((c for c in ("CountryCode", "ISO3.Code") if c in m.columns), None)
-    reg = next((c for c in ("RegionCode", "Region.Code") if c in m.columns), None)
-    if not (iso and reg):
-        sys.exit(f"[error] {path}: need CountryCode/RegionCode or ISO3.Code/Region.Code columns")
-    return dict(zip(m[iso], m[reg]))
-
-
-def natural_earth(path_or_cache_dir):
-    """Path of the Natural Earth 1:50m countries zip; downloaded once into the cache folder if needed."""
-    if os.path.isfile(path_or_cache_dir):
-        return path_or_cache_dir
-    os.makedirs(path_or_cache_dir, exist_ok=True)
-    path = os.path.join(path_or_cache_dir, os.path.basename(NE_URL))
-    if not os.path.exists(path):
-        print("[info] downloading Natural Earth countries")
-        urllib.request.urlretrieve(NE_URL, path + ".part")
-        os.replace(path + ".part", path)
-    return path
-
-
-def region_fractions(lon, lat, iso2reg, ne_file, subcells=SUBCELLS):
-    """Fraction of each grid cell in each OPEN-PROM region: DataArray (region, lat, lon).
-
-    Each cell is split into subcells x subcells points, which are masked with
-    regionmask's 2D mask and counted, so small countries (MLT, LUX) keep their
-    share of a cell. overlap=False: country polygons do not overlap, and it avoids
-    regionmask's 3D bit mask, which fails for more than 32 regions.
-    """
-    import geopandas as gpd
-    import regionmask
-    ne = gpd.read_file(ne_file)
-    ne["reg"] = ne["ADM0_A3"].map(iso2reg)              # ISO_A3 is -99 for e.g. FRA, NOR
-    regs = ne.dropna(subset=["reg"]).dissolve(by="reg").reset_index()
-    rm = regionmask.from_geopandas(regs, names="reg", abbrevs="reg", name="OPEN-PROM", overlap=False)
-    lo, la, k = np.asarray(lon), np.asarray(lat), subcells
-    off = (np.arange(k) + 0.5) / k - 0.5
-    fine = rm.mask((lo[:, None] + off * (lo[1] - lo[0])).ravel(),
-                   (la[:, None] + off * (la[1] - la[0])).ravel()).values.reshape(len(la), k, len(lo), k)
-    frac = np.stack([(fine == n).mean(axis=(1, 3), dtype=np.float32) for n in rm.numbers])
-    return xr.DataArray(frac, dims=("region", "lat", "lon"),
-                        coords={"region": list(rm.abbrevs), "lat": la, "lon": lo})
-
-
-class PopWeights:
-    """SSP2 gridded population on the map grid for a given year (nearest available); else cos(lat) area."""
-
-    def __init__(self, path, like, var=None):
-        self.like, self.pop = like, None
-        if not path:
-            print("[warn] no population grid given -> area weights")
-            self.label = "area-weighted"
-            return
-        ds = xr.open_dataset(path, decode_times=False)
-        dvars = [v for v in ds.data_vars if {"lat", "lon"} <= set(ds[v].dims)]
-        var = var or (dvars[0] if len(dvars) == 1 else next(iter([v for v in dvars if "pop" in v.lower()]), None))
-        if var is None:
-            sys.exit(f"[error] cannot pick the population variable in {path}: {dvars}")
-        tname = next(d for d in ds[var].dims if d not in ("lat", "lon"))
-        units = ds[tname].attrs.get("units", "")
-        start = int(re.search(r"(\d{4})", units).group(1))
-        vals = ds[tname].values
-        self.years = (start + vals if units.startswith("years") else start + np.floor(vals / 365.25)).astype(int)
-        self.pop, self.tname = ds[var], tname
-        self.label = "SSP2 population-weighted (population of each year)"
-
-    def __call__(self, year):
-        if self.pop is None:
-            return np.cos(np.deg2rad(self.like.lat)) * xr.ones_like(self.like.lon)
-        k = int(np.argmin(np.abs(self.years - year)))
-        return self.pop.isel({self.tname: k}).interp_like(self.like, method="nearest").fillna(0)
-
-
-def regional_means(da, frac, weights):
-    """Weighted mean of da (lat, lon) per region; NaN cells excluded."""
-    w = (frac * weights).where(da.notnull(), 0)
-    num = (w * da.fillna(0)).sum(["lat", "lon"])
-    den = w.sum(["lat", "lon"])
-    return (num / den.where(den > 0)).to_series()
-
-
-def regional_by_year(maps_file, ind, frac, popw):
-    """Population-weighted degree days per region (rows) and RIME year with data (columns)."""
-    da = xr.open_dataset(maps_file)[ind]
-    cols = {int(y): regional_means(da.sel(year=y), frac, popw(int(y)))
-            for y in da.year.values if bool(da.sel(year=y).notnull().any())}
-    if not cols:
-        sys.exit(f"[error] {maps_file}: no year with data")
-    return pd.DataFrame(cols), da.attrs
 
 
 # =============================================================== time and ratio
@@ -225,15 +129,15 @@ def main(argv=None):
     p.add_argument("--end-year", type=int, default=END_YEAR)
     a = p.parse_args(argv)
 
-    iso2reg = read_mapping(a.regionmapping)
-    regions = sorted(set(iso2reg.values()))
+    regions = Regions(a.regionmapping, natural_earth(a.natural_earth))
     maps = {lab: os.path.join(a.maps_dir, f"rime_maps_{ind}.nc") for lab, ind in (("CDD", a.cdd_ind), ("HDD", a.hdd_ind)) if ind}
     if not os.path.exists(maps["CDD"]):
         sys.exit(f"[error] no CDD maps: {maps['CDD']} (run rimeMaps.py first)")
-    like = xr.open_dataset(maps["CDD"])[a.cdd_ind].isel(year=0)
-    frac = region_fractions(like.lon, like.lat, iso2reg, natural_earth(a.natural_earth))
-    popw = PopWeights(a.pop_grid, like)
-    print(f"[info] {len(regions)} OPEN-PROM regions, {popw.label}")
+    popw = PopWeights(a.pop_grid)
+    if a.pop_grid is None:
+        print("[warn] no population grid given -> area weights")
+    print(f"[info] {len(regions.names)} OPEN-PROM regions, {popw.label}")
+    regions_list = regions.names
 
     years = list(range(a.base_year, a.end_year + 1))
     ratios, absolute, notes, scen = {}, {}, [], ""
@@ -243,10 +147,10 @@ def main(argv=None):
             print(f"[WARNING] No HDD maps{' (' + maps[label] + ')' if label in maps else ''}: "
                   "HDD = 1 for all regions and years (no heating feedback).")
             print("[WARNING] " + "=" * 68)
-            ratios[label] = pd.DataFrame(1.0, index=regions, columns=years)
+            ratios[label] = pd.DataFrame(1.0, index=regions_list, columns=years)
             notes.append("HDD: no maps -> 1 (neutral)")
             continue
-        by_year, attrs = regional_by_year(maps[label], a.cdd_ind if label == "CDD" else a.hdd_ind, frac, popw)
+        by_year, attrs = regional_by_year(maps[label], a.cdd_ind if label == "CDD" else a.hdd_ind, regions, popw)
         scen = attrs.get("scenario", scen)
         last = int(by_year.columns[by_year.notna().any()].max())
         print(f"[info] {label}: RIME years {by_year.columns.min()}-{last}"
@@ -256,12 +160,12 @@ def main(argv=None):
         notes.append(f"{label}: {os.path.basename(maps[label])}, RIME years to {last}, base floor {floor:g} °C·days")
 
     for label, r in ratios.items():
-        missing = sorted(set(regions) - set(r.dropna().index))
+        missing = sorted(set(regions_list) - set(r.dropna().index))
         if missing:
-            sys.exit(f"[error] {label}: no values for {len(missing)} of {len(regions)} OPEN-PROM regions: "
+            sys.exit(f"[error] {label}: no values for {len(missing)} of {len(regions_list)} OPEN-PROM regions: "
                      f"{', '.join(missing)} (check the region mapping / Natural Earth codes)")
 
-    write_gams_csv(a.out, ratios, regions, [
+    write_gams_csv(a.out, ratios, regions_list, [
         f"iClimDegDays.csv for OPEN-PROM (i02ClimDD, climFeedback){' - ' + scen if scen else ''}",
         f"Ratio to {a.base_year}: min(cap, 1 + (DD(t) - DD({a.base_year})) / max(DD({a.base_year}), floor)), cap {a.cap:g}",
         f"RIME maps per OPEN-PROM region, {popw.label}; " + "; ".join(notes),

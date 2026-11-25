@@ -40,7 +40,11 @@ YEARS = list(range(2020, 2101, 5))                 # RIME years
 DRAWDOWN_MAX, TEMP_MIN, TEMP_MAX = 0.15, 1.2, 3.5  # RIME defaults (map_transform_gwl)
 GSAT_PATTERN = r"Surface Temperature \(GSAT\).*50\.0th Percentile"
 ZENODO_ZIP = "https://zenodo.org/records/14524342/files/{name}?download=1"
-ARCHIVE_OF = {"sdd_c": "energy.zip"}               # indicator prefix -> Zenodo archive
+# Indicator -> Zenodo archive of the gridded maps (first matching prefix wins)
+ARCHIVE_OF = {"sdd_c": "energy.zip", "hwd_": "temperature.zip", "hw_": "temperature.zip", "tr20": "temperature.zip",
+              "cdd": "precipitation.zip", "pr_": "precipitation.zip", "sdii": "precipitation.zip",
+              "dri": "hydrology.zip", "iavar": "hydrology.zip", "seas": "hydrology.zip", "wsi": "hydrology.zip",
+              "lc": "land.zip", "pm2p5": "air_pollution.zip"}
 
 
 def read_gsat(xlsx):

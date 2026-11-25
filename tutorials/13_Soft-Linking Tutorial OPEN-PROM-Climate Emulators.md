@@ -263,6 +263,6 @@ MAGICC_WORKER_ROOT_DIR=/mnt/tmp/workers
    * Save outputs to `runs/<runFolder>/EmissionsOutput-<model>/`.
    * Plot median GSAT against the climate-assessment reference output (`Global_Mean_Temperature.png`).
    * Run RIME on the GSAT and convert the result into degree-day ratios (`iClimDegDays.csv`) for the buildings
-     climate feedback. See tutorial 16 for the RIME installation and the method.
+     climate feedback. See tutorial 16 for the RIME installation, the impact indicators and the method.
 5. `--steps` (also asked by the task): `all` (default), `emulator` (MAGICC only) or `rime` (rerun RIME and the
    degree days on an existing MAGICC output, without rerunning MAGICC).

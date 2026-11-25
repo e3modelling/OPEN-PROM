@@ -26,6 +26,11 @@
 # run with the RIME environment (paths.rime_path, installed by scripts/tools/installRimeWSL.sh).
 # Settings: config.json -> "climate_feedback". --steps rime reruns RIME on an existing MAGICC output.
 #
+# Climate impact reporting (--steps impacts): RIME maps for any Climate Solutions Explorer
+# indicators (--indicators tr20,wsi,... or all), averaged per OPEN-PROM region by
+# scripts/tools/rimeImpacts.py -> <output>/rime_impacts.mif/.csv; --tables true adds country
+# results via RIME's table route -> rime_impacts_countries.mif/.csv. Settings: "climate_impacts".
+#
 # R packages: optparse, jsonlite, readxl, dplyr, ggplot2, magclass, quitte
 
 suppressPackageStartupMessages({
@@ -147,21 +152,30 @@ findRegionMapping <- function(fb) {
   path
 }
 
-runRime <- function(cfg, gsatFile, outputDir) {
-  fb <- cfg$climate_feedback %||% list()
+# RIME environment and data cache (shared by the feedback and the impacts steps).
+rimeEnv <- function(cfg) {
   rimePath <- normalizePath(cfg$paths$rime_path %||% file.path("..", "rime"), winslash = "/", mustWork = FALSE)
   if (!dir.exists(rimePath)) stop("RIME not found at ", rimePath, ". Run scripts/tools/installRimeWSL.sh (tutorial 16).")
   dataDir <- normalizePath(cfg$paths$rime_data_path %||% file.path("..", "rime-data"), winslash = "/", mustWork = FALSE)
   dir.create(dataDir, recursive = TRUE, showWarnings = FALSE)
-  python <- paste0(toLinuxPath(rimePath), "/.venv/bin/python")
-  indicators <- c(fb$cdd_indicator %||% "sdd_c_24p0", fb$hdd_indicator)
-  ssp <- fb$ssp %||% "SSP2"
-  root <- getwd()
+  list(python = paste0(toLinuxPath(rimePath), "/.venv/bin/python"), dataDir = dataDir, root = getwd())
+}
 
+# RIME maps for a set of indicators: median GSAT -> rime_maps_<indicator>.nc
+runRimeMaps <- function(env, gsatFile, outputDir, indicators, ssp) {
   cat("RIME maps (", paste(indicators, collapse = ", "), ", ", ssp, ") in WSL...\n", sep = "")
-  runPython(root, python, toLinuxPath("scripts/tools/rimeMaps.py"), c(
+  runPython(env$root, env$python, toLinuxPath("scripts/tools/rimeMaps.py"), c(
     "--gsat", toLinuxPath(gsatFile), "--indicators", indicators, "--ssp", ssp,
-    "--impact-dir", toLinuxPath(dataDir), "--out-dir", toLinuxPath(outputDir)), "RIME map step")
+    "--impact-dir", toLinuxPath(env$dataDir), "--out-dir", toLinuxPath(outputDir)), "RIME map step")
+}
+
+# Feedback loop: degree-day maps -> iClimDegDays.csv
+runRime <- function(cfg, gsatFile, outputDir) {
+  fb <- cfg$climate_feedback %||% list()
+  env <- rimeEnv(cfg)
+  python <- env$python; root <- env$root; dataDir <- env$dataDir
+  indicators <- c(fb$cdd_indicator %||% "sdd_c_24p0", fb$hdd_indicator)
+  runRimeMaps(env, gsatFile, outputDir, indicators, fb$ssp %||% "SSP2")
 
   args <- c("--maps-dir", toLinuxPath(outputDir),
             "--regionmapping", toLinuxPath(findRegionMapping(fb)),
@@ -177,6 +191,31 @@ runRime <- function(cfg, gsatFile, outputDir) {
   runPython(root, python, toLinuxPath("scripts/tools/climDegreeDays.py"), args, "Degree-day step")
   cat("To use it: copy", file.path(outputDir, "iClimDegDays.csv"),
       "to data/ and run OPEN-PROM with --climFeedback=on\n")
+}
+
+# Impact reporting: RIME maps for the chosen indicators -> rime_impacts.mif/.csv per OPEN-PROM region
+# (+ rime_impacts_countries.mif/.csv with --tables). Settings: config.json -> "climate_impacts".
+runImpacts <- function(cfg, gsatFile, outputDir, indicators, tables) {
+  ci <- cfg$climate_impacts %||% list()
+  fb <- cfg$climate_feedback %||% list()
+  env <- rimeEnv(cfg)
+  ssp <- ci$ssp %||% fb$ssp %||% "SSP2"
+  runRimeMaps(env, gsatFile, outputDir, indicators, ssp)
+
+  args <- c("--maps-dir", toLinuxPath(outputDir), "--indicators", indicators,
+            "--regionmapping", toLinuxPath(findRegionMapping(fb)),
+            "--natural-earth", toLinuxPath(env$dataDir),
+            "--weighting", ci$weighting %||% "auto", "--ssp", ssp,
+            "--out-dir", toLinuxPath(outputDir))
+  if (!is.null(fb$pop_grid)) args <- c(args, "--pop-grid", toLinuxPath(fb$pop_grid))
+  if (tables) {
+    args <- c(args, "--tables", "--gsat", toLinuxPath(gsatFile),
+              "--table-dir", toLinuxPath(file.path(env$dataDir, "tables")))
+  }
+  cat("Impacts per OPEN-PROM region", if (tables) "and per country", "...\n")
+  runPython(env$root, env$python, toLinuxPath("scripts/tools/rimeImpacts.py"), args, "Impact step")
+  cat("Impacts written to", file.path(outputDir, "rime_impacts.mif"),
+      if (tables) "and rime_impacts_countries.mif" else "", "\n")
 }
 
 # ------------------- Plot median GSAT vs reference ----------------------
@@ -235,10 +274,23 @@ opt <- parse_args(OptionParser(option_list = list(
   make_option("--output", type = "character", default = NULL,
               help = "Custom output directory"),
   make_option("--steps", type = "character", default = "all",
-              help = paste("all = MAGICC, then RIME degree days; emulator = MAGICC only;",
-                           "rime = RIME degree days from an existing MAGICC output"))
+              help = paste("all = MAGICC, then RIME degree days (feedback); emulator = MAGICC only;",
+                           "rime = RIME degree days from an existing MAGICC output;",
+                           "impacts = RIME impacts for --indicators (runs MAGICC first if no output exists)")),
+  make_option("--indicators", type = "character", default = NULL,
+              help = "impacts: comma-separated RIME indicators, or 'all' (default: config.json climate_impacts.indicators)"),
+  make_option("--tables", type = "character", default = NULL,
+              help = "impacts: also country tables, true/false (default: config.json climate_impacts.tables)")
 )))
-if (!opt$steps %in% c("all", "emulator", "rime")) stop("--steps must be all, emulator or rime")
+if (!opt$steps %in% c("all", "emulator", "rime", "impacts")) stop("--steps must be all, emulator, rime or impacts")
+
+# All RIME-ready indicators of the Climate Solutions Explorer data (gridded maps, SSP2)
+ALL_INDICATORS <- c("sdd_c", "sdd_c_18p3", "sdd_c_20p0", "sdd_c_24p0",
+                    paste0("hw_", c("95", "97", "99"), rep(c("_3", "_5", "_7", "_10"), each = 3)),
+                    paste0("hwd_", c("95", "97", "99"), rep(c("_3", "_5", "_7", "_10"), each = 3)),
+                    "tr20", "cdd", "pr_r10", "pr_r20", "pr_r95p", "pr_r99p", "sdii",
+                    "dri", "dri_qtot", "iavar", "iavar_qtot", "seas", "seas_qtot", "wsi",
+                    "lc", "pm2p5_2030", "pm2p5_2050")
 
 cfg <- if (file.exists("config.json")) fromJSON("config.json") else list()
 caDir <- findClimateAssessment(cfg)
@@ -262,7 +314,7 @@ cat("Model:    ", opt$model, "\nEmissions:", emissions, "\nOutput:   ", output,
 
 outputFile <- file.path(output, paste0(tools::file_path_sans_ext(basename(emissions)), "_alloutput.xlsx"))
 
-if (opt$steps != "rime") {
+if (opt$steps %in% c("all", "emulator") || (opt$steps == "impacts" && !file.exists(outputFile))) {
   runAssessment(opt$model, caDir, emissions, output)
   if (!file.exists(outputFile)) stop("Workflow finished but output is missing: ", outputFile)
   plotTemperature(outputFile, getModelConfig(opt$model, caDir)$expectedFile, output)
@@ -271,4 +323,16 @@ if (opt$steps != "rime") {
 if (opt$steps %in% c("all", "rime")) {
   if (!file.exists(outputFile)) stop("No emulator output to read GSAT from: ", outputFile, ". Run --steps emulator first.")
   runRime(cfg, outputFile, output)
+}
+
+if (opt$steps == "impacts") {
+  ci <- cfg$climate_impacts %||% list()
+  ind <- if (is.null(opt$indicators)) unlist(ci$indicators) else trimws(strsplit(opt$indicators, ",")[[1]])
+  if (!length(ind)) stop("No indicators: pass --indicators or set climate_impacts.indicators in config.json.")
+  if (identical(ind, "all")) ind <- ALL_INDICATORS
+  unknown <- setdiff(ind, ALL_INDICATORS)
+  if (length(unknown)) stop("Unknown indicator(s): ", paste(unknown, collapse = ", "),
+                            ". Available: ", paste(ALL_INDICATORS, collapse = ", "))
+  tables <- if (is.null(opt$tables)) isTRUE(ci$tables) else tolower(opt$tables) %in% c("true", "1", "yes")
+  runImpacts(cfg, outputFile, output, ind, tables)
 }
