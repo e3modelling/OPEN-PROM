@@ -332,6 +332,7 @@ $setGlobal Heat             heat
 $setGlobal Curves           off
 $setGlobal Economy          economy
 $setGlobal Agriculture      agriculture
+$setGlobal Commodities      commodities
 *' To disable learning curves module, use: $setGlobal Curves off
 
 ** CORE MODEL FILES **
