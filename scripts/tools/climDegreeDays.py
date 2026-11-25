@@ -12,7 +12,7 @@ degree-day ratios read by OPEN-PROM (i02ClimDD, switch --climFeedback=on):
      held before it, the last valid value held after it (overshoot runs are
      emulated only until RIME's drawdown limit, see rimeMaps.py);
   3. ratio to the base year with a floored base and a cap (see degree_day_ratio);
-  4. iClimDegDays.csv (rows CDD.<REG> / HDD.<REG>, one column per year), plus
+  4. iClimDegDays.csv (header dummy,dummy,<years>; rows CDD,<REG> / HDD,<REG>), plus
      iClimDegDays_absolute.csv and iClimDegDays_diagnostics.png for reporting.
 
 No HDD maps exist yet (the Climate Solutions Explorer data have cooling degree
@@ -172,14 +172,15 @@ def degree_day_ratio(dd, base_year, floor, cap, label):
 
 # =============================================================== outputs
 def write_gams_csv(path, ratios, regions, provenance):
-    """GAMS $ondelim table: '*' comments, header ',<years>', rows 'HDD.REG' / 'CDD.REG'."""
+    """GAMS $ondelim table: '*' comments, header 'dummy,dummy,<years>', rows 'HDD,REG,...' / 'CDD,REG,...'."""
     years = ratios["CDD"].columns
     with open(path, "w", encoding="utf-8", newline="\n") as fh:
         fh.writelines(f"* {line}\n" for line in provenance)
-        fh.write("," + ",".join(str(y) for y in years) + "\n")
+        # OPEN-PROM/mrprom table layout: one "dummy" header field and one label column per row dimension
+        fh.write("dummy,dummy," + ",".join(str(y) for y in years) + "\n")
         for label in ("HDD", "CDD"):
             for reg in regions:
-                fh.write(f"{label}.{reg}," + ",".join(f"{v:.5g}" for v in ratios[label].loc[reg, years]) + "\n")
+                fh.write(f"{label},{reg}," + ",".join(f"{v:.5g}" for v in ratios[label].loc[reg, years]) + "\n")
 
 
 def diagnostic_plot(path, ratios, title, cap, n_label=6):
