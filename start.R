@@ -7,7 +7,7 @@
 #   Batch   :  Rscript start.R <path-to-csv>          (e.g. scenarios.csv)
 #              Reads the CSV at the given path. Each row defines one scenario
 #              by overriding (via deep merge with dotted column names) the
-#              config.json:scenario block. task_id is restricted to {2, 7} in
+#              config.json:scenario block. task_id is restricted to {2, 6} in
 #              batch mode. The VS Code "RUN BATCH" button passes "scenarios.csv".
 #              Optional `start` column gates each row: 1 = run, 0 = skip,
 #              anything else (incl. NA) = abort with row diagnostics. If the
@@ -179,6 +179,8 @@ nestDottedKeys <- function(flat) {
 # ---- runScenario(): set env vars + dispatch to the right task body --------
 runScenario <- function(scn) {
   if (is.null(scn$task_id)) stop("task_id is missing in the scenario.")
+  task_id <- as.character(scn$task_id)
+  calibrating_carbon_price <- task_id %in% c("7", "8")
 
   land_use_extra <- ""
   if (length(scn$gams_flags)) {
@@ -189,8 +191,9 @@ runScenario <- function(scn) {
     extra <- ""
   }
   # Land-use emulator config group -> GAMS flags (the soft_link_magpie group is
-  # consumed by task7, which passes --softLinkMAgPIE itself).
-  lue <- scn$land_use_emulator
+  # consumed by task6, which passes --softLinkMAgPIE itself).
+  # Tasks 7 and 8 build their own emulator flags; skip this unused block.
+  lue <- if (calibrating_carbon_price) NULL else scn$land_use_emulator
   if (length(lue)) {
     emulator_source <- lue$source %||% "magpie"
     allowed_sources <- c("legacy", "globiom", "magpie")
@@ -201,7 +204,7 @@ runScenario <- function(scn) {
     }
 
     # Every non-legacy source requires a matching coefficient-table scenario.
-    # This also applies to task 7: its round-0 solve explicitly runs with
+    # This also applies to task 6: its round-0 solve explicitly runs with
     # softLinkMAgPIE=off before the live coupling iterations start.
     if (emulator_source != "legacy") {
       carbon_price_scenario <- lue$carbon_price_scenario
@@ -227,10 +230,12 @@ runScenario <- function(scn) {
   Sys.setenv(OPENPROM_SCENARIO             = toJSON(scn, auto_unbox = TRUE))
   Sys.setenv(OPENPROM_SCENARIO_DESCRIPTION = scn$description %||% "")
 
-  switch(as.character(scn$task_id),
+  if (calibrating_carbon_price) source(file.path("scripts", "tasks", "carbonPriceCalibrationCommon.R"))
+  switch(task_id,
          "0" = runTask0(), "1" = runTask1(), "2" = runTask2(),
          "3" = runTask3(), "4" = runTask4(), "5" = runTask5(),
-         "6" = runTask6(), "7" = runTask7(),
+         "6" = runTask6(), "7" = runTask7(config, gams, saveMetadata, args),
+         "8" = runTask8(config, gams, saveMetadata, args),
          stop("Unknown task_id: ", scn$task_id))
 
   message(sprintf("[%s] task_id=%d done",
@@ -252,7 +257,7 @@ if (!batch_mode) {
       csv_path
     ))
   }
-  ALLOWED_TASK_IDS <- c(2L, 7L)
+  ALLOWED_TASK_IDS <- c(2L, 6L)
 
   csv <- read.csv(csv_path, stringsAsFactors = FALSE, na.strings = c("", "NA"),
                   check.names = FALSE)

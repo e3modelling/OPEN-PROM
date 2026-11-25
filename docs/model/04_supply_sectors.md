@@ -30,7 +30,7 @@ Several supply-side features described below are governed by global switches and
   - Set `landUseEmulator` to `globiom`/`magpie`, or `legacy` to switch the emulator off.
 * - Iterative MAgPIE soft-link
   - **Off** — biomass prices and land emissions are not iterated with the external MAgPIE model (`softLinkMAgPIE off`).
-  - Run the task-7 soft-link with `softLinkMAgPIE=on`, which then overrides the emulator.
+  - Run the task-6 soft-link with `softLinkMAgPIE=on`, which then overrides the emulator.
 :::
 
 (power-supply)=
@@ -121,7 +121,7 @@ A specific and more detailed treatment is applied to biomass, reflecting its rol
   CH₄/N₂O. The MAgPIE files are `iBmswasBioPriceH12_magpie.csv`, `iBmswasLandEmisCoef_magpie.csv`, and
   `iBmswasAgriEmisCoef_magpie.csv`. This route evaluates the fitted response inside one OPEN-PROM solve; the
   default source is `magpie` with the `Npi_Default` coefficient row.
-- **Full iterative soft-link** (`softLinkMAgPIE = on`). The biomass price is **not** an in-GAMS supply curve: a full MAgPIE run writes `iPrices_magpie.csv`, which OPEN-PROM reads to fix biomass prices for the next iteration. The two models are iterated to convergence (task 7). When this switch is on it overrides the emulator.
+- **Full iterative soft-link** (`softLinkMAgPIE = on`). The biomass price is **not** an in-GAMS supply curve: a full MAgPIE run writes `iPrices_magpie.csv`, which OPEN-PROM reads to fix biomass prices for the next iteration. The two models are iterated to convergence (task 6). When this switch is on it overrides the emulator.
 
 In either case biomass becomes an explicitly constrained resource that competes across alternative uses, including fuel production and carbon-removal pathways such as bioenergy with carbon capture and storage (BECCS).
 

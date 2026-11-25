@@ -10,7 +10,7 @@ Two stateless single-direction R functions in `postprom/R/couplePromWithMagpie.R
 * `couplePromToMagpie()` — exports OPEN-PROM carbon price + bioenergy demand to a REMIND-style `.mif` that MAgPIE consumes
 * `coupleMagpieToProm()` — reads MAgPIE's `report.mif` and writes `iPrices_magpie.csv` (biomass price for the next OPEN-PROM round) and `iEmissions_magpie.mif` (AFOLU emissions, 200 variables, IAMC mif format)
 
-The iteration loop, checkpointing, convergence judgment and resume logic live in `scripts/tasks/task7SoftLinkMagpie.R` (orchestrated by `task_id == 7` in `start.R`). The two coupler functions stay stateless; cross-round logic is entirely in task 7.
+The iteration loop, checkpointing, convergence judgment and resume logic live in `scripts/tasks/task6SoftLinkMagpie.R` (orchestrated by `task_id == 6` in `start.R`). The two coupler functions stay stateless; cross-round logic is entirely in task 6.
 
 ---
 
@@ -102,7 +102,7 @@ What it does (two output channels):
 ## 3. The iterative workflow
 
 ```bash
-Rscript start.R task_id=7
+Rscript start.R task_id=6
 ```
 
 ### 3.1 Round model
@@ -166,7 +166,7 @@ The state file holds per-round `phase`, captured h12 matrices, computed deltas, 
 
 ### 3.4 Pre-flight checks
 
-These run at the top of `runTask7()` and stop with a clear message before any expensive step:
+These run at the top of `runTask6()` and stop with a clear message before any expensive step:
 
 * **Required fields**: `paths.magpie_path`, `scenario.soft_link_magpie.project`, `scenario.scenario_name`, `scenario.soft_link_magpie.max_iter ≥ 1`
 * **Filesystem**: `magpie_path/`, `magpie_path/e3m_projects/<project>/`, `magpie_path/e3m_projects/<project>/scenarios.csv` all exist
@@ -177,7 +177,7 @@ These run at the top of `runTask7()` and stop with a clear message before any ex
 
 ## 4. Configuration
 
-All task 7 settings live under `config.json:scenario.soft_link_magpie` (or, in batch mode, as `soft_link_magpie.*` columns in `scenarios.csv`):
+All task 6 settings live under `config.json:scenario.soft_link_magpie` (or, in batch mode, as `soft_link_magpie.*` columns in `scenarios.csv`):
 
 ```jsonc
 {
@@ -204,7 +204,7 @@ All task 7 settings live under `config.json:scenario.soft_link_magpie` (or, in b
 | `soft_link_magpie.price_tol` | `0.05` | `delta_price_max < price_tol` is one half of the convergence rule |
 | `soft_link_magpie.quant_tol` | `0.05` | `delta_quant_max < quant_tol` is the other half |
 
-Three internal constants are **not** exposed to config — they are written at the top of `scripts/tasks/task7SoftLinkMagpie.R` and changing them is a code edit:
+Three internal constants are **not** exposed to config — they are written at the top of `scripts/tasks/task6SoftLinkMagpie.R` and changing them is a code edit:
 
 | Constant | Value | Why |
 |---|---|---|
@@ -230,19 +230,19 @@ If a run is interrupted **externally** (power loss, `kill -9`, SSH drop, OOM kil
 
 The four resume-side fields (`max_iter`, `price_tol`, `quant_tol`, `sce_name`) must match the run folder's `config_snapshot` bit-identically — otherwise the run aborts at pre-flight. To change a knob, start a fresh run.
 
-Task 7 then:
+Task 6 then:
 * reads `coupling_state.json` and confirms `status="iterating"`
 * validates the config matches the snapshot
 * resumes from the highest round's last completed phase (the expensive MAgPIE step is **not** re-run if it already completed)
 * continues the loop until convergence or `max_iter`
 
-**Failed runs are not resumable.** If `status="failed"`, the same config in the same folder will fail again — task 7 stops at pre-flight with the `last_failure` summary and tells you to start fresh. The folder is preserved for diagnostics. There is no command-line "force-resume failed run" entry point.
+**Failed runs are not resumable.** If `status="failed"`, the same config in the same folder will fail again — task 6 stops at pre-flight with the `last_failure` summary and tells you to start fresh. The folder is preserved for diagnostics. There is no command-line "force-resume failed run" entry point.
 
 ---
 
 ## 6. Run-folder layout
 
-Successful task 7 run touches **two folders**: the OPEN-PROM run folder (created on first invocation) and one MAgPIE output folder per round.
+Successful task 6 run touches **two folders**: the OPEN-PROM run folder (created on first invocation) and one MAgPIE output folder per round.
 
 ```
 runs/<scenario_name>_<timestamp>/                   ← OPEN-PROM run folder

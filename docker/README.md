@@ -132,7 +132,7 @@ Path meanings:
 
 - `/opt/gams/`: mounted Linux GAMS installation.
 - `/outputs`: destination for synchronized run archives when `withSync=true`.
-- `/magpie/`: placeholder path for MAgPIE, required only for task 7 soft-linking.
+- `/magpie/`: placeholder path for MAgPIE, required only for task 6 soft-linking.
 
 For a standard OPEN-PROM research run with `task_id=2`, `/magpie/` is not required.
 
@@ -328,7 +328,7 @@ To include `.gdx` files in synchronized archives, set:
 "uploadGDX": true
 ```
 
-## MAgPIE and Task 7
+## MAgPIE and Task 6
 
 `docker/config.container.json` defines:
 
@@ -336,7 +336,7 @@ To include `.gdx` files in synchronized archives, set:
 "magpie_path": "/magpie/"
 ```
 
-This is a placeholder for task 7 soft-linking. To run task 7, mount a MAgPIE installation at `/magpie`.
+This is a placeholder for task 6 soft-linking. To run task 6, mount a MAgPIE installation at `/magpie`.
 
 Example `docker/docker-compose.yml` volume:
 
@@ -344,9 +344,9 @@ Example `docker/docker-compose.yml` volume:
       - /path/to/magpie:/magpie
 ```
 
-The mounted MAgPIE directory must contain the setup expected by `scripts/tasks/task7SoftLinkMagpie.R`, including `e3m_start.R`.
+The mounted MAgPIE directory must contain the setup expected by `scripts/tasks/task6SoftLinkMagpie.R`, including `e3m_start.R`.
 
-For non-task-7 runs, the `/magpie/` path can be ignored.
+For non-task-6 runs, the `/magpie/` path can be ignored.
 
 ## Useful Commands
 
@@ -414,7 +414,7 @@ If an R package fails to install, verify that:
 - GitHub is reachable during the Docker build.
 - `GITHUB_R_PACKAGES` contains the correct repository URLs.
 
-If task 7 fails because MAgPIE is missing, add a `/magpie` volume and verify `magpie_path`.
+If task 6 fails because MAgPIE is missing, add a `/magpie` volume and verify `magpie_path`.
 
 If outputs are missing, verify:
 

@@ -63,8 +63,9 @@ The main task modes are:
 | 2 | `OPEN-PROM RESEARCH` | Runs the research model with existing research input data | existing research `data/` | model run output; `reportOutput.R` runs automatically if `behavior.withRunFolder` and `behavior.withReport` are both `true` in `config.json` | **yes** |
 | 3 | `OPEN-PROM RESEARCH NEW DATA` | Rebuilds research input data, calibrates maturity factors, then runs the model | internal data access | fresh research `data/`, `targets/`, calibration results, and a model run | no |
 | 5 | `CALIBRATE` | Runs calibration only | existing `data/` and `targets/` | calibrated maturity-factor files | no |
-| 6 | `CALIBRATE CARBON PRICES` | Runs carbon-price calibration | internal calibration setup | updated carbon-price inputs and, if enabled, a report | no |
-| 7 | `OPEN-PROM SOFT-LINK MAgPIE` | Runs the OPEN-PROM ↔ MAgPIE soft-link, iterated to convergence (`soft_link_magpie.max_iter` rounds at most; defaults to 1, i.e. single round-trip). See Tutorial 12 for the round model, convergence judgment, and resume semantics. | internal data access + MAgPIE checkout | one OPEN-PROM run folder + N MAgPIE output folders + `coupling_state.json` / `convergence_log.csv` / `coupling_summary.json` | **yes** |
+| 6 | `OPEN-PROM SOFT-LINK MAgPIE` | Runs the OPEN-PROM ↔ MAgPIE soft-link for up to `soft_link_magpie.max_iter` rounds (default 1). See Tutorial 12 for the round model, convergence judgment, and resume semantics. | internal data access + MAgPIE checkout | one OPEN-PROM run folder + N MAgPIE output folders + `coupling_state.json` / `convergence_log.csv` / `coupling_summary.json` | **yes** |
+| 7 | `CALIBRATE GLOBAL CARBON PRICE` | Calibrates a global price path against peak and end-year cumulative CO₂ budgets. | research `data/` and `global_carbon_price_calibration` settings | calibration history, calibrated carbon-price CSV and research reports | no |
+| 8 | `CALIBRATE REGIONAL CARBON PRICE` | Calibrates regional price paths against annual NDC and optional long-term GHG targets. | research `data/`, paired target and coverage tables, and `regional_carbon_price_calibration` settings | calibration history, calibrated carbon-price CSV and research reports | no |
 
 Task 4 is a debugging path and is not part of the normal run flow.
 
@@ -83,7 +84,7 @@ When you want to run several scenarios in one go, put a `scenarios.csv` file at 
 Rscript start.R scenarios.csv
 ```
 
-or click the **RUN BATCH** button in the VS Code Task Runner. The script fails with `Batch CSV not found: scenarios.csv` if the file is missing — batch is always opt-in via that file. Each row produces its own `runs/<scenario_name>_<timestamp>/` folder; rows are processed sequentially inside one R process (no subprocess overhead). Batch supports only `task_id` 2 and 7; other values are rejected per row.
+or click the **RUN BATCH** button in the VS Code Task Runner. The script fails with `Batch CSV not found: scenarios.csv` if the file is missing — batch is always opt-in via that file. Each row produces its own `runs/<scenario_name>_<timestamp>/` folder; rows are processed sequentially inside one R process (no subprocess overhead). Batch supports only `task_id` 2 and 6; other values are rejected per row.
 
 A starter template lives at `scenarios.template.csv`. The minimal required columns are `scenario_name` and `task_id`; everything else is optional.
 
@@ -103,7 +104,7 @@ Worked example — given `config.json:scenario`:
   "scenario_name": "Default",
   "description":   "Default UPTAKE run",
   "gams_flags":    { "fScenario": 200 },
-  "magpie": {
+  "soft_link_magpie": {
     "project":           "uptake",
     "existing_prom_run": null,
     "max_iter":          1,
@@ -117,7 +118,7 @@ and one CSV row:
 
 ```csv
 scenario_name,task_id,description,gams_flags.fScenario,soft_link_magpie.max_iter,soft_link_magpie.price_tol,soft_link_magpie.quant_tol,soft_link_magpie.existing_prom_run
-C600_landHigh,7,UPTAKE C600 landHigh iterated to convergence,600,5,0.05,0.05,
+C600_landHigh,6,UPTAKE C600 landHigh iterated to convergence,600,5,0.05,0.05,
 ```
 
 the merged scenario `start.R` runs for this row is:
@@ -125,10 +126,10 @@ the merged scenario `start.R` runs for this row is:
 ```jsonc
 {
   "scenario_name": "C600_landHigh",                                 // from CSV
-  "task_id":       7,                                               // from CSV (also overrides anything else)
+  "task_id":       6,                                               // from CSV (also overrides anything else)
   "description":   "UPTAKE C600 landHigh iterated to convergence",  // from CSV
   "gams_flags":    { "fScenario": 600 },                            // CSV overrides 200 -> 600
-  "magpie": {
+  "soft_link_magpie": {
     "project":           "uptake",                                  // inherited from config (no CSV override)
     "existing_prom_run": null,                                      // CSV cell was empty, inherited
     "max_iter":          5,                                         // CSV overrides 1 -> 5
@@ -175,8 +176,8 @@ Example:
 scenario_name,start,task_id,description,gams_flags.fScenario
 C200_biolim100,1,2,UPTAKE C200 biolim100,200
 C200_landHigh,1,2,UPTAKE C200 landHigh,200
-C600_biolim100,0,7,UPTAKE C600 biolim100 -- temporarily off,600
-C600_landHigh,1,7,UPTAKE C600 landHigh,600
+C600_biolim100,0,6,UPTAKE C600 biolim100 -- temporarily off,600
+C600_landHigh,1,6,UPTAKE C600 landHigh,600
 ```
 
 Console output:
@@ -190,7 +191,7 @@ The `start` column is stripped before each row's overlay is merged onto `config.
 
 ## 6. What the outputs mean
 
-When `behavior.withReport: true` in `config.json`, the task body automatically calls `scripts/tasks/reportOutput.R` after task 0, 2, 3, 6 or 7, provided the run-folder workflow is active. That script converts the model output into a MIF report, typically `reporting.mif`. It may also try to create plot files, but PDF generation depends on the local LaTeX/TinyTeX setup.
+Tasks 0, 1, 2, 3 and 6 call `scripts/tasks/reportOutput.R` when `behavior.withRunFolder` and `behavior.withReport` are both `true` in `config.json`. The script converts the model output into a MIF report, typically `reporting.mif`. PDF generation depends on the local LaTeX/TinyTeX setup. Tasks 7 and 8 generate research reports after confirming a calibration path, independently of `behavior.withReport`.
 
 `outputForProject.mif` is not part of the default workflow. It is only created when project reporting is explicitly enabled.
 
@@ -199,6 +200,6 @@ For a quick success check:
 * `modelstat.txt` should show successful model status lines for the solved years and regions
 * `outputData.gdx` should exist after a normal model run
 * `reporting.mif` only appears when the reporting step actually runs
-* if `behavior.withReport: false`, the model can still run successfully even though no MIF or reporting plots are created
+* for tasks 0, 1, 2, 3 and 6, setting `behavior.withReport` to `false` skips automatic reporting
 
 So when checking a run, do not confuse “the model solved” with “the full reporting workflow also ran”.

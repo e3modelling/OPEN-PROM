@@ -15,7 +15,7 @@ For the rationale and the exchanged quantities (carbon-price signal, advanced-bi
 AFOLU emissions), see {ref}`magpie-link`.
 :::
 
-The OPEN-PROM ⇄ MAgPIE soft-link is driven by **task 7** of the `start.R` harness. It runs the two models as
+The OPEN-PROM ⇄ MAgPIE soft-link is driven by **task 6** of the `start.R` harness. It runs the two models as
 independently solved jobs and exchanges data between them as a **round-based state machine**: a cold round 0
 solve, followed by zero or more *hot* rounds that each run a forward / MAgPIE / backward / hot sequence, looping
 until the shared boundary signals converge or a round cap is reached.
@@ -32,11 +32,11 @@ until the shared boundary signals converge or a round cap is reached.
 
 ### Running an iteration
 
-Task 7 is batchable (one scenario per CSV row), so either form works:
+Task 6 is batchable (one scenario per CSV row), so either form works:
 
 ```bash
-Rscript start.R task_id=7        # single scenario from config.json:scenario
-Rscript start.R scenarios.csv    # batch; only task_id 2 and 7 are batchable
+Rscript start.R task_id=6        # single scenario from config.json:scenario
+Rscript start.R scenarios.csv    # batch; only task_id 2 and 6 are batchable
 ```
 
 The harness runs a **cold round 0** and then iterates **hot rounds** `k ≥ 1`:
@@ -67,7 +67,7 @@ tags `blabla.gdx` so `postprom` sources AFOLU emissions from the MAgPIE `.mif` d
 
 ### Configuration
 
-The task-7 knobs live under `config.json:scenario.soft_link_magpie` (and the matching `soft_link_magpie.*`
+The task-6 knobs live under `config.json:scenario.soft_link_magpie` (and the matching `soft_link_magpie.*`
 columns of `scenarios.csv`):
 
 | Key | Default | Meaning |
@@ -128,7 +128,7 @@ represented by **pre-fitted emulator curves**, selected with the user switches a
 are configured for ordinary single-solve tasks (0–6) through `config.json:scenario.land_use_emulator`, which
 `start.R` maps onto the GAMS flags `--landUseEmulator` and `--emulatorCarbonPriceScenario`:
 
-- `softLinkMAgPIE` (`on`/`off`) — the iterative task-7 soft-link above. When `on` it wins: the biomass backend
+- `softLinkMAgPIE` (`on`/`off`) — the iterative task-6 soft-link above. When `on` it wins: the biomass backend
   price comes from MAgPIE and AFOLU emissions are read from MAgPIE's `.mif`; Module 08 still applies the common
   sustainability tax. The emulator switches below only take effect when `softLinkMAgPIE` is `off`.
 - `land_use_emulator.source` → `landUseEmulator` (`legacy`/`globiom`/`magpie`) — selects the emulator source.
@@ -146,7 +146,7 @@ are configured for ordinary single-solve tasks (0–6) through `config.json:scen
 :::{tip}
 The three approaches form a hierarchy of increasing fidelity and cost: exogenous land-use assumptions
 (`land_use_emulator.source = legacy`) → emulator-based coupling (`globiom`/`magpie`) → full iterative
-OPEN-PROM ⇄ MAgPIE soft-linking (`softLinkMAgPIE=on`, task 7). The emulator route never launches an external
+OPEN-PROM ⇄ MAgPIE soft-linking (`softLinkMAgPIE=on`, task 6). The emulator route never launches an external
 land-use model; it only evaluates the fitted curves during the solve.
 :::
 

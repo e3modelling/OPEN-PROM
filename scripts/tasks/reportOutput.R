@@ -66,7 +66,9 @@ reportOutput <- function(
   invisible(NULL)
 }
 
-args <- commandArgs(trailingOnly = TRUE)
+# The calibration worker passes arguments in its private source environment.
+args <- get0(".report_output_args", inherits = FALSE)
+if (is.null(args)) args <- commandArgs(trailingOnly = TRUE)
 runpath <- if (length(args) > 0) args[1] else getRunpath()
 mif_name <- if (length(args) > 1) args[2] else "reporting.mif"
 plot_name <- if (length(args) > 2) args[3] else "plot.tex"

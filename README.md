@@ -18,7 +18,7 @@ Containerization files are included for running OPEN-PROM with Docker:
 - `docker/install-r-packages.R`
 
 For setup, GAMS path configuration, build commands, single-scenario execution,
-batch execution, outputs, MAgPIE/task 7 notes, and troubleshooting, see
+batch execution, outputs, MAgPIE/task 6 notes, and troubleshooting, see
 [`docker/README.md`](docker/README.md).
 
 An optional Windows-container setup is also included for environments that need

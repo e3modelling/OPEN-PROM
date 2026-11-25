@@ -3,7 +3,7 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
-        // ---- Single-scenario task buttons (task 0 ... task 7) ----
+        // ---- Single-scenario task buttons (task 0 ... task 8) ----
         {
             "label": "OPEN-PROM DEV",
             "type": "shell",
@@ -89,7 +89,7 @@
         },
 
         {
-            "label": "CALIBRATE CARBON PRICES",
+            "label": "OPEN-PROM SOFT-LINK MAgPIE",
             "type": "shell",
             "command": "Rscript start.R task_id=6",
             "problemMatcher": [],
@@ -103,7 +103,7 @@
         },
 
         {
-            "label": "OPEN-PROM SOFT-LINK MAgPIE",
+            "label": "CALIBRATE GLOBAL CARBON PRICE",
             "type": "shell",
             "command": "Rscript start.R task_id=7",
             "problemMatcher": [],
@@ -114,6 +114,15 @@
             "presentation": {
                 "focus": true
             }
+        },
+
+        {
+            "label": "CALIBRATE REGIONAL CARBON PRICE",
+            "type": "shell",
+            "command": "Rscript start.R task_id=8",
+            "problemMatcher": [],
+            "group": "build",
+            "presentation": { "focus": true }
         },
 
         // ---- Batch button (extends the task system across many scenarios) ----
