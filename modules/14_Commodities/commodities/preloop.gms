@@ -12,3 +12,6 @@ V14NetTradeMaterials.FX(allCy,MATERIALS,YTIME)$DATAY(YTIME) = 0;
 *---
 V14DemandMaterials.LO(runCy,IND_SERVS,MATERIALS,YTIME) = 0;
 V14DemandMaterials.FX(runCy,IND_SERVS,MATERIALS,YTIME)$DATAY(YTIME) = i02InputMaterials(runCy,IND_SERVS,MATERIALS,YTIME);
+*---
+V14CostAvgCommodities.LO(runCy,COMMODITIES,YTIME) = 0;
+V14CostAvgCommodities.FX(runCy,COMMODITIES,YTIME)$DATAY(YTIME) = 1;

@@ -7,6 +7,8 @@ i02DataEnergyService(allCy,INDDOM,IND_SERVS,YTIME)
 i02ratioTransfInputIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EF,YTIME)
 i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EF,YTIME)
 i02InputMaterials(allCy,IND_SERVS,MATERIALS,YTIME)
+i03DataCostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
+i02EnergyPremium(MATERIALS,EF)                                               "Energy premium when importing cold charged material (Mtoe/tonn of material)"
 ;
 
 Equations
@@ -22,6 +24,7 @@ Q02ConsFuel(allCy,INDDOM,IND_SERVS,EF,YTIME)
 Q02CostCapital(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
 Q02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
 Q02ConsFuelNonEnergy(allCy,INDDOM,IND_SERVS,EF,YTIME)
+Q02Activity(allCy,INDDOM,IND_SERVS,YTIME)
 ;
 
 Variables
@@ -38,4 +41,5 @@ V02CostCapital(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)      "Capital cost of tech
 V02ISownEnergyTransf(allCy,IS_TRANSF,EFS,YTIME)            "Own energy consumption of energy transfer processes in the industry sector (Mtoe)"
 V02ScrpRatePrem(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
 V02ConsFuelNonEnergy(allCy,INDDOM,IND_SERVS,EF,YTIME)
+V02Activity(allCy,INDDOM,IND_SERVS,YTIME)
 ;

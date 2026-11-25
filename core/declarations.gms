@@ -59,6 +59,7 @@ imFactorEmissProcessesCO2(allCy,SBS,EF,YTIME)
 imFactorEmissEnergyCO2(allCy,SBS,EF)
 i03DataCap(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
 smGwToTwhPerYear(YTIME)                                    "convert GW mean power into TWh/y, depending on whether it's a leap year"
+iPriceMaterial(allCy,MATERIALS)                             "Price of input materials (k$2025/tonne)"
 ;
 Equations
 *' *** Miscellaneous'

@@ -39,12 +39,12 @@ $offdelim
 ;
 
 parameter i02EffImprovement(TECH)      "Eff improvement per year"/
-EAF 0.004
+EAF 0.005
 BOF 0.003
-CONVDRI 0.004
-CONVDRICCS 0.004
+CONVDRI 0.005
+CONVDRICCS 0.005
 GREENDRI 0.006
-COKEOV 0.003
+COKEOV 0.002
 BF 0.003
 /;
 
@@ -239,3 +239,22 @@ SUM((IS_TRANSF,IS_TRANSF_TECH)$IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TEC
   i03DataCap(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
 );
 *---
+i03DataCostVariable(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$(DATAY(YTIME) and IS_TRANSFtoIS_TRANSF_TECH(IS_TRANSF,IS_TRANSF_TECH)) =
+sum(EF$IS_TRANSF_TECHtoEF(IS_TRANSF_TECH,EF), 
+  (i02ratioTransfInputIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EF,"%fBaseY%") + i02ratioOwnEnergyTransfIS(runCy,IS_TRANSF,IS_TRANSF_TECH,EF,"%fBaseY%")) *
+  (
+    imFuelPrice(runCy,"IS",EF,YTIME) +
+    !!imCaptRateCO2(IS_TRANSF_TECH) * i06ElastCO2Seq(runCy,"seq_min") * 1e-3 * (imCo2EmiFac(runCy,"PG",EF,YTIME) + 4.17$sameas("BMSWAS", EF)) +
+    (1-imCaptRateCO2(IS_TRANSF_TECH)) * 1e-3 * imCo2EmiFac(runCy,"PG",EF,YTIME) * iCarbValYrExog(runCy,YTIME)
+  )
+) +
+i02IndCosts(IS_TRANSF_TECH,'Opex',YTIME) +
+SUM(MATERIALS,
+  i02ratioMaterialCons("PRIM_STEEL",IS_TRANSF_TECH,MATERIALS) *
+  iPriceMaterial(runCy,MATERIALS)
+);
+*---
+iPriceMaterial(runCy,"SPNGIRN") = i02IndCosts("CONVDRI",'Capex',"%fBaseY%") * imCGI(runCy,"%fBaseY%") + i02IndCosts("CONVDRI",'Fix',"%fBaseY%") + i03DataCostVariable(runCy,"DRI","CONVDRI","%fBaseY%");
+iPriceMaterial(runCy,"PIGIRON") = i02IndCosts("BF",'Capex',"%fBaseY%") * imCGI(runCy,"%fBaseY%") + i02IndCosts("BF",'Fix',"%fBaseY%") + i03DataCostVariable(runCy,"BLASTFUR","BF","%fBaseY%");
+*---
+i02EnergyPremium("SPNGIRN","ELC") = 0.01027;

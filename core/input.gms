@@ -114,14 +114,8 @@ COG 2.5
 COKE 4.2
 /;
 *---
-parameter iPriceMaterial(MATERIALS) "Price of input materials (k$2025/tonne)"
-/
-SCRAP 0.432
-IRONORE 0.199
-SPNGIRN 0.30 !! FIXME: Should be endogenously calculated per country based on cost of production
-PIGIRON 0.4 !! FIXME: Same (author: mmadianos)
-/
-;
+iPriceMaterial(allCy,"SCRAP") = 0.333;
+iPriceMaterial(allCy,"IRONORE") = 0.141;
 *---
 imCo2EmiFac(runCy,SBS,EF,YTIME)$(not (sameas("NEN",SBS) or sameas("PCH",SBS))) = iCo2EmiFacAllSbs(EF);
 *---
@@ -190,6 +184,9 @@ imFuelPrice(runCy,"STEAMP",EFS,YTIME) = imFuelPrice(runCy,"PG",EFS,YTIME);
 imFuelPrice(runCy,SBS,"H2F",YTIME) = 1.5 * imFuelPrice(runCy,"OI","ELC",YTIME);
 imFuelPrice(runCy,SBS,"STE",YTIME) = imFuelPrice(runCy,"OI","ELC",YTIME);
 imFuelPrice(runCy,"ICT",EFS,YTIME)$SECtoEF("ICT",EFS) = imFuelPrice(runCy,"SE",EFS,YTIME);
+imFuelPrice(runCy,SBS,"BFG",YTIME) = 0.9 * imFuelPrice(runCy,SBS,'HCL',YTIME);
+imFuelPrice(runCy,SBS,"COG",YTIME) = 0.9 * imFuelPrice(runCy,SBS,'HCL',YTIME);
+imFuelPrice(runCy,SBS,"COKE",YTIME) = 0.9 * imFuelPrice(runCy,SBS,'HCL',YTIME);
 *---
 table imPriceFuelsIntBase(WEF,YTIME)	              "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
 $ondelim

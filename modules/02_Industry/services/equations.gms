@@ -11,6 +11,16 @@
 *' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
 
 !!FIXME: INDDOM does not contain NENSE. Should be added as separate equations, coupled to the corresponding energy service.
+Q02Activity(allCy,INDDOM,IND_SERVS,YTIME)$(TIME(YTIME) and runCy(allCy) )..
+  V02Activity(allCy,INDDOM,IND_SERVS,YTIME)
+    =E=
+$ontext
+  SUM(COMMODITIES$COMMStoINDSERVS(COMMODITIES,IND_SERVS),V14CostAvgCommodities(allCy,COMMODITIES,YTIME-1) ** (-2)) /
+  SUM((COMMODITIES,IND_SERVS2)$(COMMStoINDSERVS(COMMODITIES,IND_SERVS2) and INDDOMtoSERVS(INDDOM,IND_SERVS2)),
+    V14CostAvgCommodities(allCy,COMMODITIES,YTIME-1) ** (-2)
+$offtext
+0;
+
 Q02EnergyService(allCy,INDDOM,IND_SERVS,YTIME)$(TIME(YTIME) and runCy(allCy))..
   V02EnergyService(allCy,INDDOM,IND_SERVS,YTIME)
       =E=
@@ -54,11 +64,12 @@ Q02CostVariable(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and INDDOMto
   V02CostVariable(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
       =E=
   SUM(EFS$INDITECHTOEF(INDITECH,EFS),
+    i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EFS,YTIME) *
     (
       VmPriceFinal(allCy,INDDOM,EFS,YTIME) +
       imCO2CaptRateIndustry(allCy,INDITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * imCo2EmiFac(allCy,INDDOM,EFS,YTIME) +
       (1-imCO2CaptRateIndustry(allCy,INDITECH,YTIME)) * 1e-3 * VmPriceCarbon(allCy,INDDOM,EFS,YTIME) * imCo2EmiFac(allCy,INDDOM,EFS,YTIME)
-    ) * i02SFC(allCy,INDDOM,IND_SERVS,INDITECH,EFS,YTIME)
+    )
   ) / imUsfEneConvSubTech(allCy,INDDOM,INDITECH,YTIME) +
   imVarCostTech(allCy,INDDOM,INDITECH,YTIME) +
   SUM(MATERIALS,

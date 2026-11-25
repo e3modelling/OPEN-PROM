@@ -42,7 +42,6 @@ VmPriceFinal.LO(runCy,DSBS,EFS,YTIME) = 0;
 VmPriceFinal.L(runCy,DSBS,EFS,YTIME) = 1;
 VmPriceFinal.FX(runCy,DSBS,EFS,YTIME)$(DATAY(YTIME) and SECtoEF(DSBS,EFS)) = imFuelPrice(runCy,DSBS,EFS,YTIME);
 VmPriceFinal.FX(runCy,DSBS,EFS,YTIME)$(not SECtoEF(DSBS,EFS)) = 0;
-VmPriceFinal.FX(runCy,DSBS,EFS,YTIME)$((DATAY(YTIME)) and (sameas("BFG",EFS) or sameas("COG",EFS) or sameas("COKE",EFS))) = 0.9*imFuelPrice(runCy,DSBS,'HCL',YTIME);
 *---
 VmPriceSecondary.LO(runCy,EFS,YTIME) = 0;
 VmPriceSecondary.L(runCy,EFS,YTIME) = 1;
@@ -87,4 +86,4 @@ VmGDPPartGlob.FX(runCy,YTIME)$(DATAY(YTIME)) = i01GDP(YTIME,runCy) / sum(runCy2,
 V03Cap.FX(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)$DATAY(YTIME) = i03DataCap(runCy,IS_TRANSF,IS_TRANSF_TECH,YTIME);
 *---
 VmPriceMaterials.LO(runCy,MATERIALS,YTIME) = 0;
-VmPriceMaterials.FX(runCy,MATERIALS,YTIME)$DATAY(YTIME) = iPriceMaterial(MATERIALS);
+VmPriceMaterials.FX(runCy,MATERIALS,YTIME)$DATAY(YTIME) = iPriceMaterial(runCy,MATERIALS);
