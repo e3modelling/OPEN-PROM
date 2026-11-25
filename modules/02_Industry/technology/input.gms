@@ -23,6 +23,7 @@ $ondelim
 $include"./iScaleEndogScrap.csv"
 $offdelim
 ;
+i02ScaleEndogScrap(runCy, DSBS, ITECH, YTIME)$(not DATAY(YTIME) and INDDOM(DSBS) and not (sameas(ITECH,"TELC") or sameas(ITECH,"THEATPUMP"))) = 3*i02ScaleEndogScrap(runCy, DSBS, ITECH, YTIME);
 *---
 table i02CalibUsefulEnergy(allCy,DSBS,YTIME)      "Calibration parameter for useful energy (1)"
 $ondelim
