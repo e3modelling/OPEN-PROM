@@ -186,20 +186,6 @@
             "presentation": {
                 "focus": true
             }
-        },
-
-        {
-            "label": "RUN CLIMATE EMULATOR (CLOUD)",
-            "type": "shell",
-            "command": "Rscript scripts/tools/runClimateCloud.R --runFolder ${input:climateRunFolder} --numCfgs ${input:climateNumCfgs}",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "focus": true
-            }
         }
 
     ],
@@ -223,13 +209,6 @@
             "description": "all = MAGICC + RIME degree days; emulator = MAGICC only; rime = RIME degree days from an existing MAGICC output",
             "options": ["all", "emulator", "rime"],
             "default": "all"
-        },
-        {
-            "id": "climateNumCfgs",
-            "type": "pickString",
-            "description": "MAGICC configurations: 600 = full ensemble, 50 = quick test",
-            "options": ["600", "50"],
-            "default": "600"
         }
     ]
 }

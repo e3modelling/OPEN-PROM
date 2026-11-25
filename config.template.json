@@ -5,8 +5,7 @@
     "gams_path": "path/to/gams/folder/including/trailing/slash/",
     "climate_assessment_path": "../climate-assessment",
     "rime_path": "../rime",
-    "rime_data_path": "../rime-data",
-    "climate_cloud_repo": "e3modelling/climate-runner"
+    "rime_data_path": "../rime-data"
   },
   "climate_feedback": {
     "ssp": "SSP2",
