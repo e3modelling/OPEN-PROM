@@ -25,13 +25,25 @@
       "carbon_price_scenario": "Npi_Default"
     },
     "maturity_factors": {
-      "levels":  { "low": 0.5, "def": 1, "high": 2 },
+      "levels": { "low": 0.5, "def": 1, "high": 2,
+                  "lightind": 1, "ccsind": 1, "bldg": 1, "avih2": 1 },
       "changes": {
-        "solar":      { "tech": "PGSOL",     "mult": "def" },
-        "windOffLam": { "tech": "PGAWNO",    "mult": "def", "region": "LAM" },
-        "bmsccsMid":  { "tech": "ATHBMSCCS", "mult": "def", "from": 2030, "to": 2050 },
-        "bmsccsLate": { "tech": "ATHBMSCCS", "mult": "def", "from": 2051 },
-        "lpgCars":    { "sector": "PC", "tech": "TLPG", "mult": "def" }
+        "elFD":   { "sector": "FD",  "tech": "TELC",      "mult": "lightind", "from": 2025 },
+        "elEN":   { "sector": "EN",  "tech": "TELC",      "mult": "lightind", "from": 2025 },
+        "elTX":   { "sector": "TX",  "tech": "TELC",      "mult": "lightind", "from": 2025 },
+        "elOI":   { "sector": "OI",  "tech": "TELC",      "mult": "lightind", "from": 2025 },
+        "ccsISg": { "sector": "IS",  "tech": "TNGSCCS",   "mult": "ccsind",   "from": 2025 },
+        "ccsISc": { "sector": "IS",  "tech": "THCLCCS",   "mult": "ccsind",   "from": 2025 },
+        "ccsBMg": { "sector": "BM",  "tech": "TNGSCCS",   "mult": "ccsind",   "from": 2025 },
+        "ccsBMc": { "sector": "BM",  "tech": "THCLCCS",   "mult": "ccsind",   "from": 2025 },
+        "ccsCHg": { "sector": "CH",  "tech": "TNGSCCS",   "mult": "ccsind",   "from": 2025 },
+        "ccsCHc": { "sector": "CH",  "tech": "THCLCCS",   "mult": "ccsind",   "from": 2025 },
+        "hpHOU":  { "sector": "HOU", "tech": "THEATPUMP", "mult": "bldg",     "from": 2025 },
+        "hpSE":   { "sector": "SE",  "tech": "THEATPUMP", "mult": "bldg",     "from": 2025 },
+        "elHOU":  { "sector": "HOU", "tech": "TELC",      "mult": "bldg",     "from": 2025 },
+        "elSE":   { "sector": "SE",  "tech": "TELC",      "mult": "bldg",     "from": 2025 },
+        "h2PA":   { "sector": "PA",  "tech": "TH2F",      "mult": "avih2",    "from": 2030 },
+        "h2BAV":  { "sector": "BAV", "tech": "TH2F",      "mult": "avih2",    "from": 2030 }
       }
     },
     "soft_link_magpie": {
