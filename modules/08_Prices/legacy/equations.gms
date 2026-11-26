@@ -174,6 +174,8 @@ Q08PriceCarbon(allCy,SBS,EFS,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
      =E=
     1e-3 * (
       VmCarVal(allCy,"TRADE",YTIME)$(INDSE1(SBS) or ((DOMSE1(SBS) or TRANS1(SBS) or BUN(SBS) or sameas("AG",SBS)) and ord(YTIME) > 17))
+*' Light-industry climate policy cost: 200 US$/tCO2 on FD, EN, TX, OI from 2025
+      + 200$((sameas(SBS,"FD") or sameas(SBS,"EN") or sameas(SBS,"TX") or sameas(SBS,"OI")) and ord(YTIME) >= 16)
     ) * imFactorEmissEnergyCO2(allCy,SBS,EFS);
 
 *' The equation calculates the average fuel price per subsector. These average prices are used to further compute electricity prices in industry
