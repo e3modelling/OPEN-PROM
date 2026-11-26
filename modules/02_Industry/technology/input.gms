@@ -26,10 +26,10 @@ $offdelim
 i02ScaleEndogScrap(runCy, DSBS, ITECH, YTIME)$(not DATAY(YTIME) and INDDOM(DSBS) and not (sameas(ITECH,"TELC") or sameas(ITECH,"THEATPUMP"))) = 1*i02ScaleEndogScrap(runCy, DSBS, ITECH, YTIME);
 *' Light industry (FD, EN, TX, OI): extra scrapping factor for fossil technologies (fuel with a CO2 emission factor); 1 = off
 i02ScaleEndogScrap(runCy, DSBS, ITECH, YTIME)$(not DATAY(YTIME) and (sameas(DSBS,"FD") or sameas(DSBS,"EN") or sameas(DSBS,"TX") or sameas(DSBS,"OI")) and sum(EF$ITECHtoEF(ITECH,EF), imCo2EmiFac(runCy,DSBS,EF,YTIME))) = 1*i02ScaleEndogScrap(runCy, DSBS, ITECH, YTIME);
-*' Buildings (HOU, SE): extra scrapping factor for fossil technologies (fuel with a CO2 emission factor); 1 = off
-i02ScaleEndogScrap(runCy, DSBS, ITECH, YTIME)$(not DATAY(YTIME) and (sameas(DSBS,"HOU") or sameas(DSBS,"SE")) and sum(EF$ITECHtoEF(ITECH,EF), imCo2EmiFac(runCy,DSBS,EF,YTIME))) = 2*i02ScaleEndogScrap(runCy, DSBS, ITECH, YTIME);
-*' Buildings (HOU, SE): heat-pump capex subsidy from 2025 (0.5 = 50% subsidy; 1 = off)
-imCapCostTech(runCy,DSBS,"THEATPUMP",YTIME)$((sameas(DSBS,"HOU") or sameas(DSBS,"SE")) and ord(YTIME) >= 16) = 0.5*imCapCostTech(runCy,DSBS,"THEATPUMP",YTIME);
+*' Buildings (HOU, SE): extra scrapping factor for fossil technologies (fuel with a CO2 emission factor); 1 = off (buildings target passed with 3)
+i02ScaleEndogScrap(runCy, DSBS, ITECH, YTIME)$(not DATAY(YTIME) and (sameas(DSBS,"HOU") or sameas(DSBS,"SE")) and sum(EF$ITECHtoEF(ITECH,EF), imCo2EmiFac(runCy,DSBS,EF,YTIME))) = 1*i02ScaleEndogScrap(runCy, DSBS, ITECH, YTIME);
+*' Buildings (HOU, SE): heat-pump capex subsidy from 2025 (0.5 = 50% subsidy; 1 = off) (buildings target passed with 0.5)
+imCapCostTech(runCy,DSBS,"THEATPUMP",YTIME)$((sameas(DSBS,"HOU") or sameas(DSBS,"SE")) and ord(YTIME) >= 16) = 1*imCapCostTech(runCy,DSBS,"THEATPUMP",YTIME);
 *---
 table i02CalibUsefulEnergy(allCy,DSBS,YTIME)      "Calibration parameter for useful energy (1)"
 $ondelim

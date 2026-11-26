@@ -112,7 +112,11 @@ Q02VarCostTech(allCy,DSBS,ITECH,YTIME)$(TIME(YTIME)$(INDDOM(DSBS) or NENSE(DSBS)
         VmPriceFuelSubsecCarVal(allCy,DSBS,EF,YTIME) +
         imCO2CaptRateIndustry(allCy,ITECH,YTIME) * VmCstCO2SeqCsts(allCy,YTIME) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME)  +
         (1-imCO2CaptRateIndustry(allCy,ITECH,YTIME)) * 1e-3 * imCo2EmiFac(allCy,DSBS,EF,YTIME)  *
-        sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
+        (
+          sum(NAP$NAPtoALLSBS(NAP,"PG"), VmCarVal(allCy,NAP,YTIME))
+*' Heavy-industry climate policy cost (US$/tCO2) on IS, NF, CH, BM, PP, OE from 2025, paid only on uncaptured CO2; 0 = off
+          + 200$((sameas(DSBS,"IS") or sameas(DSBS,"NF") or sameas(DSBS,"CH") or sameas(DSBS,"BM") or sameas(DSBS,"PP") or sameas(DSBS,"OE")) and ord(YTIME) >= 16)
+        )
       )
     ) +
     imVarCostTech(allCy,DSBS,ITECH,YTIME) / sUnitToKUnit
