@@ -1,0 +1,195 @@
+{
+  "region": "World",
+  "targets": [
+    {
+      "group": "Light industry CO2 2030 and renewable electricity 2050",
+      "require": "all",
+      "targets": [
+        {
+          "name": "Light industry CO2 (FD + EN + TX + OI) in 2030",
+          "variables": [
+            "Emissions|CO2|Energy|Demand|Industry|Food Drink and Tobacco",
+            "Emissions|CO2|Energy|Demand|Industry|Engineering",
+            "Emissions|CO2|Energy|Demand|Industry|Textiles",
+            "Emissions|CO2|Energy|Demand|Industry|Other Industrial sectors"
+          ],
+          "op": "<=",
+          "value": 921.43885,
+          "year": 2030
+        },
+        {
+          "name": "Electricity from biofuels + renewables in 2050",
+          "variables": [
+            "Secondary Energy|Electricity|Biofuels",
+            "Secondary Energy|Electricity|Renewables"
+          ],
+          "op": ">=",
+          "value": 32327.4183,
+          "year": 2050
+        }
+      ]
+    },
+    {
+      "name": "Maritime low-carbon fuels (biofuels + H2) share of BMAR + GN + PN in 2030",
+      "numerator": [
+        "Final Energy|Bunkers|Bunkers maritime|Biomass and Waste",
+        "Final Energy|Bunkers|Bunkers maritime|Biogasoline",
+        "Final Energy|Bunkers|Bunkers maritime|Biokerosene",
+        "Final Energy|Bunkers|Bunkers maritime|Biodiesel",
+        "Final Energy|Bunkers|Bunkers maritime|Biogas",
+        "Final Energy|Bunkers|Bunkers maritime|Hydrogen",
+        "Final Energy|Transportation|Goods Transport - Inland Navigation|Biomass and Waste",
+        "Final Energy|Transportation|Goods Transport - Inland Navigation|Biogasoline",
+        "Final Energy|Transportation|Goods Transport - Inland Navigation|Biokerosene",
+        "Final Energy|Transportation|Goods Transport - Inland Navigation|Biodiesel",
+        "Final Energy|Transportation|Goods Transport - Inland Navigation|Biogas",
+        "Final Energy|Transportation|Goods Transport - Inland Navigation|Hydrogen",
+        "Final Energy|Transportation|Passenger Transport - Inland Navigation|Biomass and Waste",
+        "Final Energy|Transportation|Passenger Transport - Inland Navigation|Biogasoline",
+        "Final Energy|Transportation|Passenger Transport - Inland Navigation|Biokerosene",
+        "Final Energy|Transportation|Passenger Transport - Inland Navigation|Biodiesel",
+        "Final Energy|Transportation|Passenger Transport - Inland Navigation|Biogas",
+        "Final Energy|Transportation|Passenger Transport - Inland Navigation|Hydrogen"
+      ],
+      "denominator": [
+        "Final Energy|Bunkers|Bunkers maritime",
+        "Final Energy|Transportation|Goods Transport - Inland Navigation",
+        "Final Energy|Transportation|Passenger Transport - Inland Navigation"
+      ],
+      "op": ">=",
+      "value": 0.05,
+      "year": 2030
+    },
+    {
+      "name": "Aviation CO2 (BAV + PA) in 2050",
+      "variables": [
+        "Emissions|CO2|Energy|Demand|Bunkers|Bunkers aviation",
+        "Emissions|CO2|Energy|Demand|Transportation|Passenger Transport - Aviation"
+      ],
+      "op": "<=",
+      "value": 603.4088968,
+      "year": 2050
+    },
+    {
+      "name": "Biofuels share of primary energy in 2050",
+      "numerator": [
+        "Primary Energy|Biofuels"
+      ],
+      "denominator": [
+        "Primary Energy"
+      ],
+      "op": ">=",
+      "value": 0.2,
+      "year": 2050
+    },
+    {
+      "name": "Buildings CO2 (Commercial + Residential) in 2030",
+      "variables": [
+        "Emissions|CO2|Energy|Demand|Commercial",
+        "Emissions|CO2|Energy|Demand|Residential"
+      ],
+      "op": "<=",
+      "value": 1583.62635,
+      "year": 2030
+    },
+    {
+      "group": "Industry, electricity and heat CO2 in 2030 (each on its own)",
+      "require": "all",
+      "targets": [
+        {
+          "name": "Industry CO2 in 2030",
+          "variables": [
+            "Emissions|CO2|Energy|Demand|Industry"
+          ],
+          "op": "<=",
+          "value": 1731.011547,
+          "year": 2030
+        },
+        {
+          "name": "Electricity supply CO2 in 2030",
+          "variables": [
+            "Emissions|CO2|Energy|Supply|Electricity"
+          ],
+          "op": "<=",
+          "value": 10407.81146,
+          "year": 2030
+        },
+        {
+          "name": "Heat supply CO2 in 2030",
+          "variables": [
+            "Emissions|CO2|Energy|Supply|Heat"
+          ],
+          "op": "<=",
+          "value": 541.7958124,
+          "year": 2030
+        }
+      ]
+    },
+    {
+      "group": "Zero-emission vehicles most sold (EV + H2 > 50% of new vehicles) by 2030",
+      "require": "all",
+      "targets": [
+        {
+          "name": "Passenger cars: EV + H2 share of new cars",
+          "numerator": [
+            "Capacity Additions|Passenger Cars|EVs",
+            "Capacity Additions|Passenger Cars|Fuel Cells - Hydrogen"
+          ],
+          "denominator": [
+            "Capacity Additions|Passenger Cars|Conventional Hybrid Diesel",
+            "Capacity Additions|Passenger Cars|Conventional Hybrid Gasoline",
+            "Capacity Additions|Passenger Cars|EVs",
+            "Capacity Additions|Passenger Cars|Fuel Cells - Hydrogen",
+            "Capacity Additions|Passenger Cars|Gas Turbine Kerosene",
+            "Capacity Additions|Passenger Cars|ICE Diesel",
+            "Capacity Additions|Passenger Cars|ICE Ethanol",
+            "Capacity Additions|Passenger Cars|ICE Gasoline",
+            "Capacity Additions|Passenger Cars|ICE LPG",
+            "Capacity Additions|Passenger Cars|ICE Natural Gas",
+            "Capacity Additions|Passenger Cars|Plug-in Hybrid Diesel",
+            "Capacity Additions|Passenger Cars|Plug-in Hybrid Gasoline",
+            "Capacity Additions|Passenger Cars|TRFO"
+          ],
+          "op": ">",
+          "value": 0.5,
+          "by": 2030
+        },
+        {
+          "name": "Trucks: EV + H2 share of new trucks",
+          "numerator": [
+            "Capacity Additions|Goods Transport - Trucks|Fuel Cells: Hydrogen",
+            "Capacity Additions|Goods Transport - Trucks|Pure Electirc Engine"
+          ],
+          "denominator": [
+            "Capacity Additions|Goods Transport - Trucks"
+          ],
+          "op": ">",
+          "value": 0.5,
+          "by": 2030
+        },
+        {
+          "name": "Busses: EV + H2 share of new busses",
+          "numerator": [
+            "Capacity Additions|Passenger Transport - Busses|Fuel Cells: Hydrogen",
+            "Capacity Additions|Passenger Transport - Busses|Pure Electirc Engine"
+          ],
+          "denominator": [
+            "Capacity Additions|Passenger Transport - Busses"
+          ],
+          "op": ">",
+          "value": 0.5,
+          "by": 2030
+        }
+      ]
+    },
+    {
+      "name": "Carbon capture in energy above 1 Gt CO2 in 2030 (1 Gt = 1,000 Mt)",
+      "variables": [
+        "Carbon Capture|Energy"
+      ],
+      "op": ">",
+      "value": 1000,
+      "year": 2030
+    }
+  ]
+}
