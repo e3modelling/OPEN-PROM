@@ -33,6 +33,10 @@ Fields of a target:
 - year         (optional) the target must hold in this year
 - by           (optional) the target must hold in at least one year up to and including this one
 - tolerance    (optional) allowed absolute difference for op "==" (default 0)
+- regions      (optional) list of regions to add up instead of the file's "region", e.g. ["EU", "USA", "JPN"]
+- relative_to  (optional) a year: "value" is then a fraction of the summed value in that year
+               (e.g. "value": 0.05, "relative_to": 2023 means at most 5% of the 2023 level)
+- rate         (optional) true: compare the change from the previous year (0.04 = +4% per year)
 A target needs "year", "by" or both. The output also shows the first model year in which
 the condition holds and the values every 5 years from 2025 to 2050.
 
@@ -181,8 +185,40 @@ def to_float(text):
         return None
 
 
-def read_mif(path, region):
-    """Return {variable: (unit, {year: value})} for one region."""
+class MifData(dict):
+    """{region: {variable: (unit, {year: value})}} for the regions the targets need."""
+
+    def __init__(self, default):
+        super().__init__()
+        self.default = default
+
+    def view(self, regions):
+        """Data of one region, or the sum over several regions (variables present in all of them)."""
+        if len(regions) == 1:
+            return self.get(regions[0], {})
+        parts = [self.get(r, {}) for r in regions]
+        common = set(parts[0]).intersection(*parts[1:]) if parts else set()
+        summed = {}
+        for var in common:
+            years = parts[0][var][1]
+            summed[var] = (parts[0][var][0], {
+                y: None if any(p[var][1].get(y) is None for p in parts) else sum(p[var][1][y] for p in parts)
+                for y in years})
+        return summed
+
+
+def needed_regions(targets, default):
+    """The default region plus every region named in the targets (also inside groups)."""
+    regions = {default}
+    for t in targets:
+        regions.update(t.get("regions", []))
+        regions |= needed_regions(t.get("targets", []), default) if "group" in t else set()
+    return regions
+
+
+def read_mif(path, regions, default):
+    """Read the given regions of a reporting.mif into a MifData."""
+    data = MifData(default)
     with open(path, newline="", encoding="utf-8", errors="ignore") as f:
         first = f.readline()
         f.seek(0)
@@ -190,13 +226,13 @@ def read_mif(path, region):
         reader = csv.reader(f, delimiter=sep)
         header = next(reader)
         years = {i: int(h) for i, h in enumerate(header) if h.strip().isdigit()}
-        data = {}
         for row in reader:
-            if len(row) < 5 or row[2] != region:
+            if len(row) < 5 or row[2] not in regions:
                 continue
-            data[row[3]] = (row[4], {y: to_float(row[i]) for i, y in years.items() if i < len(row)})
-    if not data:
-        sys.exit(f"Region '{region}' not found in {path}")
+            data.setdefault(row[2], {})[row[3]] = (
+                row[4], {y: to_float(row[i]) for i, y in years.items() if i < len(row)})
+    if default not in data:
+        sys.exit(f"Region '{default}' not found in {path}")
     return data
 
 
@@ -225,19 +261,29 @@ def fmt(x):
     return "n/a" if x is None else f"{x:,.1f}"
 
 
-def check_target(target, data, start_year, indent="   ", record=None):
+def check_target(target, alldata, start_year, indent="   ", record=None):
     name = target.get("name", "unnamed target")
     is_share = "numerator" in target or "denominator" in target
+    is_rate = bool(target.get("rate"))
+    pct = is_share or is_rate
     num = target.get("numerator" if is_share else "variables", [])
     den = target.get("denominator", []) if is_share else []
     op = target.get("op", ">=" if is_share else "<=")
     threshold = target.get("value")
+    relative_to = target.get("relative_to")
     year = target.get("year")
     by = target.get("by")
     tolerance = target.get("tolerance", 0)
+    regions = target.get("regions") or [alldata.default]
+    data = alldata.view(regions)
     head = indent[:-3]
 
     problems = []
+    for r in regions:
+        if r not in alldata:
+            problems.append(f"region not found: '{r}'")
+    if relative_to is not None and (is_share or is_rate):
+        problems.append("'relative_to' only works with 'variables' (not with shares or rates)")
     if not num or (is_share and not den):
         problems.append("give 'variables', or both 'numerator' and 'denominator'")
     if op not in OPS and op != "==":
@@ -250,6 +296,8 @@ def check_target(target, data, start_year, indent="   ", record=None):
         close = difflib.get_close_matches(m, data.keys(), n=3, cutoff=0.6)
         problems.append(f"variable not found: '{m}'" + (f" (did you mean: {'; '.join(close)})" if close else ""))
     print(f"{head}== {name}")
+    if regions != [alldata.default]:
+        print(f"{indent}regions: {' + '.join(regions)}")
     if problems:
         for p in problems:
             print(f"{indent}ERROR: {p}")
@@ -260,15 +308,32 @@ def check_target(target, data, start_year, indent="   ", record=None):
                            "rule": f"{op} {threshold} {when}   (error: see --run on that folder)"})
         return False
 
-    def value_in(y):
+    def level_in(y):
         top = sum_variables(data, num, y)
         if not is_share:
             return top
         bottom = sum_variables(data, den, y)
         return None if top is None or not bottom else top / bottom
 
+    def value_in(y):
+        """The level, or with "rate" the change from the previous year (0.04 = +4%)."""
+        if not is_rate:
+            return level_in(y)
+        now, before = level_in(y), level_in(y - 1)
+        return None if now is None or not before else now / before - 1
+
     def show(x):
-        return ("n/a" if x is None else f"{100 * x:.1f}%") if is_share else fmt(x)
+        return ("n/a" if x is None else f"{100 * x:.1f}%") if pct else fmt(x)
+
+    if relative_to is not None:
+        base = level_in(relative_to)
+        if base is None:
+            print(f"{indent}ERROR: no value in {relative_to} for 'relative_to'\n")
+            if record is not None:
+                record.append({"name": name, "cell": "error", "passed": False, "rule": "relative_to year missing"})
+            return False
+        print(f"{indent}threshold: {100 * threshold:g}% of the {relative_to} value {fmt(base)} = {fmt(threshold * base)}")
+        threshold = threshold * base
 
     if is_share:
         unit = "share"
@@ -283,6 +348,8 @@ def check_target(target, data, start_year, indent="   ", record=None):
             print(f"{indent}WARNING: the variables have different units: {', '.join(units)}")
 
     all_years = sorted(data[num[0].lstrip("-")][1])
+    if is_rate:
+        unit = "per year"
     first_met = next((y for y in all_years if y >= start_year
                       and check_condition(op, value_in(y), threshold, tolerance)), None)
 
@@ -292,7 +359,7 @@ def check_target(target, data, start_year, indent="   ", record=None):
         cells = []
         if year is not None:
             v = value_in(year)
-            cells.append(("n/a" if v is None else f"{100 * v:.1f}%") if is_share else
+            cells.append(("n/a" if v is None else f"{100 * v:.1f}%") if pct else
                          ("n/a" if v is None else f"{v:,.0f}"))
         if by is not None:
             cells.append(str(first_met) if first_met else "never")
@@ -303,7 +370,7 @@ def check_target(target, data, start_year, indent="   ", record=None):
         ok = check_condition(op, value, threshold, tolerance)
         passed &= ok
         gap = None if value is None else value - threshold
-        gap_text = "n/a" if gap is None else (f"{100 * gap:+.1f} pp" if is_share else f"{gap:+,.1f}")
+        gap_text = "n/a" if gap is None else (f"{100 * gap:+.1f} pp" if pct else f"{gap:+,.1f}")
         print(f"{indent}{year}: {show(value)}{'' if is_share else ' ' + unit}   target {threshold_text}   "
               f"gap {gap_text}   {'PASS' if ok else 'FAIL'}")
     if by is not None:
@@ -329,14 +396,14 @@ def check_target(target, data, start_year, indent="   ", record=None):
     return passed
 
 
-def check_group(group, data, start_year, record=None):
+def check_group(group, alldata, start_year, record=None):
     name = group.get("group", "unnamed group")
     require = group.get("require", "all")
     if require not in ("all", "any"):
         print(f"== GROUP {name}\n   ERROR: 'require' must be 'all' or 'any'\n")
         return False
     print(f"== GROUP {name} (require {require})\n")
-    results = [check_target(t, data, start_year, indent="      ", record=record) for t in group.get("targets", [])]
+    results = [check_target(t, alldata, start_year, indent="      ", record=record) for t in group.get("targets", [])]
     n_pass = sum(results)
     ok = all(results) if require == "all" else any(results)
     met = [t.get("name", "?") for t, r in zip(group.get("targets", []), results) if r]
@@ -349,7 +416,7 @@ def check_group(group, data, start_year, record=None):
 # ---------------------------------------------------------------- comparing runs
 def check_run(mif, config, region):
     """Check one run quietly. Returns [(check passed, [records of its targets])], one per check."""
-    data = read_mif(mif, region)
+    data = read_mif(mif, needed_regions(config.get("targets", []), region), region)
     start_year = model_start_year(mif)
     checks = []
     with contextlib.redirect_stdout(io.StringIO()):
@@ -426,7 +493,7 @@ def main():
         return compare_runs(chosen, config, region)
 
     mif = resolve_mif(args.run, Path(args.runs_dir))
-    data = read_mif(mif, region)
+    data = read_mif(mif, needed_regions(config.get("targets", []), region), region)
     scenario = ""
     with open(mif, encoding="utf-8", errors="ignore") as f:
         f.readline()
@@ -438,7 +505,7 @@ def main():
 
     if args.list is not None:
         text = args.list.lower()
-        for var, (unit, _) in sorted(data.items()):
+        for var, (unit, _) in sorted(data.view([region]).items()):
             if text in var.lower():
                 print(f"{var} [{unit}]")
         return 0

@@ -2,34 +2,6 @@
   "region": "World",
   "targets": [
     {
-      "group": "Light industry CO2 2030 and renewable electricity 2050",
-      "require": "all",
-      "targets": [
-        {
-          "name": "Light industry CO2 (FD + EN + TX + OI) in 2030",
-          "variables": [
-            "Emissions|CO2|Energy|Demand|Industry|Food Drink and Tobacco",
-            "Emissions|CO2|Energy|Demand|Industry|Engineering",
-            "Emissions|CO2|Energy|Demand|Industry|Textiles",
-            "Emissions|CO2|Energy|Demand|Industry|Other Industrial sectors"
-          ],
-          "op": "<=",
-          "value": 921.43885,
-          "year": 2030
-        },
-        {
-          "name": "Electricity from biofuels + renewables in 2050",
-          "variables": [
-            "Secondary Energy|Electricity|Biofuels",
-            "Secondary Energy|Electricity|Renewables"
-          ],
-          "op": ">=",
-          "value": 32327.4183,
-          "year": 2050
-        }
-      ]
-    },
-    {
       "name": "Maritime low-carbon fuels (biofuels + H2) share of BMAR + GN + PN in 2030",
       "numerator": [
         "Final Energy|Bunkers|Bunkers maritime|Biomass and Waste",
@@ -71,6 +43,44 @@
       "year": 2050
     },
     {
+      "group": "Light industry CO2 2030 and renewable electricity 2050",
+      "require": "all",
+      "targets": [
+        {
+          "name": "Light industry CO2 (FD + EN + TX + OI) in 2030",
+          "variables": [
+            "Emissions|CO2|Energy|Demand|Industry|Food Drink and Tobacco",
+            "Emissions|CO2|Energy|Demand|Industry|Engineering",
+            "Emissions|CO2|Energy|Demand|Industry|Textiles",
+            "Emissions|CO2|Energy|Demand|Industry|Other Industrial sectors"
+          ],
+          "op": "<=",
+          "value": 921.43885,
+          "year": 2030
+        },
+        {
+          "name": "Electricity from biofuels + renewables in 2050",
+          "variables": [
+            "Secondary Energy|Electricity|Biofuels",
+            "Secondary Energy|Electricity|Renewables"
+          ],
+          "op": ">=",
+          "value": 32327.4183,
+          "year": 2050
+        }
+      ]
+    },
+    {
+      "name": "Buildings CO2 (Commercial + Residential) in 2030",
+      "variables": [
+        "Emissions|CO2|Energy|Demand|Commercial",
+        "Emissions|CO2|Energy|Demand|Residential"
+      ],
+      "op": "<=",
+      "value": 1583.62635,
+      "year": 2030
+    },
+    {
       "name": "Biofuels share of primary energy in 2050",
       "numerator": [
         "Primary Energy|Biofuels"
@@ -83,13 +93,12 @@
       "year": 2050
     },
     {
-      "name": "Buildings CO2 (Commercial + Residential) in 2030",
+      "name": "Carbon capture in energy above 1 Gt CO2 in 2030 (1 Gt = 1,000 Mt)",
       "variables": [
-        "Emissions|CO2|Energy|Demand|Commercial",
-        "Emissions|CO2|Energy|Demand|Residential"
+        "Carbon Capture|Energy"
       ],
-      "op": "<=",
-      "value": 1583.62635,
+      "op": ">",
+      "value": 1000,
       "year": 2030
     },
     {
@@ -124,6 +133,89 @@
           "year": 2030
         }
       ]
+    },
+    {
+      "group": "Renewable power capacity in 2030 (offshore wind and all renewables)",
+      "require": "all",
+      "targets": [
+        {
+          "name": "Offshore wind capacity in 2030",
+          "variables": [
+            "Capacity|Electricity|Wind|Offshore"
+          ],
+          "op": ">=",
+          "value": 500,
+          "year": 2030
+        },
+        {
+          "name": "Renewable capacity in 2030 (solar + wind + hydro + geothermal + biofuels; excludes nuclear and hydrogen)",
+          "variables": [
+            "Capacity|Electricity|Solar",
+            "Capacity|Electricity|Wind",
+            "Capacity|Electricity|Hydro",
+            "Capacity|Electricity|Geothermal and other renewable sources",
+            "Capacity|Electricity|Biofuels"
+          ],
+          "op": ">=",
+          "value": 11000,
+          "year": 2030
+        }
+      ]
+    },
+    {
+      "group": "Coal phase-out: unabated coal power at most 5% of its 2023 level (EU/OECD by 2030, World by 2040)",
+      "require": "all",
+      "targets": [
+        {
+          "name": "Unabated coal power, EU + OECD (approx.: EU, GBR, USA, JPN, CAZ, NEU), 2030",
+          "variables": [
+            "Secondary Energy|Electricity|Coal|w/o CCS"
+          ],
+          "regions": [
+            "EU",
+            "GBR",
+            "USA",
+            "JPN",
+            "CAZ",
+            "NEU"
+          ],
+          "op": "<=",
+          "value": 0.05,
+          "relative_to": 2023,
+          "year": 2030
+        },
+        {
+          "name": "Unabated coal power, World, 2040",
+          "variables": [
+            "Secondary Energy|Electricity|Coal|w/o CCS"
+          ],
+          "op": "<=",
+          "value": 0.05,
+          "relative_to": 2023,
+          "year": 2040
+        }
+      ]
+    },
+    {
+      "name": "Electrification: electricity share of final energy at least 35% by 2035",
+      "numerator": [
+        "Final Energy|Electricity"
+      ],
+      "denominator": [
+        "Final Energy"
+      ],
+      "op": ">=",
+      "value": 0.35,
+      "by": 2035
+    },
+    {
+      "name": "Hydrogen production at least 523 Mt H2 in 2050 (= 17,433 TWh at 33.33 TWh/Mt, LHV)",
+      "variables": [
+        "Secondary Energy|Hydrogen"
+      ],
+      "op": ">=",
+      "value": 17433.3,
+      "year": 2050
     },
     {
       "group": "Zero-emission vehicles most sold (EV + H2 > 50% of new vehicles) by 2030",
@@ -183,12 +275,22 @@
       ]
     },
     {
-      "name": "Carbon capture in energy above 1 Gt CO2 in 2030 (1 Gt = 1,000 Mt)",
+      "name": "Energy efficiency improvement: Efficiency|Primary Energy (GDP per primary energy) up at least 4% per year in 2030",
       "variables": [
-        "Carbon Capture|Energy"
+        "Efficiency|Primary Energy"
       ],
-      "op": ">",
-      "value": 1000,
+      "rate": true,
+      "op": ">=",
+      "value": 0.04,
+      "year": 2030
+    },
+    {
+      "name": "Global Methane Pledge: energy CH4 in 2030 at least 30% below 2020 (134.35 Mt -> 94.05 Mt)",
+      "variables": [
+        "Emissions|CH4|Energy"
+      ],
+      "op": "<=",
+      "value": 94.045,
       "year": 2030
     }
   ]
