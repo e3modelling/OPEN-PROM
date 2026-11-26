@@ -625,7 +625,7 @@ $ondelim
 $include"./iPremScrpFac.csv"
 $offdelim
 ;
-i01PremScrpFac(runCy, TRANSE, TECH, YTIME)$(not DATAY(YTIME) and SECTTECH(TRANSE,"TELC") and SECTTECH(TRANSE,TECH) and not sameas(TECH,"TELC")) = 3*i01PremScrpFac(runCy,TRANSE,TECH,YTIME);
+i01PremScrpFac(runCy, TRANSE, TECH, YTIME)$(not DATAY(YTIME) and SECTTECH(TRANSE,"TELC") and SECTTECH(TRANSE,TECH) and not sameas(TECH,"TELC")) = 1*i01PremScrpFac(runCy,TRANSE,TECH,YTIME);
 *---
 table iMatrFactorData(allCy,DSBS,TECH,YTIME)          "Maturity factor per technology and subsector (1)"
 $ondelim

@@ -284,8 +284,8 @@ i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")$(SECtoEF(TRANSE,EF) and yes$SUM(EF2,B
 i01calibweibul(runCy,TRANSE,EF,YTIME)$AN(YTIME) = i01calibweibul(runCy,TRANSE,EF,"%fBaseY%");
 **i01calibweibul(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2))) = i01calibweibul(runCy,TRANSE,EF,YTIME-1) + (ord(YTIME) - (%fBaseY% - %fStartHorizon% + 1)) * (1-i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")) / (%fEndHorizon% - %fBaseY%);
 i01calibweibul(runCy,TRANSE,EF,YTIME)$(AN(YTIME) and SECtoEF(TRANSE,EF) and yes$SUM(EF2,BLENDMAP2(EF,EF2)) and not sameas("BGAS",EF)) = min(1, i01calibweibul(runCy,TRANSE,EF,YTIME-1) + (ord(YTIME) - (%fBaseY% - %fStartHorizon% + 1)) * (1-i01calibweibul(runCy,TRANSE,EF,"%fBaseY%")) / (2090 - %fBaseY%));
-*' Sustainable aviation fuel push: biokerosene blend weight x2 in aviation (PA, BAV) from 2030
-i01calibweibul(runCy,TRANSE,"BKRS",YTIME)$((sameas(TRANSE,"PA") or sameas(TRANSE,"BAV")) and ord(YTIME) >= 21) = 2*i01calibweibul(runCy,TRANSE,"BKRS",YTIME);
+*' Sustainable aviation fuel push: biokerosene blend weight multiplier in aviation (PA, BAV) from 2030 (1 = off)
+i01calibweibul(runCy,TRANSE,"BKRS",YTIME)$((sameas(TRANSE,"PA") or sameas(TRANSE,"BAV")) and ord(YTIME) >= 21) = 1*i01calibweibul(runCy,TRANSE,"BKRS",YTIME);
 *---
 testSFC(runCy,TRANSE,TTECH)$(not (sameas("PC",TRANSE) or BUN1(TRANSE))) = 
 test2SFC(TRANSE,TTECH) * 
