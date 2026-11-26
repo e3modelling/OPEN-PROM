@@ -14,4 +14,5 @@ V14DemandMaterials.LO(runCy,IND_SERVS,MATERIALS,YTIME) = 0;
 V14DemandMaterials.FX(runCy,IND_SERVS,MATERIALS,YTIME)$DATAY(YTIME) = i02InputMaterials(runCy,IND_SERVS,MATERIALS,YTIME);
 *---
 V14CostAvgCommodities.LO(runCy,COMMODITIES,YTIME) = 0;
-V14CostAvgCommodities.FX(runCy,COMMODITIES,YTIME)$DATAY(YTIME) = 1;
+V14CostAvgCommodities.L(runCy,COMMODITIES,YTIME) = 1;
+V14CostAvgCommodities.FX(runCy,COMMODITIES,YTIME)$DATAY(YTIME) = i14CostAvgCommodities(runCy,COMMODITIES,YTIME);

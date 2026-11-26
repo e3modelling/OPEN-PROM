@@ -109,15 +109,17 @@ OLQ 3.2,
 NGS 2.5,
 OGS 2.5,
 BMSWAS 0,
-BFG 2.5
-COG 2.5
-COKE 4.2
+BFG 10
+COG 2
+COKE 5
 /;
 *---
 iPriceMaterial(allCy,"SCRAP") = 0.333;
 iPriceMaterial(allCy,"IRONORE") = 0.141;
 *---
 imCo2EmiFac(runCy,SBS,EF,YTIME)$(not (sameas("NEN",SBS) or sameas("PCH",SBS))) = iCo2EmiFacAllSbs(EF);
+imCo2EmiFac(runCy,"IS","HCL",YTIME) = 4.5;
+imCo2EmiFac(runCy,"IS","LGN",YTIME) = 4.5;
 *---
 parameter imElaSubData(DSBS)       "Elasticities by subsector (1)" /
 PCH	2
@@ -184,9 +186,9 @@ imFuelPrice(runCy,"STEAMP",EFS,YTIME) = imFuelPrice(runCy,"PG",EFS,YTIME);
 imFuelPrice(runCy,SBS,"H2F",YTIME) = 1.5 * imFuelPrice(runCy,"OI","ELC",YTIME);
 imFuelPrice(runCy,SBS,"STE",YTIME) = imFuelPrice(runCy,"OI","ELC",YTIME);
 imFuelPrice(runCy,"ICT",EFS,YTIME)$SECtoEF("ICT",EFS) = imFuelPrice(runCy,"SE",EFS,YTIME);
-imFuelPrice(runCy,SBS,"BFG",YTIME) = 0.9 * imFuelPrice(runCy,SBS,'HCL',YTIME);
-imFuelPrice(runCy,SBS,"COG",YTIME) = 0.9 * imFuelPrice(runCy,SBS,'HCL',YTIME);
-imFuelPrice(runCy,SBS,"COKE",YTIME) = 0.9 * imFuelPrice(runCy,SBS,'HCL',YTIME);
+imFuelPrice(runCy,SBS,"BFG",YTIME)$(not sameas("IS",SBS)) = 0.9 * imFuelPrice(runCy,SBS,'HCL',YTIME);
+imFuelPrice(runCy,SBS,"COG",YTIME)$(not sameas("IS",SBS)) = 0.9 * imFuelPrice(runCy,SBS,'HCL',YTIME);
+imFuelPrice(runCy,SBS,"COKE",YTIME)$(not sameas("IS",SBS)) = 0.9 * imFuelPrice(runCy,SBS,'HCL',YTIME);
 *---
 table imPriceFuelsIntBase(WEF,YTIME)	              "International Fuel Prices USED IN BASELINE SCENARIO ($2015/toe)"
 $ondelim

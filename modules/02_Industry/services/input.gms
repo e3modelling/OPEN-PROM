@@ -258,3 +258,35 @@ iPriceMaterial(runCy,"SPNGIRN") = i02IndCosts("CONVDRI",'Capex',"%fBaseY%") * im
 iPriceMaterial(runCy,"PIGIRON") = i02IndCosts("BF",'Capex',"%fBaseY%") * imCGI(runCy,"%fBaseY%") + i02IndCosts("BF",'Fix',"%fBaseY%") + i03DataCostVariable(runCy,"BLASTFUR","BF","%fBaseY%");
 *---
 i02EnergyPremium("SPNGIRN","ELC") = 0.01027;
+*---
+i02DataCostTotal(runCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(DATAY(YTIME) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH)) = 
+( 
+  imCapCostTech(runCy,INDDOM,INDITECH,YTIME) * imCGI(runCy,YTIME) +
+  imFixOMCostTech(runCy,INDDOM,INDITECH,YTIME)
+) / imUsfEneConvSubTech(runCy,INDDOM,INDITECH,YTIME) +
+SUM(EFS$INDITECHTOEF(INDITECH,EFS),
+  (
+    imFuelPrice(runCy,INDDOM,EFS,YTIME) +
+    !!imCO2CaptRateIndustry(runCy,INDITECH,YTIME) * VmCstCO2SeqCsts.L(runCy,YTIME) * 1e-3 * imCo2EmiFac(runCy,INDDOM,EFS,YTIME) +
+    (1-imCO2CaptRateIndustry(runCy,INDITECH,YTIME)) * 1e-3 * iCarbValYrExog(runCy,YTIME) * imCo2EmiFac(runCy,INDDOM,EFS,YTIME)
+  ) * i02SFC(runCy,INDDOM,IND_SERVS,INDITECH,EFS,"%fBaseY%")
+) / imUsfEneConvSubTech(runCy,INDDOM,INDITECH,YTIME) +
+imVarCostTech(runCy,INDDOM,INDITECH,YTIME) +
+SUM(MATERIALS,
+  i02ratioMaterialCons(IND_SERVS,INDITECH,MATERIALS) *
+  iPriceMaterial(runCy,MATERIALS)
+);
+*---
+i14CostAvgCommodities(runCy,COMMODITIES,YTIME)$DATAY(YTIME) = 
+SUM((IND_SERVS,INDITECH)$(SERVStoTECH(IND_SERVS,INDITECH)$COMMStoINDSERVS(COMMODITIES,IND_SERVS)$SERVStoTECH(IND_SERVS,INDITECH)),
+  i02DataCostTotal(runCy,"IS",IND_SERVS,INDITECH,YTIME) * (i02Capacity(runCy,"IS",IND_SERVS,INDITECH,YTIME) + 1e-6)
+) /
+SUM((IND_SERVS,INDITECH)$(SERVStoTECH(IND_SERVS,INDITECH)$COMMStoINDSERVS(COMMODITIES,IND_SERVS)$SERVStoTECH(IND_SERVS,INDITECH)),
+  i02Capacity(runCy,"IS",IND_SERVS,INDITECH,YTIME) + 1e-6
+);
+*---
+i02CalibSteelShares(runCy,"IS",IND_SERVS,YTIME)$(DATAY(YTIME) and INDDOMtoSERVS("IS",IND_SERVS)) = 
+(i02DataEnergyService(runCy,"IS",IND_SERVS,YTIME) + 1e-6) / SUM(IND_SERVS2$INDDOMtoSERVS("IS",IND_SERVS2),i02DataEnergyService(runCy,"IS",IND_SERVS2,YTIME) + 1e-6) *
+SUM(COMMODITIES$COMMStoINDSERVS(COMMODITIES,IND_SERVS),i14CostAvgCommodities(runCy,COMMODITIES,YTIME) ** (1));
+i02CalibSteelShares(runCy,"IS",IND_SERVS,YTIME)$(not DATAY(YTIME)) = i02CalibSteelShares(runCy,"IS",IND_SERVS,"%fBaseY%");
+*---

@@ -11,22 +11,33 @@
 *' and the ratio of lagged energy costs (with the corresponding elasticities). This type of equation captures both short term and long term reactions to energy costs. 
 
 !!FIXME: INDDOM does not contain NENSE. Should be added as separate equations, coupled to the corresponding energy service.
-Q02Activity(allCy,INDDOM,IND_SERVS,YTIME)$(TIME(YTIME) and runCy(allCy) )..
+Q02Activity(allCy,INDDOM,IND_SERVS,YTIME)$(TIME(YTIME) and runCy(allCy) and INDDOMtoSERVS(INDDOM,IND_SERVS))..
   V02Activity(allCy,INDDOM,IND_SERVS,YTIME)
     =E=
+  imActv(YTIME,allCy,INDDOM)
 $ontext
-  SUM(COMMODITIES$COMMStoINDSERVS(COMMODITIES,IND_SERVS),V14CostAvgCommodities(allCy,COMMODITIES,YTIME-1) ** (-2)) /
-  SUM((COMMODITIES,IND_SERVS2)$(COMMStoINDSERVS(COMMODITIES,IND_SERVS2) and INDDOMtoSERVS(INDDOM,IND_SERVS2)),
-    V14CostAvgCommodities(allCy,COMMODITIES,YTIME-1) ** (-2)
+  (
+    1 + (
+      SUM(COMMODITIES$COMMStoINDSERVS(COMMODITIES,IND_SERVS),
+        i02CalibSteelShares(allCy,INDDOM,IND_SERVS,YTIME) * 
+        V14CostAvgCommodities(allCy,COMMODITIES,YTIME-1) ** (-1)
+      ) /
+      SUM((COMMODITIES,IND_SERVS2)$(COMMStoINDSERVS(COMMODITIES,IND_SERVS2) and INDDOMtoSERVS(INDDOM,IND_SERVS2)),
+        i02CalibSteelShares(allCy,INDDOM,IND_SERVS2,YTIME) * 
+        V14CostAvgCommodities(allCy,COMMODITIES,YTIME-1) ** (-1)
+      ) -
+      1
+    )$sameas("IS",INDDOM)
+  )
 $offtext
-0;
+;
 
 Q02EnergyService(allCy,INDDOM,IND_SERVS,YTIME)$(TIME(YTIME) and runCy(allCy))..
   V02EnergyService(allCy,INDDOM,IND_SERVS,YTIME)
       =E=
   (1+i02CalibUsefulEnergy(allCy,INDDOM,YTIME)) *
   V02EnergyService(allCy,INDDOM,IND_SERVS,YTIME-1) *
-  imActv(YTIME,allCy,INDDOM);
+  V02Activity(allCy,INDDOM,IND_SERVS,YTIME);
 
 Q02Capacity(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)$(TIME(YTIME) and runCy(allCy) and INDDOMtoSERVS(INDDOM,IND_SERVS) and SERVStoTECH(IND_SERVS,INDITECH))..
   V02Capacity(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)

@@ -9,6 +9,9 @@ i02ratioOwnEnergyTransfIS(allCy,IS_TRANSF,IS_TRANSF_TECH,EF,YTIME)
 i02InputMaterials(allCy,IND_SERVS,MATERIALS,YTIME)
 i03DataCostVariable(allCy,IS_TRANSF,IS_TRANSF_TECH,YTIME)
 i02EnergyPremium(MATERIALS,EF)                                               "Energy premium when importing cold charged material (Mtoe/tonn of material)"
+i02CalibSteelShares(allCy,INDDOM,IND_SERVS,YTIME)
+i02DataCostTotal(allCy,INDDOM,IND_SERVS,INDITECH,YTIME)
+i14CostAvgCommodities(allCy,COMMODITIES,YTIME)
 ;
 
 Equations
