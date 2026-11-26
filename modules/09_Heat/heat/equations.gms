@@ -66,7 +66,7 @@ Q09CostVarProdSte(allCy,TSTEAM,YTIME)$(TIME(YTIME)$(runCy(allCy)))..
         (
           sum(NAP$NAPtoALLSBS(NAP,"STEAMP"),VmCarVal(allCy,NAP,YTIME))
 *' Steam/heat production climate policy cost (US$/tCO2) from 2025, paid only on uncaptured CO2; 0 = off
-          + 400$(ord(YTIME) >= 16)
+          + 0$(ord(YTIME) >= 16)
         )
       )
     ) / SUM(STECH$sameas(STECH,TSTEAM),imPlantEffByType(allCy,STECH,"effHeat","%fBaseY%")) + !!i09EffSteThrm(TSTEAM,YTIME) +
