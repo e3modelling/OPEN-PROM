@@ -83,6 +83,9 @@ Step-by-step instructions for preparing a Windows modelling server environment f
 - ***15_Pushing technologies through maturity factors:***
 Instructions for making a technology expand faster or slower from `config.json`, using the `maturity_factors` block, without editing GAMS code manually.
 
+- ***16_Climate impacts and feedback with RIME:***
+How to turn an OPEN-PROM run into climate impacts per region and country (heat, cooling demand, precipitation, water, air quality) with MAGICC and RIME, and how the cooling degree days feed back into buildings demand (switch `climFeedback`, input files, method, assumptions).
+
 Additional resources in this folder:
 
 - `InputDataOverview.csv` — a CSV overview of input data files and formats used by the model.

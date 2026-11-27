@@ -2,7 +2,25 @@
   "paths": {
     "model_runs_path": "local/path/to/model/runs/",
     "magpie_path": "path/to/magpie/folder/including/trailing/slash/",
-    "gams_path": "path/to/gams/folder/including/trailing/slash/"
+    "gams_path": "path/to/gams/folder/including/trailing/slash/",
+    "climate_assessment_path": "../climate-assessment",
+    "rime_path": "../rime",
+    "rime_data_path": "../rime-data"
+  },
+  "climate_feedback": {
+    "ssp": "SSP2",
+    "cdd_indicator": "sdd_c_24p0",
+    "hdd_indicator": null,
+    "pop_grid": null,
+    "regionmapping": null,
+    "floor_cdd": 50,
+    "floor_hdd": 100,
+    "cap": 3.0
+  },
+  "climate_impacts": {
+    "indicators": ["sdd_c_24p0", "tr20", "hwd_95_10", "wsi"],
+    "weighting": "auto",
+    "tables": false
   },
   "behavior": {
     "withRunFolder": true,

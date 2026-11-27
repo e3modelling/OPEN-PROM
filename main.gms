@@ -211,6 +211,12 @@ $setglobal softLinkMAgPIE off  !! on or off
 
 $setglobal OPENGEM off !! on or off
 
+*' *** climFeedback: climate feedback loop 1 - heating/cooling degree days (HDD/CDD)
+*' *** scale buildings (HOU, SE) useful demand in 02_Industry/technology.
+*' *** off = equations compiled exactly as without the feedback.
+*' *** on  = reads iClimDegDays.csv and iClimShares.csv (neutral if absent).
+$setglobal climFeedback off   !! on / off: degree-day feedback on buildings demand
+
 *' *** Land-use emulator: pre-fitted BMSWAS price and AFOLU-emission responses
 *' *** standing in for a land-use model. One of:
 *' ***   legacy  = no emulator (exogenous static price + external emission source)

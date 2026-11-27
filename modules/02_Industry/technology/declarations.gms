@@ -8,6 +8,13 @@ i02numtechnologiesUsingEF(DSBS,EF)                         "Number of technologu
 imCO2CaptRateIndustry(allCy,ITECH,YTIME)	               "Industry CO2 capture rate (1)"
 i02ShareBlend(allCy,DSBS,ITECH,EF,YTIME)                   "Share of each energy form in a technology"
 i02ShareElcHP(allCy,DSBS,YTIME)                            "Share of final electricity consumption of HeatPumps in substitutable electricity consumption (1)"
+*' Climate feedback loop 1 (switch climFeedback): degree-day feedback on buildings demand.
+*' All parameters are declared regardless of the switch; with climFeedback == off they keep neutral values and are not used in any equation.
+i02ClimDD(DDTYPE,allCy,YTIME)                              "Degree-day ratio to 2023, HDD or CDD (1)"
+i02ShHeat(allCy,DSBS)                                      "Climate-sensitive (space-heating) share of substitutable useful demand (1)"
+i02ShCool(allCy,DSBS)                                      "Cooling share of non-substitutable useful electricity (1)"
+i02ElDD(DDTYPE)                                            "Elasticity of climate-sensitive demand to degree days (1)"
+i02ClimIdx(allCy,DSBS,DDTYPE,YTIME)                        "Climate demand index of buildings relative to 2023 (1)"
 ;
 
 Equations

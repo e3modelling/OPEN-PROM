@@ -247,9 +247,22 @@ MAGICC_WORKER_ROOT_DIR=/mnt/tmp/workers
 
 ## 6. Typical Workflow
 
-1. Place emissions input files under the designated runs/<runFolder>/emissions.csv directory (or specify a custom path).
-2. Run the script with model and folder options, e.g.: `Rscript scripts/tools/runClimateModels.r --model magicc --runFolder daily_npi`
-3. The script will:
-   * Call the Python workflow inside the correct virtual environment.
-   * Save processed outputs to runs/<runFolder>/EmissionsOutput-<model>/.
-   * Compare against reference outputs and generate a global mean temperature plot (Global_Mean_Temperature.png).
+1. Make sure `runs/<runFolder>/emissions.csv` exists (or use a custom path with `--emissions`).
+2. If `climate-assessment` is not in the same parent folder as OPEN-PROM, set its location in `config.json`:
+   ```json
+   "paths": { "climate_assessment_path": "C:/Users/<user>/Models/climate-assessment" }
+   ```
+3. Run the VS Code task **RUN CLIMATE EMULATOR** (pick `magicc` or `ciceroscm`, then a run folder or `latest`), or from the OPEN-PROM root:
+   ```
+   Rscript scripts/tools/runClimateModels.r --model magicc --runFolder <runFolder>
+   ```
+   `--runFolder latest` (the default) picks the newest run folder that has an `emissions.csv`.
+4. The script will:
+   * Run `run_workflow.py` with the `.venv` of climate-assessment **inside WSL** for both emulators (from inside WSL it calls bash directly).
+   * Stop with an error if the workflow fails.
+   * Save outputs to `runs/<runFolder>/EmissionsOutput-<model>/`.
+   * Plot median GSAT against the climate-assessment reference output (`Global_Mean_Temperature.png`).
+   * Run RIME on the GSAT and convert the result into degree-day ratios (`iClimDegDays.csv`) for the buildings
+     climate feedback. See tutorial 16 for the RIME installation, the impact indicators and the method.
+5. `--steps` (also asked by the task): `all` (default), `emulator` (MAGICC only) or `rime` (rerun RIME and the
+   degree days on an existing MAGICC output, without rerunning MAGICC).

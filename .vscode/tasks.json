@@ -181,7 +181,49 @@
             "presentation": {
                 "focus": true
             }
+        },
+
+        {
+            "label": "RUN CLIMATE EMULATOR",
+            "type": "shell",
+            "command": "Rscript scripts/tools/runClimateModels.r --model ${input:climateModel} --runFolder ${input:climateRunFolder} --steps ${input:climateSteps} --indicators ${input:climateIndicators}",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true
+            }
         }
 
+    ],
+    "inputs": [
+        {
+            "id": "climateModel",
+            "type": "pickString",
+            "description": "Climate emulator (runs in WSL)",
+            "options": ["magicc", "ciceroscm"],
+            "default": "magicc"
+        },
+        {
+            "id": "climateRunFolder",
+            "type": "promptString",
+            "description": "Run folder under runs/ ('latest' = newest folder with emissions.csv)",
+            "default": "latest"
+        },
+        {
+            "id": "climateSteps",
+            "type": "pickString",
+            "description": "all = MAGICC + RIME degree days (feedback); emulator = MAGICC only; rime = degree days from existing MAGICC output; impacts = RIME impacts for the indicators; report = add GSAT/GMST of existing MAGICC output to reporting.mif",
+            "options": ["all", "emulator", "rime", "impacts", "report"],
+            "default": "all"
+        },
+        {
+            "id": "climateIndicators",
+            "type": "promptString",
+            "description": "impacts only: comma-separated indicators (e.g. tr20,hwd_95_10,wsi) or 'all'; other steps ignore it",
+            "default": "sdd_c_24p0,tr20,hwd_95_10,wsi"
+        }
     ]
 }
