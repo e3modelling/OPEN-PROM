@@ -54,7 +54,7 @@ Rscript scripts/tools/runClimateModels.r --runFolder <run> --steps impacts --ind
 | `--runFolder <run>` | run folder under `runs/`; `latest` = newest folder with an `emissions.csv` |
 | `--indicators a,b,c` | indicators from section 3; `all` = every indicator; without it, `climate_impacts.indicators` in `config.json` |
 | `--tables true` | also country results (section 4); default `climate_impacts.tables` |
-| `--steps` | `impacts` = MAGICC (only if the run has no MAGICC output yet), then RIME impacts · `emulator` = MAGICC only · `all` / `rime` = buildings feedback input (Part B) |
+| `--steps` | `impacts` = MAGICC (only if the run has no MAGICC output yet), then RIME impacts · `emulator` = MAGICC only · `all` / `rime` = buildings feedback input (Part B) · `report` = add GSAT / GMST of an existing MAGICC output to the run's `reporting.mif` (also done automatically after every MAGICC run) |
 
 MAGICC runs once per run folder. Later runs, for other indicators or for the
 feedback, reuse its output.

@@ -17,6 +17,11 @@
     "floor_hdd": 100,
     "cap": 3.0
   },
+  "climate_impacts": {
+    "indicators": ["sdd_c_24p0", "tr20", "hwd_95_10", "wsi"],
+    "weighting": "auto",
+    "tables": false
+  },
   "behavior": {
     "withRunFolder": true,
     "withSync": true,

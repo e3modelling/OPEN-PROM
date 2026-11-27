@@ -18,7 +18,9 @@
 # otherwise ../climate-assessment (same parent folder as OPEN-PROM).
 #
 # Outputs: <output>/<emissions>_alloutput.xlsx and <output>/Global_Mean_Temperature.png
-# (default <output> = runs/<runFolder>/EmissionsOutput-<model>).
+# (default <output> = runs/<runFolder>/EmissionsOutput-<model>). All GSAT and GMST variables
+# of the output are also appended to runs/<runFolder>/reporting.mif (region World);
+# --steps report redoes only that step on an existing output.
 #
 # Climate feedback loop 1 (OPEN-PROM -> MAGICC -> RIME -> OPEN-PROM): after MAGICC,
 #   scripts/tools/rimeMaps.py       median GSAT -> RIME degree-day maps (rime_maps_<ind>.nc)
@@ -262,6 +264,52 @@ plotTemperature <- function(outputFile, expectedFile, outputDir, refModel = "REM
   cat("Plot saved to", plotOut, "\n")
 }
 
+# ------------------- Append GSAT / GMST to reporting.mif ----------------------
+
+# Copies every GSAT and GMST variable (all percentiles, raw and AR6-assessed) of the
+# climate-assessment output into the run's reporting.mif, region "World", on the years of
+# the MIF. Model and scenario are taken from the MIF so the rows line up with OPEN-PROM's.
+# Rerunning replaces earlier copies, so the step can be repeated safely.
+TEMP_PATTERN <- "Surface Temperature \\((GSAT|GMST)\\)"
+
+appendTemperatureToMif <- function(outputFile, mifFile) {
+  if (!file.exists(mifFile)) {
+    cat("No reporting.mif in the run folder, temperatures not added:", mifFile, "\n")
+    return(invisible(FALSE))
+  }
+  xl <- as.data.frame(read_excel(outputFile))
+  names(xl) <- tolower(names(xl))
+  xl <- xl[grepl(TEMP_PATTERN, xl$variable) & xl$region == "World", ]
+  if (!nrow(xl)) stop("No GSAT/GMST variables found in ", outputFile)
+
+  raw <- readChar(mifFile, file.info(mifFile)$size, useBytes = TRUE)
+  eol <- if (grepl("\r\n", raw, fixed = TRUE)) "\r\n" else "\n"
+  lines <- strsplit(raw, "\r?\n")[[1]]
+  lines <- lines[nzchar(lines)]
+  header <- strsplit(lines[1], ";", fixed = TRUE)[[1]]
+  years <- header[-(1:5)]
+  first <- strsplit(lines[2], ";", fixed = TRUE)[[1]]
+
+  # Drop GSAT/GMST rows from an earlier run of this step.
+  old <- grepl(paste0("^[^;]*;[^;]*;World;[^;]*", TEMP_PATTERN), lines[-1])
+  body <- lines[-1][!old]
+
+  vals <- sapply(years, function(y) {
+    v <- if (y %in% names(xl)) suppressWarnings(as.numeric(xl[[y]])) else rep(NA_real_, nrow(xl))
+    ifelse(is.na(v), "N/A", format(round(v, 4), scientific = FALSE, trim = TRUE))
+  })
+  vals <- matrix(vals, nrow = nrow(xl))
+  new <- paste0(paste(first[1], first[2], "World", xl$variable, xl$unit,
+                      apply(vals, 1, paste, collapse = ";"), sep = ";"), ";")
+
+  con <- file(mifFile, open = "wb")
+  writeLines(c(lines[1], body, new), con, sep = eol, useBytes = TRUE)
+  close(con)
+  cat("Added", length(new), "GSAT/GMST variables to", mifFile,
+      if (any(old)) paste0("(replaced ", sum(old), " earlier rows)") else "", "\n")
+  invisible(TRUE)
+}
+
 # ------------------- Main ----------------------
 
 opt <- parse_args(OptionParser(option_list = list(
@@ -276,13 +324,16 @@ opt <- parse_args(OptionParser(option_list = list(
   make_option("--steps", type = "character", default = "all",
               help = paste("all = MAGICC, then RIME degree days (feedback); emulator = MAGICC only;",
                            "rime = RIME degree days from an existing MAGICC output;",
+                           "report = add GSAT/GMST of an existing MAGICC output to reporting.mif;",
                            "impacts = RIME impacts for --indicators (runs MAGICC first if no output exists)")),
   make_option("--indicators", type = "character", default = NULL,
               help = "impacts: comma-separated RIME indicators, or 'all' (default: config.json climate_impacts.indicators)"),
   make_option("--tables", type = "character", default = NULL,
               help = "impacts: also country tables, true/false (default: config.json climate_impacts.tables)")
 )))
-if (!opt$steps %in% c("all", "emulator", "rime", "impacts")) stop("--steps must be all, emulator, rime or impacts")
+if (!opt$steps %in% c("all", "emulator", "rime", "impacts", "report")) {
+  stop("--steps must be all, emulator, rime, impacts or report")
+}
 
 # All RIME-ready indicators of the Climate Solutions Explorer data (gridded maps, SSP2)
 ALL_INDICATORS <- c("sdd_c", "sdd_c_18p3", "sdd_c_20p0", "sdd_c_24p0",
@@ -318,6 +369,12 @@ if (opt$steps %in% c("all", "emulator") || (opt$steps == "impacts" && !file.exis
   runAssessment(opt$model, caDir, emissions, output)
   if (!file.exists(outputFile)) stop("Workflow finished but output is missing: ", outputFile)
   plotTemperature(outputFile, getModelConfig(opt$model, caDir)$expectedFile, output)
+  appendTemperatureToMif(outputFile, file.path(runDir, "reporting.mif"))
+}
+
+if (opt$steps == "report") {
+  if (!file.exists(outputFile)) stop("No emulator output to read temperatures from: ", outputFile)
+  appendTemperatureToMif(outputFile, file.path(runDir, "reporting.mif"))
 }
 
 if (opt$steps %in% c("all", "rime")) {
