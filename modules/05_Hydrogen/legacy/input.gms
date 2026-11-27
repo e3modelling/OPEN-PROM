@@ -77,8 +77,8 @@ i05H2Adopt(runCy,"mid",YTIME) = i05H2Parameters(runCy,"mid");
 i05TranspLftH2(INFRTECH,YTIME) = i05H2InfrCapCosts("LFT",INFRTECH,YTIME);
 *---
 i05CostCapH2Prod(runCy,H2TECH,YTIME) = i05H2Production("IC",H2TECH,YTIME);
-i05CostCapH2Prod("CHA","cgf",YTIME) = 0.5 * i05CostCapH2Prod("CHA","cgf",YTIME);
-i05CostCapH2Prod("CHA","cgs",YTIME) = 0.54 * i05CostCapH2Prod("CHA","cgs",YTIME);
+i05CostCapH2Prod("CHN","cgf",YTIME) = 0.5 * i05CostCapH2Prod("CHN","cgf",YTIME);
+i05CostCapH2Prod("CHN","cgs",YTIME) = 0.54 * i05CostCapH2Prod("CHN","cgs",YTIME);
 i05CostCapH2Prod(runCy,"wes",YTIME)  = i05H2Production("IC","weg",YTIME);
 i05CostCapH2Prod(runCy,"wew",YTIME)  = i05H2Production("IC","weg",YTIME);
 *---

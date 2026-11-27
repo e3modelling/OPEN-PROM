@@ -235,9 +235,9 @@ i01PassCarsMarkSat(runCy) = 0.7;
 *' base-year ownership in preloop, so the Gompertz calibration (i01Sigma "S1") always stays valid.
 parameter i01PassCarsMarkSatReg(allCy)      "Assumed car-ownership saturation by region (cars per capita)" /
 USA 0.80, CAZ 0.80,
-REF 0.60,
-CHA 0.50, LAM 0.50, MEA 0.50,
-IND 0.35, OAS 0.35, SSA 0.35
+OER 0.60,
+CHN 0.50, LAM 0.50, MENA 0.50,
+IND 0.35, OSA 0.35, SSA 0.35
 /;
 *---
 *' Uncomment to apply the region-specific saturation in preloop instead of using the uniform 0.7 value above.
