@@ -155,5 +155,5 @@ i04ShareFuels(runCy,PGALL,PGEF)$PGALLTOEF(PGALL,PGEF) =
   SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%"))
 )$SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%")) +
 (
-  1 / CARD(PGALL)
+  1 / SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),1)
 )$(not SUM(PGEF2$PGALLTOEF(PGALL,PGEF2),i03InpTotTransfProcess(runCy,"PG",PGEF2,"%fBaseY%")));
